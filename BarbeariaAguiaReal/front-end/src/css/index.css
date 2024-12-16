@@ -44,6 +44,7 @@
     z-index: 1;
     color: white;
     text-align: center;
+    height: 100%;
 }
 
 .overlay h2 {
@@ -52,14 +53,68 @@
 
 .overlay button {
     position: absolute;
+    bottom: 10%;
     left: 50%;
     transform: translateX(-50%);
     padding: 10px 20px;
     background-color: greenyellow;
     border: none;
+    border-radius: 25px;
 }
 
 .overlay img {
     max-width: 25px;
     max-height: 25px;
 }
+
+.overlay a {
+    text-decoration: none;;
+}
+
+.listaServicos {
+    background-color: blueviolet;
+    height: 40px;
+}
+
+.listaServicos ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+}
+
+.listaServicos ul li {
+    padding: 10px;
+}
+
+.CardBox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.CardBox img {
+    width: 175px;
+    max-height: 175px;
+}
+
+.CardBox div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+.imgCant {
+    display: flex;
+    justify-content: space-around;
+}
+
+.imgCant img {
+    width: 175px;
+    max-height: 175px;
+}
+
+
+

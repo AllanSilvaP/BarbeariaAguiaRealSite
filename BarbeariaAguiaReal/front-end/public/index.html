@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,7 +13,8 @@
 <body>
     <nav class="BarraNavegador">
         <ul>
-            <li><a href="#pagInicio"><img src="/front-end/public/img/barbearia-frente.png" alt="" style="height: 25px; width: 25px;"></a></li>
+            <li><a href="#pagInicio"><img src="/front-end/public/img/barbearia-frente.png" alt=""
+                        style="height: 25px; width: 25px;"></a></li>
             <li><a href="#pagInicio">Pagina Inicial</a></li>
             <li><a href="#servicos">Serviços</a></li>
             <li><a href="#sobrenos">Sobre nós</a></li>
@@ -21,58 +23,80 @@
         </ul>
     </nav>
 
-    <div class = "pagInicio">
-        <video autoplay loop muted playsinline><source src = "/front-end/public/videos/VideoFundo2.mp4" type="video/mp4">Seu navegador não suporte esse elemento</video>
-        <div class = "overlay">
+    <div class="pagInicio">
+        <video autoplay loop muted playsinline>
+            <source src="/front-end/public/videos/VideoFundo2.mp4" type="video/mp4">Seu navegador não suporte esse
+            elemento
+        </video>
+        <div class="overlay">
             <h2>Bem vindo à Barbearia Águia Real</h2>
-            <button><a href="https://wa.me/61982436970" target="_blank"><img src="/front-end/public/img/barbearia-frente.png" alt="">Agende seu Horário</a></button>
+            <button><a href="https://wa.me/61982436970" target="_blank"><img
+                        src="/front-end/public/img/barbearia-frente.png" alt="">Agende seu Horário</a></button>
         </div>
     </div>
 
-    <div class = "servicos">
+    <div class="servicos">
         <h2>Serviços</h2>
 
-        <ul>
-            <li>Segunda</li>
-            <li>Terça</li>
-            <li>Quarta</li>
-            <li>Quinta</li>
-            <li>Sexta</li>
-            <li>Sabádo</li>
-            <li>Domingo</li>
-        </ul>
+        <div class="listaServicos">
+            <ul>
+                <li>Segunda</li>
+                <li>Terça</li>
+                <li>Quarta</li>
+                <li>Quinta</li>
+                <li>Sexta</li>
+                <li>Sabádo</li>
+                <li>Domingo</li>
+            </ul>
+        </div>
 
-        <div class = "CardBox">
-            <img src="" alt="">
-            <p class = "precoCard">R$35</p>
-            <p class = "textoCard">Corte</p>
-            <img src="" alt="">
-            <p class = "precoCard">R$35</p>
-            <p class = "textoCard">Barba</p>
-            <img src="" alt="">
-            <p class = "precoCard">R$35</p>
-            <p class = "textoCard">Pigmentação</p>
-            <img src="" alt="">
-            <p class = "precoCard">R$35</p>
-            <p class = "textoCard">Progressiva</p>
-            <img src="" alt="">
-            <p class = "precoCard">R$35</p>
-            <p class = "textoCard">Luzes</p>
-            <img src="" alt="">
-            <p class = "precoCard">R$35</p>
-            <p class = "textoCard">Nevou</p>
-            <img src="" alt="">
-            <p class = "precoCard">R$35</p>
-            <p class = "textoCard">Limpeza de Pele</p>
+        <div class="CardBox">
+
+            <div>
+                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <p class="precoCard">R$35</p>
+                <p class="textoCard">Corte</p>
+                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <p class="precoCard">R$35</p>
+                <p class="textoCard">Barba</p>
+                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <p class="precoCard">R$35</p>
+                <p class="textoCard">Pigmentação</p>
+            </div>
+
+            <div>
+                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <p class="precoCard">R$35</p>
+                <p class="textoCard">Progressiva</p>
+                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <p class="precoCard">R$35</p>
+                <p class="textoCard">Luzes</p>
+                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <p class="precoCard">R$35</p>
+                <p class="textoCard">Nevou</p>
+            </div>
+
+            <div>
+                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <p class="precoCard">R$35</p>
+                <p class="textoCard">Limpeza de Pele</p>
+                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <p class="precoCard">R$35</p>
+                <p class="textoCard">Limpeza de Pele</p>
+                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <p class="precoCard">R$35</p>
+                <p class="textoCard">Limpeza de Pele</p>
+            </div>
+
         </div>
     </div>
 
     <div class="sobrenos">
         <h2>Sobre nós</h2>
 
-        <div class ="imgCanto">
-            <img src="" alt="">
-            <p class = "textoNos">
+        <div class="imgCanto">
+            <img src="/front-end/public/img/barbearia-frente.png" alt="">
+            <p class="textoNos">
                 Lorem Ipsum Lorem Ipsum Lorem Ipsum
                 Lorem Ipsum Lorem Ipsum Lorem Ipsum
                 Lorem Ipsum Lorem Ipsum Lorem Ipsum
@@ -88,16 +112,16 @@
         <h2>Contato</h2>
 
         <img src="" alt="">
-        <p class = "contatoTexto">Localização</p>
+        <p class="contatoTexto">Localização</p>
         <img src="" alt="">
-        <p class = "contatoTexto">Instagram</p>
+        <p class="contatoTexto">Instagram</p>
         <img src="" alt="">
-        <p class = "contatoTexto">Email</p>
+        <p class="contatoTexto">Email</p>
         <img src="" alt="">
-        <p class = "contatoTexto">61 98243-6970</p>
+        <p class="contatoTexto">61 98243-6970</p>
     </div>
 
-    <div class = "GoogleMaps">
+    <div class="GoogleMaps">
         <p>google mapas</p>
     </div>
 
