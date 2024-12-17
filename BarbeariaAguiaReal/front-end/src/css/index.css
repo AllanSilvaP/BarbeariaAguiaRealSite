@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 .BarraNavegador {
     background-color: gray;
     height: 40px;
@@ -16,6 +20,7 @@
 .BarraNavegador ul li a {
     color: white;
     text-decoration: none;
+    scroll-behavior: smooth;
 }
 
 .BarraNavegador ul li a:hover {
@@ -106,14 +111,19 @@
     margin-left: 100px;
     margin-right: 100px;
 }
-.imgCant {
+
+.imgCanto {
     display: flex;
     justify-content: space-around;
 }
 
-.imgCant img {
+.imgCanto img {
     width: 175px;
     max-height: 175px;
+}
+
+.contato img {
+    width: 25px;
 }
 
 
