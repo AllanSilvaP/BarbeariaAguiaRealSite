@@ -1,6 +1,15 @@
+html {
+    scroll-behavior: smooth;
+    margin: 0;
+}
+
 .BarraNavegador {
     background-color: gray;
-    height: 40px;
+    height: 50px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 10;
 }
 
 .BarraNavegador ul {
@@ -16,6 +25,8 @@
 .BarraNavegador ul li a {
     color: white;
     text-decoration: none;
+    scroll-behavior: smooth;
+    font-size: 18px;
 }
 
 .BarraNavegador ul li a:hover {
@@ -23,8 +34,9 @@
 }
 
 .pagInicio {
+    padding-top: 50px;
     position: relative;
-    height: 55vh;
+    height: calc(75vh - 50px);
     overflow: hidden;
 }
 
@@ -82,8 +94,10 @@
     justify-content: space-around;
 }
 
-.listaServicos ul li {
+.listaServicos ul button {
     padding: 10px;
+    background: none;
+    border: none;
 }
 
 .CardBox {
@@ -106,14 +120,19 @@
     margin-left: 100px;
     margin-right: 100px;
 }
-.imgCant {
+
+.imgCanto {
     display: flex;
     justify-content: space-around;
 }
 
-.imgCant img {
+.imgCanto img {
     width: 175px;
     max-height: 175px;
+}
+
+.contato img {
+    width: 25px;
 }
 
 

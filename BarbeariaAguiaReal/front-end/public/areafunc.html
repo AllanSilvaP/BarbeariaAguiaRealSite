@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/front-end/src/css/index.css">
+    <link rel="stylesheet" href="/front-end/src/css/areaFunc.css">
     <title>Área do Funcionário</title>
 </head>
 
 <body>
     <nav class="BarraNavegador">
         <ul>
-            <li><a href="index.html"><img src="/front-end/public/img/barbearia-frente.png" alt="" style="height: 25px; width: 25px;"></a></li>
+            <li><a href="index.html"><img src="/front-end/public/img/barbearia-frente.png" alt=""
+                        style="height: 25px; width: 25px;"></a></li>
             <li><a href="index.html">Pagina Inicial</a></li>
             <li><a href="index.html">Serviços</a></li>
             <li><a href="index.html">Sobre nós</a></li>
@@ -20,15 +23,18 @@
     </nav>
 
 
-    <div class = "paginaLogin">
+    <div class="pagina-login">
         <h2>Area de Login</h2>
-        <textarea name="Login" id="login"></textarea>
-        <textarea name="Senha" id="senha"></textarea>
-        <div class ="bts">
+        <div class = "login-field">
+            <input type="email" name="email" placeholder="Digite seu email" required>
+            <input type="password" name="senha" placeholder="Digite sua Senha" required>
+        </div>
+        <div class="bts">
             <button>Login</button>
             <button>Cadastrar</button>
         </div>
 
     </div>
 </body>
+
 </html>
