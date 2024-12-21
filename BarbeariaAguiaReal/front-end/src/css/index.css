@@ -3,8 +3,8 @@ html {
     margin: 0;
 }
 
-.BarraNavegador {
-    background-color: gray;
+.barra-navegador {
+    background-color: #222222; /* Cinza bem escuro */
     height: 50px;
     width: 100%;
     position: fixed;
@@ -12,35 +12,35 @@ html {
     z-index: 10;
 }
 
-.BarraNavegador ul {
+.barra-navegador ul {
     list-style: none;
     display: flex;
     justify-content: space-around;
 }
 
-.BarraNavegador ul li {
+.barra-navegador ul li {
     padding: 10px;
 }
 
-.BarraNavegador ul li a {
+.barra-navegador ul li a {
     color: white;
     text-decoration: none;
     scroll-behavior: smooth;
     font-size: 18px;
 }
 
-.BarraNavegador ul li a:hover {
+.barra-navegador ul li a:hover {
     color: whitesmoke;
 }
 
-.pagInicio {
+.pag-inicial {
     padding-top: 50px;
     position: relative;
     height: calc(75vh - 50px);
     overflow: hidden;
 }
 
-.pagInicio video {
+.pag-inicial video {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -54,7 +54,6 @@ html {
 .overlay {
     position: relative;
     z-index: 1;
-    color: white;
     text-align: center;
     height: 100%;
 }
@@ -80,39 +79,44 @@ html {
 }
 
 .overlay a {
-    text-decoration: none;;
+    text-decoration: none;
 }
 
-.listaServicos {
-    background-color: blueviolet;
+.bt-servicos {
+    background-color: #404040; /* Cinza médio para contraste */
     height: 40px;
 }
 
-.listaServicos ul {
+.bt-servicos ul {
     list-style: none;
     display: flex;
     justify-content: space-around;
 }
 
-.listaServicos ul button {
+.bt-servicos ul button {
     padding: 10px;
-    background: none;
-    border: none;
+    cursor: pointer;
 }
 
-.CardBox {
+.bt-servicos ul button:hover {
+    background-color: aqua; /* Não alterado */
+}
+
+.card-servicos {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     justify-content: space-between;
+    background-color: #2F2F2F; /* Cinza intermediário */
+    padding: 20px;
 }
 
-.CardBox img {
+.card-servicos img {
     width: 175px;
     max-height: 175px;
 }
 
-.CardBox div {
+.card-servicos div {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -121,19 +125,27 @@ html {
     margin-right: 100px;
 }
 
-.imgCanto {
+.img-canto {
     display: flex;
     justify-content: space-around;
+    background-color: #1C1C1C; /* Fundo para harmonizar com o tema */
 }
 
-.imgCanto img {
+.img-canto img {
     width: 175px;
     max-height: 175px;
+}
+
+.contato {
+    background-color: #333333; /* Cinza neutro escuro */
+    color: white;
+    padding: 20px;
 }
 
 .contato img {
     width: 25px;
 }
 
-
-
+.googleMaps {
+    background-color: #2B2B2B; /* Fundo levemente mais claro para contraste */
+}

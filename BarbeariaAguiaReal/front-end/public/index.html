@@ -6,17 +6,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/front-end/src/css/index.css">
-    <script src="/front-end/src/js/index.js"></script>
     <title>Barbearia Aguia Real</title>
 </head>
 
 
 <body>
-    <nav class="BarraNavegador">
+    <nav class="barra-navegador">
         <ul>
-            <li><a href="#pagInicio"><img src="/front-end/public/img/barbearia-frente.png" alt=""
+            <li><a href="#pag-inicial"><img src="/front-end/public/img/barbearia-frente.png" alt=""
                         style="height: 25px; width: 25px;"></a></li>
-            <li><a href="#pagInicio">Pagina Inicial</a></li>
+            <li><a href="#pag-inicial">Pagina Inicial</a></li>
             <li><a href="#servicos">Serviços</a></li>
             <li><a href="#sobrenos">Sobre nós</a></li>
             <li><a href="#contato">Contato</a></li>
@@ -24,7 +23,7 @@
         </ul>
     </nav>
 
-    <div class="pagInicio" id="pagInicio">
+    <div class="pag-inicial" id="pag-inicial">
         <video autoplay loop muted playsinline>
             <source src="/front-end/public/videos/VideoFundo2.mp4" type="video/mp4">Seu navegador não suporte esse
             elemento
@@ -39,63 +38,77 @@
     <div class="servicos" id="servicos">
         <h2>Serviços</h2>
 
-        <div class="listaServicos">
+        <div class="bt-servicos">
             <ul>
-                <button>Segunda</a></button>
-                <button>Terça</button>
-                <button>Quarta</button>
-                <button>Quinta</button>
-                <button>Sexta</button>
-                <button>Sabádo</button>
-                <button>Domingo</button>
+                <button data-dia="segunda">Segunda</a></button>
+                <button data-dia="terça">Terça</button>
+                <button data-dia="quarta">Quarta</button>
+                <button data-dia="quinta">Quinta</button>
+                <button data-dia="sexta">Sexta</button>
+                <button data-dia="sabádo">Sabádo</button>
+                <button data-dia="domingo">Domingo</button>
             </ul>
         </div>
 
-        <div class="CardBox">
+        <div class="card-servicos">
 
-            <div>
+            <div class="servico" data-servico="corte">
                 <img src="/front-end/public/img/barbearia-frente.png" alt="">
-                <p class="precoCard">R$35</p>
-                <p class="textoCard">Corte</p>
+                <p class="preco-card">R$35</p>
+                <p class="texto-card">Corte</p>
+            </div>
+            <div class="servico" data-servico="barba">
                 <img src="/front-end/public/img/barbearia-frente.png" alt="">
-                <p class="precoCard">R$35</p>
-                <p class="textoCard">Barba</p>
+                <p class="preco-card">R$35</p>
+                <p class="texto-card">Barba</p>
+            </div>
+            <div class="servico" data-servico="pigmentacao">
                 <img src="/front-end/public/img/barbearia-frente.png" alt="">
-                <p class="precoCard">R$35</p>
-                <p class="textoCard">Pigmentação</p>
+                <p class="preco-card">R$35</p>
+                <p class="texto-card">Pigmentação</p>
             </div>
 
-            <div>
+
+            <div class="servico" data-servico="progressiva">
                 <img src="/front-end/public/img/barbearia-frente.png" alt="">
-                <p class="precoCard">R$35</p>
-                <p class="textoCard">Progressiva</p>
+                <p class="preco-card">R$35</p>
+                <p class="texto-card">Progressiva</p>
+            </div>
+            <div class="servico" data-servico="luzes">
                 <img src="/front-end/public/img/barbearia-frente.png" alt="">
-                <p class="precoCard">R$35</p>
-                <p class="textoCard">Luzes</p>
+                <p class="preco-card">R$35</p>
+                <p class="texto-card">Luzes</p>
+            </div>
+            <div class="servico" data-servico="nevou">
                 <img src="/front-end/public/img/barbearia-frente.png" alt="">
-                <p class="precoCard">R$35</p>
-                <p class="textoCard">Nevou</p>
+                <p class="preco-card">R$35</p>
+                <p class="texto-card">Nevou</p>
             </div>
 
-            <div>
+            <div class="servico" data-servico="limpezaPele">
                 <img src="/front-end/public/img/barbearia-frente.png" alt="">
-                <p class="precoCard">R$35</p>
-                <p class="textoCard">Limpeza de Pele</p>
+                <p class="preco-card">R$35</p>
+                <p class="texto-card">Limpeza de Pele</p>
+            </div>
+            <div class="servico" data-servico="limpezaPele">
                 <img src="/front-end/public/img/barbearia-frente.png" alt="">
-                <p class="precoCard">R$35</p>
-                <p class="textoCard">Limpeza de Pele</p>
+                <p class="preco-card">R$35</p>
+                <p class="texto-card">Limpeza de Pele</p>
+            </div>
+            <div class="servico" data-servico="limpezaPele">
                 <img src="/front-end/public/img/barbearia-frente.png" alt="">
-                <p class="precoCard">R$35</p>
-                <p class="textoCard">Limpeza de Pele</p>
+                <p class="preco-card">R$35</p>
+                <p class="texto-card">Limpeza de Pele</p>
             </div>
 
         </div>
+    </div>
     </div>
 
     <div class="sobrenos" id="sobrenos">
         <h2>Sobre nós</h2>
 
-        <div class="imgCanto">
+        <div class="img-canto">
             <img src="/front-end/public/img/barbearia-frente.png" alt="">
             <p class="textoNos">
                 Lorem Ipsum Lorem Ipsum Lorem Ipsum
@@ -134,7 +147,7 @@
         <p><img src="/front-end/public/img/barbearia-frente.png" alt="">61 98243-6970</p>
     </div>
 
-    <div class="GoogleMaps">
+    <div class="googleMaps">
         <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d570.5812938149008!2d-48.11100684229753!3d-15.835659583658085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935bcdbaced52809%3A0x477fc2608d94836d!2sBarbearia%20Aguia%20Real!5e0!3m2!1sen!2sbr!4v1734461934379!5m2!1sen!2sbr"
             width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
@@ -145,5 +158,5 @@
 
 </body>
 
-
+<script src="/front-end/src/js/index.js"></script>
 </html>
