@@ -3,8 +3,8 @@ html {
     margin: 0;
 }
 
-.BarraNavegador {
-    background-color: gray;
+.barra-navegador {
+    background-color: #222222; /* Cinza bem escuro */
     height: 50px;
     width: 100%;
     position: fixed;
@@ -12,34 +12,35 @@ html {
     z-index: 10;
 }
 
-.BarraNavegador ul {
+.barra-navegador ul {
     list-style: none;
     display: flex;
     justify-content: space-around;
 }
 
-.BarraNavegador ul li {
+.barra-navegador ul li {
     padding: 10px;
 }
 
-.BarraNavegador ul li a {
+.barra-navegador ul li a {
     color: white;
     text-decoration: none;
     scroll-behavior: smooth;
+    font-size: 18px;
 }
 
-.BarraNavegador ul li a:hover {
+.barra-navegador ul li a:hover {
     color: whitesmoke;
 }
 
-.pagInicio {
+.pag-inicial {
     padding-top: 50px;
     position: relative;
     height: calc(75vh - 50px);
     overflow: hidden;
 }
 
-.pagInicio video {
+.pag-inicial video {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -53,7 +54,6 @@ html {
 .overlay {
     position: relative;
     z-index: 1;
-    color: white;
     text-align: center;
     height: 100%;
 }
@@ -79,60 +79,130 @@ html {
 }
 
 .overlay a {
-    text-decoration: none;;
+    text-decoration: none;
 }
 
-.listaServicos {
-    background-color: blueviolet;
+
+.servicos h2 {
+    background-color: #404040;
+    text-align: center;
+    font-weight: bold;
+    font-size: 2em;
+    color: white;
+    margin: 0;
+    height: 3em;
+}
+
+.bt-servicos {
+    background-color: #404040; /* Cinza médio para contraste */
     height: 40px;
 }
 
-.listaServicos ul {
+.bt-servicos ul {
     list-style: none;
     display: flex;
     justify-content: space-around;
+    margin: 0;
 }
 
-.listaServicos ul button {
-    padding: 10px;
-    background: none;
+.bt-servicos ul button {
     border: none;
+    font-weight: bold;
+    font-size: large;
+    color: white;
+    background: none;
+    padding: 10px;
+    cursor: pointer;
+    outline: none;
+    position: relative;
 }
 
-.CardBox {
+.bt-servicos ul button::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: white;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.bt-servicos ul button:focus::after {
+    width: 100%;
+    left: 0;
+    transform: translateX(0);
+}
+
+.bt-servicos ul button:focus:not(:focus-visible) ::after{
+    width: 0;
+    left: 50%;
+    transform: translateY(-50%);
+}
+
+.card-servicos {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
     justify-content: space-between;
+    background-color:#404040; 
+    font-weight: bold;
+    font-size: large;
+    color: white;
 }
 
-.CardBox img {
+.card-servicos img {
     width: 175px;
     max-height: 175px;
 }
 
-.CardBox div {
+.card-servicos div {
+    background-color: rgb(137, 140, 143);
+    border-radius: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 10px;
+    width: 16%;
+    margin-top: 15px;
+    margin-bottom: 10px;
     margin-left: 100px;
     margin-right: 100px;
 }
 
-.imgCanto {
+.img-canto {
     display: flex;
     justify-content: space-around;
+    background-color: #1C1C1C;
 }
 
-.imgCanto img {
+.img-canto img {
     width: 175px;
     max-height: 175px;
+    padding-right: 20%;
+}
+
+.texto-nos {
+    font-weight: bold;
+    font-size: large;
+    color: white;
+}
+
+.titulo-nos {
+    font-weight: bold;
+    font-size: 30px;
+    color: rgb(231, 229, 229);
+}
+
+.contato {
+    background-color: #333333; /* Cinza neutro escuro */
+    color: white;
+    padding: 20px;
 }
 
 .contato img {
     width: 25px;
 }
 
-
-
+.google-maps {
+    background-color: #2B2B2B;
+}
