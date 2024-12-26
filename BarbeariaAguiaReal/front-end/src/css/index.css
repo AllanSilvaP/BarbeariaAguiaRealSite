@@ -1,21 +1,35 @@
 html {
     scroll-behavior: smooth;
     margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
 }
 
+body {
+    background-color: #121212; /* Preto elegante */
+    color: #ffffff; /* Branco para contraste */
+    margin: 0;
+}
+
+/* Barra de Navegação */
 .barra-navegador {
-    background-color: #222222; /* Cinza bem escuro */
-    height: 50px;
+    background-color: #333333; /* Cinza escuro */
+    height: 60px;
     width: 100%;
     position: fixed;
     top: 0;
     z-index: 10;
+    display: flex;
+    align-items: center;
 }
 
 .barra-navegador ul {
     list-style: none;
     display: flex;
     justify-content: space-around;
+    width: 100%;
+    padding: 0;
+    margin: 0;
 }
 
 .barra-navegador ul li {
@@ -23,20 +37,21 @@ html {
 }
 
 .barra-navegador ul li a {
-    color: white;
+    color: #f5f5f5; /* Branco suave */
     text-decoration: none;
-    scroll-behavior: smooth;
     font-size: 18px;
+    transition: color 0.3s;
 }
 
 .barra-navegador ul li a:hover {
-    color: whitesmoke;
+    color: #bfbfbf; /* Cinza claro */
 }
 
+/* Página Inicial */
 .pag-inicial {
-    padding-top: 50px;
+    padding-top: 60px; /* Compensa a altura da barra de navegação */
     position: relative;
-    height: calc(75vh - 50px);
+    height: 75vh;
     overflow: hidden;
 }
 
@@ -60,6 +75,8 @@ html {
 
 .overlay h2 {
     margin-bottom: 20px;
+    color: #ffffff;
+    font-size: 2em;
 }
 
 .overlay button {
@@ -68,53 +85,81 @@ html {
     left: 50%;
     transform: translateX(-50%);
     padding: 10px 20px;
-    background-color: greenyellow;
+    background-color: #5CB338; /* Cor verde */
     border: none;
     border-radius: 25px;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    /* Ajuste de alinhamento interno */
+    display: flex;
+    align-items: center; /* Centraliza verticalmente os itens */
+    justify-content: center; /* Centraliza horizontalmente os itens */
+    gap: 8px; /* Espaço entre o ícone e o texto */
+}
+
+.overlay button:hover {
+    background-color: #777777; /* Cinza mais claro */
 }
 
 .overlay img {
-    max-width: 25px;
-    max-height: 25px;
+    width: 20px; /* Ajusta o tamanho do ícone */
+    height: 20px; /* Mantém proporções */
 }
 
 .overlay a {
     text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    font-size: 15px;
+    color: #ffffff;
 }
 
-
+/* Serviços */
 .servicos h2 {
-    background-color: #404040;
+    padding: 1% 0;
+    background-color: #444444; /* Cinza escuro */
     text-align: center;
     font-weight: bold;
     font-size: 2em;
-    color: white;
+    color: #ffffff;
     margin: 0;
-    height: 3em;
 }
 
 .bt-servicos {
-    background-color: #404040; /* Cinza médio para contraste */
-    height: 40px;
+    background-color: #444444; /* Cinza escuro */
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .bt-servicos ul {
     list-style: none;
     display: flex;
     justify-content: space-around;
+    width: 80%;
     margin: 0;
+    padding: 0;
 }
 
 .bt-servicos ul button {
     border: none;
     font-weight: bold;
     font-size: large;
-    color: white;
+    color: #ffffff;
     background: none;
     padding: 10px;
     cursor: pointer;
     outline: none;
     position: relative;
+    transition: color 0.3s;
+}
+
+.bt-servicos ul button:hover {
+    color: #bfbfbf;
 }
 
 .bt-servicos ul button::after {
@@ -124,85 +169,113 @@ html {
     left: 50%;
     width: 0;
     height: 2px;
-    background-color: white;
+    background-color: #ffffff;
     transition: all 0.3s ease;
     transform: translateX(-50%);
 }
 
-.bt-servicos ul button:focus::after {
+.bt-servicos ul button:focus::after,
+.bt-servicos ul button:hover::after {
     width: 100%;
     left: 0;
     transform: translateX(0);
 }
 
-.bt-servicos ul button:focus:not(:focus-visible) ::after{
-    width: 0;
-    left: 50%;
-    transform: translateY(-50%);
-}
-
+/* Cards de Serviços */
 .card-servicos {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    background-color:#404040; 
-    font-weight: bold;
-    font-size: large;
-    color: white;
-}
-
-.card-servicos img {
-    width: 175px;
-    max-height: 175px;
+    justify-content: center;
+    background-color: #1a1a1a; /* Preto suave */
+    padding: 2%;
 }
 
 .card-servicos div {
-    background-color: rgb(137, 140, 143);
-    border-radius: 25px;
+    background-color: #2c2c2c; /* Cinza escuro */
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 16%;
-    margin-top: 15px;
-    margin-bottom: 10px;
-    margin-left: 100px;
-    margin-right: 100px;
+    margin: 15px;
+    padding: 15px;
+    text-align: center;
+    color: #ffffff;
+    transition: transform 0.3s, background-color 0.3s;
 }
 
-.img-canto {
+.card-servicos div:hover {
+    transform: scale(1.05);
+    background-color: #3c3c3c; /* Cinza mais claro */
+}
+
+.card-servicos img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+/* Sobre Nós */
+.sobrenos {
+    background-color: #1f1f1f; /* Preto suave */
+    color: #e0e0e0; /* Cinza claro */
+    padding: 5%;
+}
+
+.sobrenos .img-canto {
     display: flex;
     justify-content: space-around;
-    background-color: #1C1C1C;
+    margin-bottom: 20px;
 }
 
-.img-canto img {
-    width: 175px;
-    max-height: 175px;
-    padding-right: 20%;
+.sobrenos .img-canto img {
+    width: 45%;
+    height: auto;
+    border-radius: 10px;
 }
 
 .texto-nos {
-    font-weight: bold;
     font-size: large;
-    color: white;
+    line-height: 1.6;
 }
 
 .titulo-nos {
-    font-weight: bold;
-    font-size: 30px;
-    color: rgb(231, 229, 229);
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #ffffff;
 }
 
+/* Contato */
 .contato {
-    background-color: #333333; /* Cinza neutro escuro */
-    color: white;
-    padding: 20px;
+    background-color: #CACACA; /* Cinza escuro */
+    color: #ffffff;
+    text-align: center;
+    padding: 5%;
 }
 
 .contato img {
     width: 25px;
+    margin: 0 5px;
 }
 
+.contato h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.contato a {
+    text-decoration: none;
+    color: #ffffff;
+    transition: color 0.3s;
+}
+
+.contato a:hover {
+    color: #bfbfbf;
+}
+
+/* Google Maps */
 .google-maps {
-    background-color: #2B2B2B;
+    background-color: #CACACA;
+    padding: 5%;
 }
