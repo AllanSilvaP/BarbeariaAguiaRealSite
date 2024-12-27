@@ -1,8 +1,10 @@
+
+
 html {
     scroll-behavior: smooth;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: "Afacad Flux", serif;
 }
 
 body {
@@ -37,33 +39,36 @@ body {
 }
 
 .barra-navegador ul li a {
-    color: #f5f5f5; /* Branco suave */
+    color: #f5f5f5;
     text-decoration: none;
-    font-size: 18px;
+    font-family: "Afacad Flux", serif;
+    font-size: 23px;
+    font-weight: 400;
     transition: color 0.3s;
 }
 
 .barra-navegador ul li a:hover {
-    color: #bfbfbf; /* Cinza claro */
+    color: #FFC100;
 }
 
-/* Página Inicial */
 .pag-inicial {
-    padding-top: 60px; /* Compensa a altura da barra de navegação */
+    padding-top: 60px; 
     position: relative;
-    height: 75vh;
+    height: 90vh;
     overflow: hidden;
 }
 
 .pag-inicial video {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     min-height: 100%;
     min-width: 100%;
+    object-fit: cover;
     z-index: -1;
     object-fit: cover;
+    pointer-events: none;
 }
 
 .overlay {
@@ -76,12 +81,14 @@ body {
 .overlay h2 {
     margin-bottom: 20px;
     color: #ffffff;
-    font-size: 2em;
+    font-size: 5em;
+    font-family: "Bebas Neue", serif;
+    font-weight: 700;
 }
 
 .overlay button {
     position: absolute;
-    bottom: 10%;
+    bottom: 20%;
     left: 50%;
     transform: translateX(-50%);
     padding: 10px 20px;
@@ -92,16 +99,10 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s;
-
-    /* Ajuste de alinhamento interno */
-    display: flex;
-    align-items: center; /* Centraliza verticalmente os itens */
-    justify-content: center; /* Centraliza horizontalmente os itens */
-    gap: 8px; /* Espaço entre o ícone e o texto */
 }
 
 .overlay button:hover {
-    background-color: #777777; /* Cinza mais claro */
+    background-color: #777777; 
 }
 
 .overlay img {
@@ -117,16 +118,25 @@ body {
     color: #ffffff;
 }
 
-/* Serviços */
-.servicos h2 {
-    padding: 1% 0;
-    background-color: #444444; /* Cinza escuro */
+.titulo-servicos {
+    background-color: #444444;
     text-align: center;
-    font-weight: bold;
-    font-size: 2em;
-    color: #ffffff;
-    margin: 0;
+    margin: 0 auto;
 }
+
+.titulo-servicos h2 {
+    width: 20%;
+    display: inline-block;
+    font-weight: bold;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 0 auto;
+    border-bottom: 4px solid white;
+}
+
+
 
 .bt-servicos {
     background-color: #444444; /* Cinza escuro */
@@ -156,10 +166,13 @@ body {
     outline: none;
     position: relative;
     transition: color 0.3s;
+    font-family: "Afacad Flux", serif;
+    font-size: 23px;
+    font-weight: 400;
 }
 
 .bt-servicos ul button:hover {
-    color: #bfbfbf;
+    color: #FFC100;
 }
 
 .bt-servicos ul button::after {
@@ -174,24 +187,22 @@ body {
     transform: translateX(-50%);
 }
 
-.bt-servicos ul button:focus::after,
 .bt-servicos ul button:hover::after {
     width: 100%;
     left: 0;
     transform: translateX(0);
 }
 
-/* Cards de Serviços */
 .card-servicos {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    background-color: #1a1a1a; /* Preto suave */
+    background-color: #1a1a1a; 
     padding: 2%;
 }
 
 .card-servicos div {
-    background-color: #2c2c2c; /* Cinza escuro */
+    background-color: #2c2c2c; 
     border-radius: 15px;
     display: flex;
     flex-direction: column;
@@ -200,13 +211,14 @@ body {
     margin: 15px;
     padding: 15px;
     text-align: center;
+    font-size: 4vh;
     color: #ffffff;
     transition: transform 0.3s, background-color 0.3s;
 }
 
 .card-servicos div:hover {
     transform: scale(1.05);
-    background-color: #3c3c3c; /* Cinza mais claro */
+    background-color: #3c3c3c; 
 }
 
 .card-servicos img {
@@ -216,10 +228,9 @@ body {
     margin-bottom: 10px;
 }
 
-/* Sobre Nós */
 .sobrenos {
-    background-color: #1f1f1f; /* Preto suave */
-    color: #e0e0e0; /* Cinza claro */
+    background-color: #1f1f1f; 
+    color: #e0e0e0; 
     padding: 5%;
 }
 
@@ -231,8 +242,9 @@ body {
 
 .sobrenos .img-canto img {
     width: 45%;
-    height: auto;
+    height: 600px;
     border-radius: 10px;
+    padding-right: 3%;
 }
 
 .texto-nos {
@@ -241,17 +253,18 @@ body {
 }
 
 .titulo-nos {
+    font-family: "Montserrat", sans-serif;
     font-size: 2em;
     margin-bottom: 20px;
     color: #ffffff;
 }
 
-/* Contato */
 .contato {
-    background-color: #CACACA; /* Cinza escuro */
+    background-color: #4E4F51; 
     color: #ffffff;
     text-align: center;
-    padding: 5%;
+    padding: 1% 5% 2% 5%;
+    font-family: "Montserrat", sans-serif;
 }
 
 .contato img {
@@ -271,11 +284,10 @@ body {
 }
 
 .contato a:hover {
-    color: #bfbfbf;
+    color: #FFC100;
 }
 
-/* Google Maps */
 .google-maps {
-    background-color: #CACACA;
-    padding: 5%;
+    background-color: #4E4F51;
+    padding: 0% 5% 5% 5%;
 }
