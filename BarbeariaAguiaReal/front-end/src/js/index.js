@@ -34,3 +34,15 @@ const hoje = new Date()
 const diasNomes = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"]
 const diaAtual = diasNomes [hoje.getDay()]
 atualizaPrecos(diaAtual); 
+
+//funcao para deixar butao ativo
+
+const btServicos = document.querySelectorAll('.bt-servicos ul button')
+
+btServicos.forEach(button => {
+    button.addEventListener('click', () => {
+        btServicos.forEach(btn => btn.classList.remove('active'))
+        button.classList.add('active');
+    })
+})
+

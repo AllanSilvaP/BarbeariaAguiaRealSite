@@ -47,6 +47,7 @@ body {
     transition: color 0.3s;
 }
 
+
 .barra-navegador ul li a:hover {
     color: #FFC100;
 }
@@ -193,6 +194,16 @@ body {
     transform: translateX(0);
 }
 
+.bt-servicos ul button.active {
+    color: #FFC100;
+}
+
+.bt-servicos ul button.active::after {
+    width: 100%;
+    left: 0;
+    transform: translateX(0);
+}
+
 .card-servicos {
     display: flex;
     flex-wrap: wrap;
@@ -263,31 +274,64 @@ body {
     background-color: #4E4F51; 
     color: #ffffff;
     text-align: center;
-    padding: 1% 5% 2% 5%;
+    padding: 2% 5%;
     font-family: "Montserrat", sans-serif;
-}
-
-.contato img {
-    width: 25px;
-    margin: 0 5px;
+    border-radius: 8px;
 }
 
 .contato h2 {
-    font-size: 2em;
-    margin-bottom: 10px;
+    font-family: "Bebas Neue", serif;
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+.contato .colunas {
+    display: flex;
+    align-items: center; 
+    justify-content: space-around;
+    flex-wrap: nowrap;
+    gap: 20px;
+}
+
+.contato .item {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: left;
+    margin: 0px 10px;
+}
+
+.contato .item img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px; 
 }
 
 .contato a {
     text-decoration: none;
     color: #ffffff;
+    font-weight: bold;
     transition: color 0.3s;
 }
 
 .contato a:hover {
-    color: #FFC100;
+    color: #FFC100; /* Cor de destaque */
 }
 
 .google-maps {
     background-color: #4E4F51;
     padding: 0% 5% 5% 5%;
+}
+
+.google-maps iframe {
+    border: none;
+    border-radius: 15px;
+    width: 100%;
+    height: 450px;
+}
+
+.footer {
+    background-color: #121212;
+    margin: 0;
+    padding: 10px 0;
 }
