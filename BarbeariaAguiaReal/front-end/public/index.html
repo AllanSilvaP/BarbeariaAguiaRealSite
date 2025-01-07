@@ -3,9 +3,25 @@
 <html lang="pt-br">
 
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/front-end/src/css/index.css">
+    <link rel="icon" href="/front-end/public/img/barbearia-frente.png" type="image/x-icon">
     <title>Barbearia Aguia Real</title>
 </head>
 
@@ -18,24 +34,24 @@
             <li><a href="#pag-inicial">Pagina Inicial</a></li>
             <li><a href="#servicos">Serviços</a></li>
             <li><a href="#contato">Contato</a></li>
-            <li><a href="areafunc.html">Area do funcionario</a></li>
         </ul>
     </nav>
 
     <div class="pag-inicial" id="pag-inicial">
-        <video autoplay loop muted playsinline>
-            <source src="/front-end/public/videos/VideoFundo2.mp4" type="video/mp4">Seu navegador não suporte esse
-            elemento
-        </video>
+        <img src="/front-end/public/img/ImagemParaTest.jpg" alt="" id="foto-fundo">
         <div class="overlay">
-            <h2>Barbearia Águia Real</h2>
-            <button><a href="https://wa.me/61982436970" target="_blank"><img
-                        src="/front-end/public/img/Whatsaap.png" alt="">Agende seu Horário</a></button>
+
+            <h2>Barbearia <br> Águia Real</h2>
+            <button><a href="https://wa.me/61982436970" target="_blank"><img src="/front-end/public/img/Whatsaap.png"
+                        alt="">Agende seu Horário</a></button>
         </div>
     </div>
 
     <div class="servicos" id="servicos">
-        <h2>Serviços</h2>
+
+        <div class="titulo-servicos">
+            <h2>Serviços</h2>
+        </div>
 
         <div class="bt-servicos">
             <ul>
@@ -45,63 +61,55 @@
                 <button data-dia="quinta">Quinta</button>
                 <button data-dia="sexta">Sexta</button>
                 <button data-dia="sabádo">Sabádo</button>
-                <button data-dia="domingo">Domingo</button>
             </ul>
         </div>
 
         <div class="card-servicos">
 
             <div class="servico" data-servico="corte">
-                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <img src="/front-end/public/img/Corte.png" alt="">
                 <p class="preco-card"></p>
                 <p class="texto-card">Corte</p>
             </div>
             <div class="servico" data-servico="barba">
-                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <img src="/front-end/public/img/Barba.png" alt="">
                 <p class="preco-card"></p>
                 <p class="texto-card">Barba</p>
             </div>
+            <div class="servico" data-servico="sombrancelha">
+                <img src="/front-end/public/img/Limpeza.png" alt="">
+                <p class="preco-card"></p>
+                <p class="texto-card">Sombrancelha</p>
+            </div>
             <div class="servico" data-servico="pigmentacao">
-                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <img src="/front-end/public/img/Pigmentado.png" alt="">
                 <p class="preco-card"></p>
                 <p class="texto-card">Pigmentação</p>
             </div>
 
 
             <div class="servico" data-servico="progressiva">
-                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <img src="/front-end/public/img/Progressiva.png" alt="">
                 <p class="preco-card"></p>
                 <p class="texto-card">Progressiva</p>
             </div>
             <div class="servico" data-servico="luzes">
-                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <img src="/front-end/public/img/Luzes.png" alt="">
                 <p class="preco-card"></p>
                 <p class="texto-card">Luzes</p>
             </div>
             <div class="servico" data-servico="nevou">
-                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <img src="/front-end/public/img/Nevou.png" alt="">
                 <p class="preco-card"></p>
                 <p class="texto-card">Nevou</p>
             </div>
-
             <div class="servico" data-servico="limpezaPele">
-                <img src="/front-end/public/img/barbearia-frente.png" alt="">
-                <p class="preco-card"></p>
-                <p class="texto-card">Limpeza de Pele</p>
-            </div>
-            <div class="servico" data-servico="limpezaPele">
-                <img src="/front-end/public/img/barbearia-frente.png" alt="">
-                <p class="preco-card"></p>
-                <p class="texto-card">Limpeza de Pele</p>
-            </div>
-            <div class="servico" data-servico="limpezaPele">
-                <img src="/front-end/public/img/barbearia-frente.png" alt="">
+                <img src="/front-end/public/img/Limpeza.png" alt="">
                 <p class="preco-card"></p>
                 <p class="texto-card">Limpeza de Pele</p>
             </div>
 
         </div>
-    </div>
     </div>
 
     <div class="sobrenos" id="sobrenos">
@@ -136,47 +144,56 @@
 
     <div class="contato" id="contato">
         <h2>Contato</h2>
+        <div class="colunas">
 
-        <p>
-            <img src="/front-end/public/img/Telefone.png" alt="">
-            (61) 98243-6970 - (61) 98135-4110
-        </p>
+            <div class="item">
+                <span>
+                    <img src="/front-end/public/img/Telefone.png" alt="Telefone">
+                    (61) 98243-6970 - (61) 98135-4110
+                </span>
 
-        <p>
-            <img src="/front-end/public/img/Endereco.png" alt="">
-            Qnn 22 Conjunto P Lote 28
-        </p>
+                <span>
+                    <img src="/front-end/public/img/Endereco.png" alt="Endereço">
+                    Qnn 22 Conjunto P Lote 28
+                </span>
+            </div>
 
-        <p>
-            <img src="/front-end/public/img/Relogio.png" alt="">
-            Segunda a Sabádo: 09:00 até às 20:00
-        </p>
+            <div class="item">
+                <span>
+                    <img src="/front-end/public/img/Relogio.png" alt="Horário">
+                    Segunda a Sábado: 09:00 até às 20:00
+                </span>
+                <span>
+                    <img src="/front-end/public/img/Email.png" alt="Email">
+                    aguiarealbarbershop@gmail.com
+                </span>
+            </div>
 
-        <p>
-            <img src="/front-end/public/img/Email.png" alt="">
-            aguiarealbarbershop@gmail.com
-        </p>
-
-        <a href="https://www.instagram.com/barbearia_aguiareal" target="_blank">
-            <img src="/front-end/public/img/Instagram.png" alt="">
-            barbearia_aguiareal
-        </a>
-
-        <a href="https://www.tiktok.com/@barbeariaaguiareal?_t=8sXqhJJ92yj&_r=1" target="_blank">
-            <img src="/front-end/public/img/TikTok.webp" alt="">
-            barbeariaaguiareal
-        </a>
+            <div class="item">
+                <a href="https://www.instagram.com/barbearia_aguiareal" target="_blank">
+                    <img src="/front-end/public/img/Instagram.png" alt="Instagram">
+                    barbearia_aguiareal
+                </a>
+                <a href="https://www.tiktok.com/@barbeariaaguiareal?_t=8sXqhJJ92yj&_r=1" target="_blank">
+                    <img src="/front-end/public/img/TikTok.webp" alt="TikTok">
+                    barbeariaaguiareal
+                </a>
+            </div>
+        </div>
     </div>
+
+
 
     <div class="google-maps">
         <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d570.5812938149008!2d-48.11100684229753!3d-15.835659583658085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935bcdbaced52809%3A0x477fc2608d94836d!2sBarbearia%20Aguia%20Real!5e0!3m2!1sen!2sbr!4v1734461934379!5m2!1sen!2sbr"
-            width="100%" height="450" style="border:0; border-radius: 50px;" allowfullscreen="" loading="lazy" 
-            referrerpolicy="no-referrer-when-downgrade">
+            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
         </iframe>
     </div>
 
-    <footer><p>teste</p></footer>
+    <footer class="footer">
+        <p>© 2024 Barbearia Águia Real - Feito por Allan da Silva</p>
+    </footer>
 
 
 </body>
