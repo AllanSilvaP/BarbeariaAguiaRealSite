@@ -1,13 +1,13 @@
 //funcao mostrar preco certo
 
 const precosPorDia = {
-    segunda: { corte: 25, barba: 25, sombrancelha: 15, pigmentacao: 15, progressiva: 70, luzes: 120, nevou: 200, limpezaPele: 70},
-    terça: { corte: 25, barba: 25, sombrancelha: 15, pigmentacao: 15, progressiva: 70, luzes: 120, nevou: 200, limpezaPele: 70},
-    quarta: { corte: 25, barba: 25, sombrancelha: 15, pigmentacao: 15, progressiva: 70, luzes: 120, nevou: 200, limpezaPele: 70},
-    quinta: { corte: 30, barba: 30, sombrancelha: 15, pigmentacao: 15, progressiva: 70, luzes: 120, nevou: 200, limpezaPele: 70},
-    sexta: { corte: 30, barba: 30, sombrancelha: 15, pigmentacao: 15, progressiva: 70, luzes: 120, nevou: 200, limpezaPele: 70},
-    sabado: { corte: 30, barba: 30, sombrancelha: 15, pigmentacao: 15, progressiva: 70, luzes: 120, nevou: 200, limpezaPele: 70},
-    domingo: { corte: 30, barba: 30, sombrancelha: 15, pigmentacao: 15, progressiva: 70, luzes: 120, nevou: 200, limpezaPele: 70 },
+    segunda: { corte: 25, barba: 25, sombrancelha: 15, pigmentacao: 25, progressiva: 100, luzes: 150, nevou: 180, limpezaPele: 120},
+    terça: { corte: 25, barba: 25, sombrancelha: 15, pigmentacao: 25, progressiva: 100, luzes: 150, nevou: 180, limpezaPele: 120},
+    quarta: { corte: 25, barba: 25, sombrancelha: 15, pigmentacao: 25, progressiva: 100, luzes: 150, nevou: 180, limpezaPele: 120},
+    quinta: { corte: 30, barba: 30, sombrancelha: 15, pigmentacao: 25, progressiva: 100, luzes: 150, nevou: 180, limpezaPele: 120},
+    sexta: { corte: 30, barba: 30, sombrancelha: 15, pigmentacao: 25, progressiva: 100, luzes: 150, nevou: 180, limpezaPele: 120},
+    sábado: { corte: 30, barba: 30, sombrancelha: 15, pigmentacao: 25, progressiva: 100, luzes: 150, nevou: 180, limpezaPele: 120},
+    domingo: { corte: 30, barba: 30, sombrancelha: 15, pigmentacao: 25, progressiva: 100, luzes: 150, nevou: 180, limpezaPele: 120},
 };
 
 const btDias = document.querySelectorAll('.bt-servicos button');

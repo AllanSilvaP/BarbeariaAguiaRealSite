@@ -1,5 +1,4 @@
 html {
-    scroll-behavior: smooth;
     font-family: "Afacad Flux", serif;
 }
 
@@ -14,6 +13,7 @@ html, body {
     width: 100%;
     height: 100%;
     overflow-x: hidden; 
+    scroll-behavior: smooth;
 }
 
 /* Barra de Navegação */
@@ -63,7 +63,7 @@ html, body {
     overflow: hidden;
 }
 
-#foto-fundo {
+.pag-inicial video {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -141,7 +141,7 @@ html, body {
     font-weight: bold;
     color: #ffffff;
     margin: 0 auto;
-    border-bottom: 4px solid white;
+    border-bottom: 4px solid #ffffff;
 }
 
 
@@ -353,6 +353,7 @@ html, body {
     background-color: #121212;
     margin: 0;
     padding: 10px 0;
+    text-align: center;
 }
 
 /*Media para ajustar para outras midias*/
@@ -389,6 +390,20 @@ html, body {
 
     .contato .item img {
         margin: 0 auto 10px;
+    }
+
+    .sobrenos {
+        flex-direction: column; /* Empilha os itens */
+        padding: 5%; /* Ajusta o espaçamento */
+    }
+
+    .sobrenos .img-canto {
+        flex-direction: column; /* Empilha as imagens */
+    }
+
+    .sobrenos .img-canto img {
+        width: 100%; /* Ocupa toda a largura disponível */
+        margin: 0 auto; /* Centraliza as imagens */
     }
 
 
