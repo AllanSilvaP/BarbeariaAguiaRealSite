@@ -15,13 +15,15 @@ class UsuarioController extends Controller
             $request->validate([
                 'email' => 'required|email|unique:usuarios',
                 'senha' => 'required|min:6',
-                'tipo_conta' => 'required|in:cliente,barbeiro,administrador'
+                'tipo_usuario' => 'required|in:cliente,barbeiro,administrador'
             ]);
+
+            dd($request->all());
 
             $user = Usuario::create([
                 'email' => $request->email,
-                'password' => Hash::make($request->senha),
-                'tipo_conta' => $request->tipo_conta
+                'senha' => Hash::make($request->senha),
+                'tipo_usuario' => $request->tipo_usuario
             ]);
 
             return response()->json([

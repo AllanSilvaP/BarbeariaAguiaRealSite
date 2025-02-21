@@ -1,28 +1,27 @@
 import { cadastrarUsuario } from "./api.js";
 
 export async function handleCadastro(event) {
-    event.preventDefault(); // Evita o recarregamento da página
+    event.preventDefault();
 
-    // Captura os valores do formulário
     const email = document.getElementById("email").value;
     const senha = document.getElementById("senha").value;
-    const tipoConta = document.getElementById("tipo-conta").value;
+    const tipo_usuario = document.getElementById("tipo-conta").value;
 
-    if (!email || !senha || !tipoConta) {
+    if (!email || !senha || !tipo_usuario) {
         alert("Preencha todos os campos!");
         return;
     }
 
     try {
-        const resultado = await cadastrarUsuario(email, senha, tipoConta);
+        const resultado = await cadastrarUsuario({ email, senha, tipo_usuario });
         console.log("Usuário cadastrado:", resultado);
         alert("Cadastro realizado com sucesso!");
     } catch (error) {
         console.error("Erro ao cadastrar usuário:", error);
-        alert("Erro ao cadastrar usuário.");
+        alert(`Erro ao cadastrar usuário: ${error.message}`);
     }
-
 }
+
 
 // Função para adicionar o evento ao botão (caso precise ser chamado em outro arquivo)
 export function ativarCadastro() {
