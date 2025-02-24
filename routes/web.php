@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UsuarioController;
 
 Route::get('/', function () {
     return view('index');
@@ -11,4 +10,8 @@ Route::get('/areaFuncionario', function () {
     return view('areafunc');
 })->name('areafunc');
 
-Route::post('/cadastrar', [UsuarioController::class, 'cadastrarUsuario']);
+Route::get('/hub', function () {
+    return view('hub');
+})->name('hub');
+
+

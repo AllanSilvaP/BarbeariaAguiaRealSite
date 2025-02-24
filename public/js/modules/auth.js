@@ -3,9 +3,12 @@ import { cadastrarUsuario } from "./api.js";
 export async function handleCadastro(event) {
     event.preventDefault();
 
-    const email = document.getElementById("email").value;
+    const email = document.getElementById("email").value.trim();
     const senha = document.getElementById("senha").value;
-    const tipo_usuario = document.getElementById("tipo-conta").value;
+    const tipo_usuario = document.getElementById("tipo_usuario").value;
+
+    console.log("Email:", email, "Senha:", senha, "Tipo usuário:", tipo_usuario);
+    console.log(JSON.stringify({ email, senha, tipo_usuario }));
 
     if (!email || !senha || !tipo_usuario) {
         alert("Preencha todos os campos!");
@@ -13,7 +16,7 @@ export async function handleCadastro(event) {
     }
 
     try {
-        const resultado = await cadastrarUsuario({ email, senha, tipo_usuario });
+        const resultado = await cadastrarUsuario( email, senha, tipo_usuario );
         console.log("Usuário cadastrado:", resultado);
         alert("Cadastro realizado com sucesso!");
     } catch (error) {

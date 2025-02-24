@@ -27,8 +27,8 @@
         <div class="login-field">
             <input id="email" name="email" type="email" placeholder="Digite seu email" required>
             <input id="senha" name="senha" type="password" placeholder="Digite sua senha" required>
-            <label for="tipo-conta">Tipo de Usuário</label>
-            <select id="tipo-conta" required>
+            <label>Tipo de Usuário</label>
+            <select id="tipo_usuario" required>
                 <option value="cliente" selected>Cliente</option>
                 <option value="barbeiro">Barbeiro</option>
                 <option value="administrador">Administrador</option>

@@ -18,8 +18,6 @@ class UsuarioController extends Controller
                 'tipo_usuario' => 'required|in:cliente,barbeiro,administrador'
             ]);
 
-            dd($request->all());
-
             $user = Usuario::create([
                 'email' => $request->email,
                 'senha' => Hash::make($request->senha),

@@ -1,0 +1,55 @@
+.container {
+    margin-top: 60px;
+    height: 100%;
+    width: 100%;
+}
+
+.barra-navegador-direita {
+    background-color: whitesmoke;
+    height: 100%;
+    width: 25%;
+    position: fixed;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.usuario {
+    padding: 5%;
+}
+
+.hub-bt {
+    padding: 5%;
+    display: flex;
+    justify-content: center;
+}
+
+.hub-bt-funcionalidades {
+    padding: 5%;
+    display: flex;
+    flex-direction: column;
+}
+
+.painel-financeiro {
+    display: block;
+    background-color: grey;
+    height: 100%;
+    left: 0;
+    width: 75%;
+}
+
+.painel-estoque {
+    display: none;
+    background-color: grey;
+    height: 100%;
+    left: 0;
+    width: 75%;
+}
+
+.painel-agendamento {
+    display: none;
+    background-color: grey;
+    height: 100%;
+    left: 0;
+    width: 75%;
+}
