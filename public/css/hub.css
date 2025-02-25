@@ -31,7 +31,7 @@
 }
 
 .painel-financeiro {
-    display: block;
+    display: none;
     background-color: grey;
     height: 100%;
     left: 0;

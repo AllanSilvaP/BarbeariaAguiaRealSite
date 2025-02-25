@@ -38,13 +38,14 @@
             </div>
         </div>
 
-        <div class="painel-financeiro">
+        <div class="painel-financeiro" id="painel-financeiro">
             <h1>Financeiro</h1>
             <div class="tela-finaceiro">
 
             <div class="bt-financeiro">
-                <button>A Pagar</button>
-                <button>Pagos</button>
+                <button id="bt-a-pagar" class="ativo">A Pagar</button>
+                <button id="bt-pagos">Pagos</button>
+                <button id="bt-add-conta">Adicionar Contas</button>
                 </div>
 
                 <div class="datas">
