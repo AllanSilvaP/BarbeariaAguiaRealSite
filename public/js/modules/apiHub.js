@@ -4,10 +4,11 @@ const API_URL = "http://127.0.0.1:8000";
 
 export async function cadastrarConta(nome, categoria, caixa, dataVencimento, valor, formaPagamento, status, dataPagamento, numParcela, totalParcelas, idParcelamento, criadoEm) {
     try {
-        const response = await fetch(`${API_URL}/contas`, {
+        const response = await fetch(`${API_URL}/cadastrar/conta`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
             body: JSON.stringify({ nome, categoria, caixa, dataVencimento, valor, formaPagamento, status, dataPagamento, numParcela, totalParcelas, idParcelamento, criadoEm })
         });
@@ -27,7 +28,7 @@ export async function cadastrarConta(nome, categoria, caixa, dataVencimento, val
 
 async function buscarContas() {
     try {
-        const response = await fetch(`${API_URL}/contas`);
+        const response = await fetch(`${API_URL}/buscar/contas`);
         if (!response.ok) throw new Error("Erro ao buscar contas");
 
         return await response.json();
@@ -40,6 +41,11 @@ async function buscarContas() {
 async function carregarContas() {
     const contas = await buscarContas();
     mostrarCards(contas);
+}
+
+async function cadastrarContas () {
+    const contas = await cadastrarConta();
+
 }
 
 export { carregarContas };

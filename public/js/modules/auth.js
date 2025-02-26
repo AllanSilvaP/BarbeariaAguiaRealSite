@@ -7,9 +7,6 @@ export async function handleCadastro(event) {
     const senha = document.getElementById("senha").value;
     const tipo_usuario = document.getElementById("tipo_usuario").value;
 
-    console.log("Email:", email, "Senha:", senha, "Tipo usuário:", tipo_usuario);
-    console.log(JSON.stringify({ email, senha, tipo_usuario }));
-
     if (!email || !senha || !tipo_usuario) {
         alert("Preencha todos os campos!");
         return;
