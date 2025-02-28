@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Contas;
@@ -17,7 +16,12 @@ class ContaController extends Controller
     }
 
     public function buscarContas (Request $request) {
-
+        try {
+            $buscador = Contas::where('status', 'A pagar')->get();
+            return response()->json($buscador);
+        } catch (Exception $e) {
+            return response()->json(['Error' => 'erro ao buscar contas'], 500);
+        }
     }
 
     public function cadastrarConta (Request $request) {
@@ -32,7 +36,7 @@ class ContaController extends Controller
                 'status' => ['required', Rule::in(['A pagar', 'Pago'])],
                 'data_pagamento' => 'nullable|date',
                 'num_parcela' => 'required|integer|min:1',
-                'total_parcela' => 'required|integer|min:1',
+                'total_parcelas' => 'required|integer|min:1',
             ]);
 
             $analisador['id_parcelamento'] = null;

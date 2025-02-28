@@ -17,7 +17,7 @@ const formulario = document.getElementById('formCadastroConta')
 
 //PRIMEIRA PARTE - A PAGAR e PAGOS
 
-function ativarBotaoHub () {
+function ativarBotaoHub() {
     btPagar.addEventListener("click", () => {
         painelFinanceiro.style.display = "block"
         carregarContas()
@@ -32,16 +32,16 @@ function ativarBotaoHub () {
     })
 }
 
-function ativarBotaoAux (ativo, inativo) {
+function ativarBotaoAux(ativo, inativo) {
     ativo.classList.add('ativo')
     inativo.classList.remove('ativo')
 }
 
-function ativarBotaoCad () {
+function ativarBotaoCad() {
     btAddConta.addEventListener("click", () => {
         painelEspecialidade.innerHTML = ""
-        painelEspecialidade.innerHTML =`
-        <form id="formCadastroConta">
+        painelEspecialidade.innerHTML = `
+        <form id="formCadastroConta" method="POST" action="/api/cadastrar/conta">
                 <label for="nome">Nome:</label>
                 <input type="text" id="nome" name="nome" required>
 
@@ -65,13 +65,13 @@ function ativarBotaoCad () {
                 </select>
 
                 <label for="dataVencimento">Data de Vencimento:</label>
-                <input type="date" id="dataVencimento" name="dataVencimento" required>
+                <input type="date" id="dataVencimento" name="data_vencimento" required>
 
                 <label for="valor">Valor:</label>
                 <input type="number" id="valor" name="valor" required>
 
                 <label for="formaPagamento">Forma de Pagamento:</label>
-                <input type="text" id="formaPagamento" name="formaPagamento" required>
+                <input type="text" id="formaPagamento" name="forma_pagamento" required>
 
                 <label for="status">Status:</label>
                 <select id="status" name="status" required>
@@ -80,12 +80,12 @@ function ativarBotaoCad () {
                 </select>
 
                 <label for="numParcela">Número da Parcela:</label>
-                <select id="numParcela" name="numParcela">
+                <select id="numParcela" name="num_parcela">
                     ${Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}" ${i === 0 ? 'selected' : ''}>${i + 1}</option>`).join('')}
                 </select>
 
                 <label for="totalParcelas">Total de Parcelas:</label>
-                <select id="totalParcelas" name="totalParcelas">
+                <select id="total_parcelas" name="total_parcelas">
                     ${Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}" ${i === 0 ? 'selected' : ''}>${i + 1}</option>`).join('')}
                 </select>
 
@@ -93,41 +93,40 @@ function ativarBotaoCad () {
          </form>`
     })
     //  PEGANDO DADOS FORM PARA MANDAR PARA A API
-        formulario.addEventListener("submit", async (event) => {
+    formulario.addEventListener("submit", async (event) => {
         event.preventDefault()
 
         const formData = new FormData(event.target)
-        const dados = Object.fromEntreis(formData.entries())
+        const dados = Object.fromEntries(formData.entries())
 
-        dados.valor = parseFloat (dados.valor)
-        dados.numParcela = parseInt(dados.numParcela, 10);
-            dados.totalParcelas = parseInt(dados.totalParcelas, 10);
-            dados.dataPagamento = dados.dataPagamento ? dados.dataPagamento : null;
-            dados.idParcelamento = null;
-            dados.criadoEm = new Date().toISOString();
+        dados.valor = parseFloat(dados.valor)
+        dados.num_parcela = parseInt(dados.num_parcela, 10);
+        dados.total_parcelas = parseInt(dados.total_parcelas, 10);
+        dados.data_pagamento = dados.dataPagamento ? dados.dataPagamento : null;
+        dados.id_parcelamento = null;
+        dados.criado_em = new Date().toISOString();
 
-            try {
-                const resposta = await cadastrarConta(
-                    dados.nome,
-                    dados.categoria,
-                    dados.caixa,
-                    dados.dataVencimento,
-                    dados.valor,
-                    dados.formaPagamento,
-                    dados.status,
-                    dados.dataPagamento,
-                    dados.numParcela,
-                    dados.totalParcelas,
-                    dados.idParcelamento,
-                    dados.criadoEm
-                );
-
-                alert("Conta cadastrada com sucesso!");
-                console.log("Resposta da API:", resposta);
-            } catch (error) {
-                alert("Erro ao cadastrar conta. Verifique os campos e tente novamente.");
-            }
+        try {
+            const resposta = await cadastrarConta(
+                dados.nome,
+                dados.categoria,
+                dados.caixa,
+                dados.data_vencimento,
+                dados.valor,
+                dados.forma_pagamento,
+                dados.status,
+                dados.data_pagamento,
+                dados.num_parcela,
+                dados.total_parcelas,
+                dados.id_parcelamento,
+                dados.criado_em
+            );
+            alert("Conta cadastrada com sucesso!");
+            console.log("Resposta da API:", resposta);
+        } catch (error) {
+            alert("Erro ao cadastrar conta. Verifique os campos e tente novamente.");
+        }
     })
 }
 
-export {ativarBotaoHub, ativarBotaoAux, ativarBotaoCad}
+export { ativarBotaoHub, ativarBotaoAux, ativarBotaoCad }

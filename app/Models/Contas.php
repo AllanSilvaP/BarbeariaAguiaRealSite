@@ -11,6 +11,8 @@ class Contas extends Model
 
     protected $table = 'contas';
 
+    public $timestamps = false;
+
     protected $fillable = [
         'nome',
         'categoria',

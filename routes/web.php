@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ContaController;
 
 Route::get('/', function () {
     return view('index');
@@ -13,5 +14,4 @@ Route::get('/areaFuncionario', function () {
 Route::get('/hub', function () {
     return view('hub');
 })->name('hub');
-
-
+?>
