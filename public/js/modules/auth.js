@@ -35,7 +35,7 @@ async function handleUsuario(event) {
     try {
         const response = await loginUsuario(email, senha, tipo_usuario);
 
-        if (response && response.token) {
+        if (response) {
             //localStorage.setItem("authToken", response.Token)
             alert("Login Realizado com sucesso");
             window.location.href = "http://127.0.0.1:8000/hub";

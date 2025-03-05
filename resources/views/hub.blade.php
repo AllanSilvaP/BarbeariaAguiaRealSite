@@ -54,11 +54,7 @@
                     <button>Amanhã</button>
                     <button>Esse mês</button>
                 </div>
-                <div class="hub-financeiro" id="hub-financeiro">
-                    <h2>Variavel Mês</h2>
-                    <p> grafico SEXY</p>
-                    <p>Seja bem vindo $user!</p>
-                </div>
+                <div class="hub-financeiro" id="hub-financeiro"></div>
             </div>
         </div>
 

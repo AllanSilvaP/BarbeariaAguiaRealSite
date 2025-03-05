@@ -11,16 +11,21 @@ class ContaController extends Controller
 {
     //CRUD
 
-    public function criarContas (Request $request) {
-
-    }
-
     public function buscarContas (Request $request) {
         try {
-            $buscador = Contas::where('status', 'A pagar')->get();
+            $status = $request->input('status');
+
+            if ($status === 'A pagar') {
+                $buscador = Contas::where('status', 'A pagar')->get();
+            } else {
+                $buscador = Contas::where('status', 'Pago')->get();
+            }
             return response()->json($buscador);
         } catch (Exception $e) {
-            return response()->json(['Error' => 'erro ao buscar contas'], 500);
+            return response()->json([
+                'Error' => 'erro ao buscar contas',
+                'details' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -42,12 +47,8 @@ class ContaController extends Controller
             $analisador['id_parcelamento'] = null;
             $analisador['criado_em'] = now();
 
-            $conta = Contas::create($analisador);
+            Contas::create($analisador);
 
-            return response()->json([
-                'message' => 'Conta cadastrada com sucesso',
-                'conta' => $conta
-            ], 201);
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'erro em: ',

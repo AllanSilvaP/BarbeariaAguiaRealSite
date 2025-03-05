@@ -16,19 +16,23 @@ const btAddConta = document.getElementById('bt-add-conta')
 const formulario = document.getElementById('formCadastroConta')
 
 //PRIMEIRA PARTE - A PAGAR e PAGOS
-
 function ativarBotaoHub() {
     btPagar.addEventListener("click", () => {
         painelFinanceiro.style.display = "block"
-        carregarContas()
+        carregarContas('A Pagar')
+    })
+}
 
-        btAPagar.addEventListener("click", () => {
-            ativarBotaoAux(btAPagar, btPagos)
-        })
+function ativarBotaoFinanceiro() {
+    btAPagar.addEventListener("click", () => {
+        ativarBotaoAux(btAPagar, btPagos)
+        carregarContas('A Pagar')
+    })
 
-        btPagos.addEventListener("click", () => {
-            ativarBotaoAux(btPagos, btAPagar)
-        })
+    btPagos.addEventListener("click", () => {
+        ativarBotaoAux(btPagos, btAPagar)
+        console.log('test')
+        carregarContas('Pago')
     })
 }
 
@@ -107,7 +111,7 @@ function ativarBotaoCad() {
         dados.criado_em = new Date().toISOString();
 
         try {
-            const resposta = await cadastrarConta(
+            await cadastrarConta(
                 dados.nome,
                 dados.categoria,
                 dados.caixa,
@@ -122,11 +126,10 @@ function ativarBotaoCad() {
                 dados.criado_em
             );
             alert("Conta cadastrada com sucesso!");
-            console.log("Resposta da API:", resposta);
         } catch (error) {
             alert("Erro ao cadastrar conta. Verifique os campos e tente novamente.");
         }
     })
 }
 
-export { ativarBotaoHub, ativarBotaoAux, ativarBotaoCad }
+export { ativarBotaoHub, ativarBotaoAux, ativarBotaoCad, ativarBotaoFinanceiro }

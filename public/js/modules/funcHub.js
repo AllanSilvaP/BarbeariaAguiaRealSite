@@ -26,7 +26,7 @@ function criarCard(conta) {
 }
 
 function mostrarCards (contas) {
-    const hubFinanceiro = document.getElementsById('hub-financeiro')
+    const hubFinanceiro = document.getElementById('hub-financeiro')
     hubFinanceiro.innerHTML = ""
 
     contas.forEach(conta => {

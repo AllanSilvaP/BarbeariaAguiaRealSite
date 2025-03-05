@@ -8,6 +8,7 @@ export async function cadastrarConta(nome, categoria, caixa, dataVencimento, val
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                "X-Requested-With": "XMLHttpRequest",
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
             body: JSON.stringify({ nome, categoria, caixa, dataVencimento, valor, formaPagamento, status, dataPagamento, numParcela, totalParcelas, idParcelamento, criadoEm, updated_at, created_at })
@@ -26,9 +27,9 @@ export async function cadastrarConta(nome, categoria, caixa, dataVencimento, val
     }
 }
 
-async function buscarContas() {
+async function buscarContas(status) {
     try {
-        const response = await fetch(`${API_URL}/buscar/contas`);
+        const response = await fetch(`${API_URL}/api/buscar/contas?status=${status}`);
         if (!response.ok) throw new Error("Erro ao buscar contas");
 
         return await response.json();

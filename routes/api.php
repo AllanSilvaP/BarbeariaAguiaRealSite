@@ -8,7 +8,7 @@ Route::post('/cadastrar', [UsuarioController::class, 'cadastrarUsuario']
 
 Route::post('/login', [UsuarioController::class, 'loginUsuario'])->name('loginUsuario');
 
-Route::get('/buscar/contas', [ContaController::class, 'buscarConta'])->name('buscarConta');
+Route::get('/buscar/contas', [ContaController::class, 'buscarContas'])->name('buscarConta');
 
 Route::post('/cadastrar/conta', [ContaController::class, 'cadastrarConta'])->name('cadastrarConta');
 ?>
