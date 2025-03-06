@@ -2,7 +2,7 @@ import { mostrarCards } from "./funcHub.js";
 
 const API_URL = "http://127.0.0.1:8000";
 
-export async function cadastrarConta(nome, categoria, caixa, dataVencimento, valor, formaPagamento, status, dataPagamento, numParcela, totalParcelas, idParcelamento, criadoEm) {
+async function cadastrarConta(nome, categoria, caixa, dataVencimento, valor, formaPagamento, status, dataPagamento, numParcela, totalParcelas, idParcelamento, criadoEm) {
     try {
         const response = await fetch(`${API_URL}/api/cadastrar/conta`, {
             method: 'POST',
@@ -32,16 +32,37 @@ async function buscarContas(status) {
         const response = await fetch(`${API_URL}/api/buscar/contas?status=${status}`);
         if (!response.ok) throw new Error("Erro ao buscar contas");
 
-        return await response.json();
+        return await response.json()
     } catch (error) {
         console.error("Erro ao carregar contas:", error);
         return [];
     }
 }
 
-async function carregarContas() {
-    const contas = await buscarContas();
-    mostrarCards(contas);
+async function carregarContas(status) {
+    const contas = await buscarContas(status)
+    mostrarCards(contas)
 }
 
-export { carregarContas };
+async function excluirConta(id) {
+    try {
+        const response = await fetch(`${API_URL}/api/excluir/conta/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Erro desconhecido ao excluir usuario");
+        }
+        alert('Conta excluida com sucesso')
+        return data
+    } catch (error) {
+        return response()
+    }
+}
+
+export { carregarContas, cadastrarConta, excluirConta };

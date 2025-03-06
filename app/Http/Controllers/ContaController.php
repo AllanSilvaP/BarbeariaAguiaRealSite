@@ -14,12 +14,8 @@ class ContaController extends Controller
     public function buscarContas (Request $request) {
         try {
             $status = $request->input('status');
+            $buscador = Contas::where('status', $status)->get();
 
-            if ($status === 'A pagar') {
-                $buscador = Contas::where('status', 'A pagar')->get();
-            } else {
-                $buscador = Contas::where('status', 'Pago')->get();
-            }
             return response()->json($buscador);
         } catch (Exception $e) {
             return response()->json([
@@ -54,6 +50,32 @@ class ContaController extends Controller
                 'message' => 'erro em: ',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function excluirConta ($id) {
+        try {
+            $conta = Contas::findOrFail($id);
+            $conta->delete();
+            return response('Conta excluida com sucesso', 200);
+        } catch (Exception $e) {
+            return response('Erro ao excluir conta', 500);
+        }
+    }
+
+    public function pagarConta ($id) {
+        try {
+            $conta = Contas::findOrFail($id);
+
+            if ($conta->status === 'A Pagar') {
+                $conta->status = 'Pago';
+                $conta->save();
+                return response();
+            } else {
+                return response()->json(['message' => 'A conta não está em status "A Pagar".'], 400);
+            }
+        } catch (Exception $e) {
+            return response();
         }
     }
 }

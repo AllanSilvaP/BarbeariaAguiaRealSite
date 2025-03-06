@@ -37,7 +37,6 @@ async function handleUsuario(event) {
 
         if (response) {
             //localStorage.setItem("authToken", response.Token)
-            alert("Login Realizado com sucesso");
             window.location.href = "http://127.0.0.1:8000/hub";
         }
     } catch (error) {

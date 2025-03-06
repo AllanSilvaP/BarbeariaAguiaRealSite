@@ -1,3 +1,4 @@
+import { excluirConta } from "./apiHub.js";
 function criarCard(conta) {
     const card = document.createElement('div')
     card.classList.add('card-pagamento')
@@ -19,8 +20,19 @@ function criarCard(conta) {
     </div>
     <div class="card-footer">
         ${conta.status === "A Pagar" ? `<button class="btn-pagar" data-id="${conta.id}">Pagar</button>` : ""}
+        ${conta.status === "A Pagar" ? `<button class="btn-editar" data-id="${conta.id}">Editar</button>` : ""}
+        ${conta.status === "A Pagar" ? `<button class="btn-excluir" data-id="${conta.id}">Excluir</button>` : ""}
     </div>
     `;
+
+    //CONST PARA FAZER CRUD
+
+    const btnExcluir = card.querySelector('.btn-excluir')
+    if (btnExcluir) {
+        btnExcluir.addEventListener('click', () => {
+            excluirConta(conta.id)
+        })
+    }
 
     return card
 }

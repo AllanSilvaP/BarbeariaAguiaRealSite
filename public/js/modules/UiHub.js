@@ -14,16 +14,12 @@ const btAddConta = document.getElementById('bt-add-conta')
 
 
 const formulario = document.getElementById('formCadastroConta')
-
 //PRIMEIRA PARTE - A PAGAR e PAGOS
-function ativarBotaoHub() {
     btPagar.addEventListener("click", () => {
         painelFinanceiro.style.display = "block"
         carregarContas('A Pagar')
     })
-}
 
-function ativarBotaoFinanceiro() {
     btAPagar.addEventListener("click", () => {
         ativarBotaoAux(btAPagar, btPagos)
         carregarContas('A Pagar')
@@ -31,10 +27,8 @@ function ativarBotaoFinanceiro() {
 
     btPagos.addEventListener("click", () => {
         ativarBotaoAux(btPagos, btAPagar)
-        console.log('test')
         carregarContas('Pago')
     })
-}
 
 function ativarBotaoAux(ativo, inativo) {
     ativo.classList.add('ativo')
@@ -132,4 +126,4 @@ function ativarBotaoCad() {
     })
 }
 
-export { ativarBotaoHub, ativarBotaoAux, ativarBotaoCad, ativarBotaoFinanceiro }
+export { ativarBotaoAux, ativarBotaoCad }
