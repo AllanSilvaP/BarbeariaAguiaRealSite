@@ -25,7 +25,8 @@ class ContaController extends Controller
         }
     }
 
-    public function cadastrarConta (Request $request) {
+    public function cadastrarConta(Request $request) {
+
         try {
             $analisador = $request->validate([
                 'nome' => 'required|string|max:255',
@@ -45,13 +46,15 @@ class ContaController extends Controller
 
             Contas::create($analisador);
 
+            return response()->json(['message' => 'Conta cadastrada com sucesso'], 201);
         } catch (Exception $e) {
             return response()->json([
-                'message' => 'erro em: ',
+                'message' => 'Erro ao cadastrar conta',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
+
 
     public function excluirConta ($id) {
         try {

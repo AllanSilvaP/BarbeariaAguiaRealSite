@@ -2,16 +2,15 @@ import { mostrarCards } from "./funcHub.js";
 
 const API_URL = "http://127.0.0.1:8000";
 
-async function cadastrarConta(nome, categoria, caixa, dataVencimento, valor, formaPagamento, status, dataPagamento, numParcela, totalParcelas, idParcelamento, criadoEm) {
+async function cadastrarConta(nome, categoria, caixa, data_vencimento, valor, forma_pagamento, status, data_pagamento, num_parcela, total_parcelas, id_parcelamento, criado_em) {
     try {
         const response = await fetch(`${API_URL}/api/cadastrar/conta`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 "X-Requested-With": "XMLHttpRequest",
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            body: JSON.stringify({ nome, categoria, caixa, dataVencimento, valor, formaPagamento, status, dataPagamento, numParcela, totalParcelas, idParcelamento, criadoEm, updated_at, created_at })
+            body: JSON.stringify({ nome, categoria, caixa, data_vencimento, valor, forma_pagamento, status, data_pagamento, num_parcela, total_parcelas, id_parcelamento, criado_em})
         });
 
         const data = await response.json();
@@ -61,7 +60,8 @@ async function excluirConta(id) {
         alert('Conta excluida com sucesso')
         return data
     } catch (error) {
-        return response()
+        console.error(error)
+        throw error
     }
 }
 
@@ -83,7 +83,5 @@ async function pagarConta (id) {
         console.error(error)
     }
 }
-
-console.log('mudei')
 
 export { pagarConta, carregarContas, cadastrarConta, excluirConta };

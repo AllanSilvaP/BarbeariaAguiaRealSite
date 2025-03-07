@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/hub.css') }}">
     <link rel="icon" href="{{ asset('img/barbearia-frente.png')}}" type="image/x-icon">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>HUB</title>
 </head>
 
@@ -49,7 +48,7 @@
                 </div>
 
                 <div class="datas">
-                    <button>Pesquisar</button>
+                    <button id="bt-pesquisar">Pesquisar</button>
                     <button>Hoje</button>
                     <button>Amanhã</button>
                     <button>Esse mês</button>
