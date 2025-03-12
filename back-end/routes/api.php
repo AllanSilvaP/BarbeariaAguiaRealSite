@@ -15,4 +15,6 @@ Route::post('/cadastrar/conta', [ContaController::class, 'cadastrarConta'])->nam
 Route::delete('/excluir/conta/{id}', [ContaController::class, 'excluirConta'])->name('excluirConta');
 
 Route::patch('/pagar/conta/{id}', [ContaController::class, 'pagarConta'])->name('pagarConta');
+
+Route::patch('/editar/conta/{id}', [ContaController::class, 'editarConta'])->name('editarConta')
 ?>

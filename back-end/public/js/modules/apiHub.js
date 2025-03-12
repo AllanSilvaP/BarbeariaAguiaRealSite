@@ -84,4 +84,24 @@ async function pagarConta (id) {
     }
 }
 
-export { pagarConta, carregarContas, cadastrarConta, excluirConta };
+async function editarConta (id) {
+    try {
+        const response = await fetch (`${API_URL}/api/editar/conta/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        const data = await response.json()
+        if (!response.ok) {
+            throw new Error(data.message || "Erro ao editar")
+        }
+
+        return data
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export { pagarConta, carregarContas, cadastrarConta, excluirConta, editarConta};

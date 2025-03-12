@@ -1,6 +1,6 @@
-import { ativarBotaoCad, ativarBotaoPesquisa } from "./UiHub.js";
+import { ativarBotaoCad, /*ativarBotaoPesquisa,*/ ativarBotaoEditar } from "./UiHub.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     ativarBotaoCad()
-    ativarBotaoPesquisa()
+    ativarBotaoEditar()
 });

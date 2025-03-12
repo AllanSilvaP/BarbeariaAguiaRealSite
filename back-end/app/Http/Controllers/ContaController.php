@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Contas;
@@ -11,7 +12,8 @@ class ContaController extends Controller
 {
     //CRUD
 
-    public function buscarContas (Request $request) {
+    public function buscarContas(Request $request)
+    {
         try {
             $status = $request->input('status');
             $buscador = Contas::where('status', $status)->get();
@@ -25,7 +27,8 @@ class ContaController extends Controller
         }
     }
 
-    public function cadastrarConta(Request $request) {
+    public function cadastrarConta(Request $request)
+    {
 
         try {
             $analisador = $request->validate([
@@ -56,7 +59,8 @@ class ContaController extends Controller
     }
 
 
-    public function excluirConta ($id) {
+    public function excluirConta($id)
+    {
         try {
             $conta = Contas::findOrFail($id);
             $conta->delete();
@@ -66,7 +70,8 @@ class ContaController extends Controller
         }
     }
 
-    public function pagarConta ($id) {
+    public function pagarConta($id)
+    {
         try {
             $conta = Contas::findOrFail($id);
 
@@ -77,6 +82,31 @@ class ContaController extends Controller
             } else {
                 return response()->json(['message' => 'A conta não está em status "A Pagar".'], 400);
             }
+        } catch (Exception $e) {
+            return response();
+        }
+    }
+
+    public function editarConta(Request $request, $id)
+    {
+        try {
+            $conta = Contas::findOrFail($id);
+            $conta->update($request->only([
+                'nome',
+                'categoria',
+                'caixa',
+                'data_vencimento',
+                'valor',
+                'forma_pagamento',
+                'status',
+                'data_pagamento',
+                'num_parcela',
+                'total_parcela',
+                'id_parcelamento',
+                'criado_em'
+            ]));
+
+            return response();
         } catch (Exception $e) {
             return response();
         }

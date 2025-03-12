@@ -131,11 +131,11 @@ function ativarBotaoCad() {
 }
 
 
-function ativarBotaoPesquisa() {
+/*function ativarBotaoPesquisa() {
     btPesquisar.addEventListener('click', () => {
         painelEspecialidade.innerHTML = ""
         painelEspecialidade.innerHTML = `
-        <form id="formPesquisaConta" method="POST" action="/api/cadastrar/conta">
+        <form id="formPesquisaConta">
                 <label for="nome">Nome:</label>
                 <input type="text" id="nome" name="nome" required>
 
@@ -186,6 +186,14 @@ function ativarBotaoPesquisa() {
                 <button type="submit">Cadastrar</button>
          </form>`
     })
+}*/
+
+function ativarBotaoEditar() {
+    painelEspecialidade.addEventListener('click', (event) => {
+        if (event.target && event.target.classList.contains('btn-editar')) {
+            console.log('fodase teste')
+        }
+    })
 }
 
-export { ativarBotaoAux, ativarBotaoCad, ativarBotaoPesquisa }
+export { ativarBotaoAux, ativarBotaoCad, ativarBotaoEditar }
