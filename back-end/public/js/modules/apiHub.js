@@ -43,6 +43,18 @@ async function carregarContas(status) {
     mostrarCards(contas)
 }
 
+async function buscarContaPorId (id) {
+    try {
+        const response = await fetch(`${API_URL}/api/buscar/conta/${id}`);
+        if (!response.ok) throw new Error("Erro ao buscar contas");
+
+        return await response.json()
+    } catch (error) {
+        console.error("Erro ao carregar contas:", error);
+        return [];
+    }
+}
+
 async function excluirConta(id) {
     try {
         const response = await fetch(`${API_URL}/api/excluir/conta/${id}`, {
@@ -84,13 +96,14 @@ async function pagarConta (id) {
     }
 }
 
-async function editarConta (id) {
+async function editarConta (id, contaData) {
     try {
         const response = await fetch (`${API_URL}/api/editar/conta/${id}`, {
-            method: 'PATCH',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify(contaData)
         })
 
         const data = await response.json()
@@ -104,4 +117,4 @@ async function editarConta (id) {
     }
 }
 
-export { pagarConta, carregarContas, cadastrarConta, excluirConta, editarConta};
+export { pagarConta, carregarContas, cadastrarConta, excluirConta, editarConta, buscarContaPorId};

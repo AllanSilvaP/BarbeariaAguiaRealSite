@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Contas;
 use Illuminate\Validation\Rule;
 use Exception;
+use Illuminate\Support\Facades\Log;
+
 
 class ContaController extends Controller
 {
@@ -22,6 +24,18 @@ class ContaController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'Error' => 'erro ao buscar contas',
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function buscarContaPorId($id) {
+        try {
+            $buscador = Contas::where('id', $id)->first();
+
+            return response()->json($buscador);
+        } catch (Exception $e) {
+            return response()->json([
                 'details' => $e->getMessage()
             ], 500);
         }
@@ -87,28 +101,56 @@ class ContaController extends Controller
         }
     }
 
-    public function editarConta(Request $request, $id)
-    {
-        try {
-            $conta = Contas::findOrFail($id);
-            $conta->update($request->only([
-                'nome',
-                'categoria',
-                'caixa',
-                'data_vencimento',
-                'valor',
-                'forma_pagamento',
-                'status',
-                'data_pagamento',
-                'num_parcela',
-                'total_parcela',
-                'id_parcelamento',
-                'criado_em'
-            ]));
+    public function editarConta($id, Request $request)
+{
+    try {
+        // Logando os dados recebidos no request
+        Log::info('Recebido request para editar conta', ['id' => $id, 'dados' => $request->all()]);
 
-            return response();
-        } catch (Exception $e) {
-            return response();
-        }
+        // Validação dos dados
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'categoria' => ['required', Rule::in(['Aluguel', 'Energia', 'Salário Barbeiro', 'Doces', 'Comidas', 'Bebidas', 'Sinuca', 'Equipamento'])],
+            'caixa' => ['required', Rule::in(['BRB Empresa', 'Dinheiro', 'BRB Pessoal'])],
+            'data_vencimento' => 'required|date',
+            'valor' => 'required|numeric|min:0',
+            'forma_pagamento' => 'required|string|max:100',
+            'status' => ['required', Rule::in(['A pagar', 'Pago'])],
+            'data_pagamento' => 'nullable|date',
+            'num_parcela' => 'required|integer|min:1',
+            'total_parcelas' => 'required|integer|min:1',
+        ]);
+
+        // Encontrando a conta
+        $conta = Contas::findOrFail($id);
+        Log::info('Conta encontrada', ['conta' => $conta]);
+
+        // Atualizando os dados da conta
+        $conta->update($request->only([
+            'nome',
+            'categoria',
+            'caixa',
+            'data_vencimento',
+            'valor',
+            'forma_pagamento',
+            'status',
+            'data_pagamento',
+            'num_parcela',
+            'total_parcelas',
+            'id_parcelamento'
+        ]));
+
+        Log::info('Conta atualizada com sucesso', ['conta' => $conta]);
+
+        return response()->json(['message' => 'Conta atualizada com sucesso!'], 200);
+    } catch (Exception $e) {
+        // Logando o erro
+        Log::error('Erro ao atualizar conta', [
+            'exception' => $e->getMessage(),
+            'stack' => $e->getTraceAsString(),
+        ]);
+
+        return response()->json(['error' => 'Erro ao atualizar a conta'], 500);
     }
+}
 }

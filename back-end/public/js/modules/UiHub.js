@@ -1,4 +1,4 @@
-import { carregarContas, cadastrarConta } from "./apiHub.js"
+import { carregarContas, cadastrarConta, buscarContaPorId, editarConta } from "./apiHub.js"
 
 const painelFinanceiro = document.getElementById('painel-financeiro')
 const painelEspecialidade = document.getElementById('hub-financeiro')
@@ -189,11 +189,112 @@ function ativarBotaoCad() {
 }*/
 
 function ativarBotaoEditar() {
-    painelEspecialidade.addEventListener('click', (event) => {
+    painelEspecialidade.addEventListener('click', async (event) => {
         if (event.target && event.target.classList.contains('btn-editar')) {
-            console.log('fodase teste')
+            const contaId = event.target.getAttribute("data-id")
+            try {
+                const conta = await buscarContaPorId(contaId)
+                const contaElemento = event.target.closest(".card-pagamento")
+
+                const cloneOriginal = contaElemento.cloneNode(true)
+                contaElemento.innerHTML = `
+                    <form id="formCadastroConta">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome"value="${conta.nome}" required>
+
+                <label for="categoria">Categoria:</label>
+                <select id="categoria" name="categoria" required>
+                    ${gerarOpcoesSelect(conta.categoria, ["Aluguel", "Energia", "Salário Barbeiro", "Doces", "Comidas", "Bebidas", "Sinuca", "Equipamento"])}
+                </select>
+
+                <label for="caixa">Caixa:</label>
+                <select id="caixa" name="caixa" required>
+                    ${gerarOpcoesSelect(conta.caixa, ["BRB Empresa", "Dinheiro", "BRB Pessoal"])}
+                </select>
+
+                <label for="dataVencimento">Data de Vencimento:</label>
+                <input type="date" id="dataVencimento" name="data_vencimento" value="${conta.data_vencimento}" required>
+
+                <label for="valor">Valor:</label>
+                <input type="number" id="valor" name="valor" value="${conta.valor}" required>
+
+                <label for="formaPagamento">Forma de Pagamento:</label>
+                <input type="text" id="formaPagamento" name="forma_pagamento" value="${conta.forma_pagamento}"required>
+
+                <label for="status">Status:</label>
+                <select id="status" name="status" required>
+                ${gerarOpcoesSelect(conta.status, ["A pagar", "Pago"])}
+                </select>
+
+                <label for="numParcela">Número da Parcela:</label>
+                <select id="numParcela" name="num_parcela">
+                    ${Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}" ${conta.num_parcela === i + 1 ? 'selected' : ''}>${i + 1}</option>`).join('')}
+                </select>
+
+                <label for="totalParcelas">Total de Parcelas:</label>
+                <select id="total_parcelas" name="total_parcelas">
+                    ${Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}" ${conta.total_parcelas === i + 1 ? 'selected' : ''}>${i + 1}</option>`).join('')}
+                </select>
+
+                <button type="submit"id="btn-atualizar">Atualizar</button>
+                <button type="button"id="btn-cancelar">Cancelar</button>
+         </form>`
+
+                const btAtualizar = document.getElementById('btn-atualizar')
+                const btCancelar = document.getElementById('btn-cancelar')
+
+                btCancelar.addEventListener('click', () => {
+                    contaElemento.replaceWith(cloneOriginal)
+                })
+
+                const formulario = document.getElementById("formCadastroConta");
+
+                formulario.addEventListener("submit", async (event) => {
+                    event.preventDefault(); // Impede o reload da página
+
+                    const formData = new FormData(event.target);
+                    const dados = Object.fromEntries(formData.entries());
+
+                    dados.valor = parseFloat(dados.valor);
+                    dados.num_parcela = parseInt(dados.num_parcela, 10);
+                    dados.total_parcelas = parseInt(dados.total_parcelas, 10);
+                    dados.data_pagamento = dados.data_pagamento || null;
+                    dados.id_parcelamento = null;
+                    dados.criado_em = new Date().toISOString();
+
+                    try {
+                        await editarConta(
+                            contaId,
+                            {nome: dados.nome,
+                            categoria: dados.categoria,
+                            caixa: dados.caixa,
+                            data_vencimento: dados.data_vencimento,
+                            valor: dados.valor,
+                            forma_pagamento: dados.forma_pagamento,
+                            status: dados.status,
+                            data_pagamento: dados.data_pagamento,
+                            num_parcela: dados.num_parcela,
+                            total_parcelas: dados.total_parcelas,
+                            id_parcelamento: dados.id_parcelamento,
+                            criado_em: dados.criado_em}
+                        );
+                        alert("Conta atualizada com sucesso!");
+                    } catch (error) {
+                        alert("Erro ao cadastrar conta. Verifique os campos e tente novamente.");
+                        console.error(error);
+                    }
+                })
+
+            } catch (error) {
+                console.error(error)
+            }
         }
     })
 }
+
+function gerarOpcoesSelect(valorAtual, opcoes) {
+    return opcoes.map(opcao => `<option value="${opcao}" ${opcao === valorAtual ? 'selected' : ''}>${opcao}</option>`).join('');
+}
+
 
 export { ativarBotaoAux, ativarBotaoCad, ativarBotaoEditar }

@@ -10,11 +10,13 @@ Route::post('/login', [UsuarioController::class, 'loginUsuario'])->name('loginUs
 
 Route::get('/buscar/contas', [ContaController::class, 'buscarContas'])->name('buscarContas');
 
+Route::get('/buscar/conta/{id}', [ContaController::class, 'buscarContaPorId'])->name('buscarContaPorId');
+
 Route::post('/cadastrar/conta', [ContaController::class, 'cadastrarConta'])->name('cadastrarConta');
 
 Route::delete('/excluir/conta/{id}', [ContaController::class, 'excluirConta'])->name('excluirConta');
 
 Route::patch('/pagar/conta/{id}', [ContaController::class, 'pagarConta'])->name('pagarConta');
 
-Route::patch('/editar/conta/{id}', [ContaController::class, 'editarConta'])->name('editarConta')
+Route::put('/editar/conta/{id}', [ContaController::class, 'editarConta'])->name('editarConta')
 ?>
