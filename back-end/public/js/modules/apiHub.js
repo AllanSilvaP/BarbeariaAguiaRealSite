@@ -55,6 +55,18 @@ async function buscarContaPorId (id) {
     }
 }
 
+async function buscarContaPorData (data) {
+    try {
+        const response = await fetch(`${API_URL}/api/buscar/conta/${data}`);
+        if (!response.ok) throw new Error("Erro ao buscar contas");
+
+        return await response.json()
+    } catch (error) {
+        console.error("Erro ao carregar contas:", error);
+        return [];
+    }
+}
+
 async function excluirConta(id) {
     try {
         const response = await fetch(`${API_URL}/api/excluir/conta/${id}`, {
@@ -89,6 +101,29 @@ async function pagarConta (id) {
         const data = await response.json();
         if (!response.ok) {
             throw new Error(data.message || "Erro desconhecido ao pagar conta");
+        } else {
+            alert('Conta Paga')
+        }
+        return data
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+async function voltarConta (id) {
+    try {
+        const response = await fetch(`${API_URL}/api/voltar/conta/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        const data = await response.json();
+        if (!response.ok) {
+            throw new Error(data.message || "Erro desconhecido ao pagar conta");
+        } else {
+            alert('Conta retornou a aba A Pagar')
         }
         return data
     } catch (error) {
@@ -117,4 +152,4 @@ async function editarConta (id, contaData) {
     }
 }
 
-export { pagarConta, carregarContas, cadastrarConta, excluirConta, editarConta, buscarContaPorId};
+export { pagarConta, carregarContas, cadastrarConta, excluirConta, editarConta, buscarContaPorId, voltarConta, buscarContaPorData};

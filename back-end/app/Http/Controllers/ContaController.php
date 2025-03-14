@@ -41,6 +41,26 @@ class ContaController extends Controller
         }
     }
 
+    public function buscarContaPorData($data) {
+        try {
+            $buscador = Contas::where('data_vencimento', $data)->get();
+
+            return response()->json($buscador);
+        } catch (Exception $e) {
+            return response()->json([
+                'details' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function pesquisarConta(Request $request) {
+        try {
+            //code...
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
     public function cadastrarConta(Request $request)
     {
 
@@ -78,9 +98,9 @@ class ContaController extends Controller
         try {
             $conta = Contas::findOrFail($id);
             $conta->delete();
-            return response('Conta excluida com sucesso', 200);
+            return response()->json();
         } catch (Exception $e) {
-            return response('Erro ao excluir conta', 500);
+            return response()->json();
         }
     }
 
@@ -92,7 +112,24 @@ class ContaController extends Controller
             if ($conta->status === 'A Pagar') {
                 $conta->status = 'Pago';
                 $conta->save();
-                return response();
+                return response()->json();
+            } else {
+                return response()->json(['message' => 'A conta não está em status "A Pagar".'], 400);
+            }
+        } catch (Exception $e) {
+            return response();
+        }
+    }
+
+    public function voltarConta($id)
+    {
+        try {
+            $conta = Contas::findOrFail($id);
+
+            if ($conta->status === 'Pago') {
+                $conta->status = 'A Pagar';
+                $conta->save();
+                return response()->json();
             } else {
                 return response()->json(['message' => 'A conta não está em status "A Pagar".'], 400);
             }
@@ -104,9 +141,6 @@ class ContaController extends Controller
     public function editarConta($id, Request $request)
 {
     try {
-        // Logando os dados recebidos no request
-        Log::info('Recebido request para editar conta', ['id' => $id, 'dados' => $request->all()]);
-
         // Validação dos dados
         $request->validate([
             'nome' => 'required|string|max:255',
@@ -123,8 +157,6 @@ class ContaController extends Controller
 
         // Encontrando a conta
         $conta = Contas::findOrFail($id);
-        Log::info('Conta encontrada', ['conta' => $conta]);
-
         // Atualizando os dados da conta
         $conta->update($request->only([
             'nome',
@@ -140,15 +172,8 @@ class ContaController extends Controller
             'id_parcelamento'
         ]));
 
-        Log::info('Conta atualizada com sucesso', ['conta' => $conta]);
-
         return response()->json(['message' => 'Conta atualizada com sucesso!'], 200);
     } catch (Exception $e) {
-        // Logando o erro
-        Log::error('Erro ao atualizar conta', [
-            'exception' => $e->getMessage(),
-            'stack' => $e->getTraceAsString(),
-        ]);
 
         return response()->json(['error' => 'Erro ao atualizar a conta'], 500);
     }

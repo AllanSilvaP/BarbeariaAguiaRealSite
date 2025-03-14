@@ -63,7 +63,7 @@ function ativarBotaoCad() {
                 </select>
 
                 <label for="dataVencimento">Data de Vencimento:</label>
-                <input type="date" id="dataVencimento" name="data_vencimento" required>
+                <input type="date" id="dataVencimento" name="data_vencimento" required >
 
                 <label for="valor">Valor:</label>
                 <input type="number" id="valor" name="valor" required>
@@ -100,6 +100,13 @@ function ativarBotaoCad() {
             const dados = Object.fromEntries(formData.entries());
 
             dados.valor = parseFloat(dados.valor);
+            if (dados.valor <= 0) {
+                alert("Valor Invalido")
+                return
+            }
+            const dataVencimento = new Date(dados.data_vencimento)
+            dataVencimento.setMinutes(dataVencimento.getMinutes() + dataVencimento.getTimezoneOffset())
+            dados.dataVencimento = dataVencimento.toISOString().split("T")[0]
             dados.num_parcela = parseInt(dados.num_parcela, 10);
             dados.total_parcelas = parseInt(dados.total_parcelas, 10);
             dados.data_pagamento = dados.data_pagamento || null;
@@ -131,16 +138,17 @@ function ativarBotaoCad() {
 }
 
 
-/*function ativarBotaoPesquisa() {
+function ativarBotaoPesquisa() {
     btPesquisar.addEventListener('click', () => {
         painelEspecialidade.innerHTML = ""
         painelEspecialidade.innerHTML = `
         <form id="formPesquisaConta">
-                <label for="nome">Nome:</label>
+                <label for="nome">Nome da Conta:</label>
                 <input type="text" id="nome" name="nome" required>
 
                 <label for="categoria">Categoria:</label>
                 <select id="categoria" name="categoria" required>
+                    <option value=""></option>
                     <option value="Aluguel">Aluguel</option>
                     <option value="Energia">Energia</option>
                     <option value="Salário Barbeiro">Salário Barbeiro</option>
@@ -153,6 +161,7 @@ function ativarBotaoCad() {
 
                 <label for="caixa">Caixa:</label>
                 <select id="caixa" name="caixa" required>
+                    <option value=""></option>
                     <option value="BRB Empresa">BRB Empresa</option>
                     <option value="Dinheiro">Dinheiro</option>
                     <option value="BRB Pessoal">BRB Pessoal</option>
@@ -164,29 +173,12 @@ function ativarBotaoCad() {
                 <label for="valor">Valor:</label>
                 <input type="number" id="valor" name="valor" required>
 
-                <label for="formaPagamento">Forma de Pagamento:</label>
-                <input type="text" id="formaPagamento" name="forma_pagamento" required>
-
-                <label for="status">Status:</label>
-                <select id="status" name="status" required>
-                    <option value="A pagar" selected>A pagar</option>
-                    <option value="Pago">Pago</option>
-                </select>
-
-                <label for="numParcela">Número da Parcela:</label>
-                <select id="numParcela" name="num_parcela">
-                    ${Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}" ${i === 0 ? 'selected' : ''}>${i + 1}</option>`).join('')}
-                </select>
-
-                <label for="totalParcelas">Total de Parcelas:</label>
-                <select id="total_parcelas" name="total_parcelas">
-                    ${Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}" ${i === 0 ? 'selected' : ''}>${i + 1}</option>`).join('')}
-                </select>
-
-                <button type="submit">Cadastrar</button>
+                <button type="submit">Pesquisar</button>
          </form>`
+
+         const formPesquisa = document.getElementById('formPesquisaConta')
     })
-}*/
+}
 
 function ativarBotaoEditar() {
     painelEspecialidade.addEventListener('click', async (event) => {
@@ -240,7 +232,6 @@ function ativarBotaoEditar() {
                 <button type="button"id="btn-cancelar">Cancelar</button>
          </form>`
 
-                const btAtualizar = document.getElementById('btn-atualizar')
                 const btCancelar = document.getElementById('btn-cancelar')
 
                 btCancelar.addEventListener('click', () => {
@@ -265,18 +256,20 @@ function ativarBotaoEditar() {
                     try {
                         await editarConta(
                             contaId,
-                            {nome: dados.nome,
-                            categoria: dados.categoria,
-                            caixa: dados.caixa,
-                            data_vencimento: dados.data_vencimento,
-                            valor: dados.valor,
-                            forma_pagamento: dados.forma_pagamento,
-                            status: dados.status,
-                            data_pagamento: dados.data_pagamento,
-                            num_parcela: dados.num_parcela,
-                            total_parcelas: dados.total_parcelas,
-                            id_parcelamento: dados.id_parcelamento,
-                            criado_em: dados.criado_em}
+                            {
+                                nome: dados.nome,
+                                categoria: dados.categoria,
+                                caixa: dados.caixa,
+                                data_vencimento: dados.data_vencimento,
+                                valor: dados.valor,
+                                forma_pagamento: dados.forma_pagamento,
+                                status: dados.status,
+                                data_pagamento: dados.data_pagamento,
+                                num_parcela: dados.num_parcela,
+                                total_parcelas: dados.total_parcelas,
+                                id_parcelamento: dados.id_parcelamento,
+                                criado_em: dados.criado_em
+                            }
                         );
                         alert("Conta atualizada com sucesso!");
                     } catch (error) {
@@ -297,4 +290,4 @@ function gerarOpcoesSelect(valorAtual, opcoes) {
 }
 
 
-export { ativarBotaoAux, ativarBotaoCad, ativarBotaoEditar }
+export { ativarBotaoAux, ativarBotaoCad, ativarBotaoEditar, ativarBotaoPesquisa }

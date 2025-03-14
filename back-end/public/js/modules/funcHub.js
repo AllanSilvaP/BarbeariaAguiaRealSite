@@ -1,4 +1,4 @@
-import { excluirConta, pagarConta } from "./apiHub.js";
+import { excluirConta, pagarConta, voltarConta } from "./apiHub.js";
 function criarCard(conta) {
     const card = document.createElement('div')
     card.classList.add('card-pagamento')
@@ -14,14 +14,14 @@ function criarCard(conta) {
         <p><strong>Categoria:</strong> ${conta.categoria}</p>
         <p><strong>Caixa:</strong> ${conta.caixa}</p>
         <p><strong>Valor:</strong> R$ ${parseFloat(conta.valor).toFixed(2)}</p>
-        <p><strong>Data de Vencimento:</strong> ${new Date(conta.data_vencimento).toLocaleDateString()}</p>
+        <p><strong>Data de Vencimento:</strong> ${new Date(conta.data_vencimento + "T00:00:00").toLocaleDateString()}</p>
         <p><strong>Forma de Pagamento:</strong> ${conta.forma_pagamento}</p>
         ${conta.total_parcelas > 1 ? `<p><strong>Parcela:</strong> ${conta.num_parcela} de ${conta.total_parcelas}</p>` : ""}
     </div>
     <div class="card-footer">
         ${conta.status === "A Pagar" ? `<button class="btn-pagar" data-id="${conta.id}">Pagar</button>` : ""}
-        ${conta.status === "A Pagar" ? `<button class="btn-editar" data-id="${conta.id}">Editar</button>` : ""}
-        ${conta.status === "A Pagar" ? `<button class="btn-excluir" data-id="${conta.id}">Excluir</button>` : ""}
+        <button class="btn-editar" data-id="${conta.id}">Editar</button>
+        <button class="btn-excluir" data-id="${conta.id}">Excluir</button>
     </div>
     `;
 
@@ -30,7 +30,11 @@ function criarCard(conta) {
     const btnExcluir = card.querySelector('.btn-excluir')
     if (btnExcluir) {
         btnExcluir.addEventListener('click', () => {
-            excluirConta(conta.id)
+            if(conta.status === "A Pagar") {
+                excluirConta(conta.id)
+            } else {
+                voltarConta(conta.id)
+            }
         })
     }
 
@@ -43,7 +47,7 @@ function criarCard(conta) {
     return card
 }
 
-function mostrarCards (contas) {
+function mostrarCards(contas) {
     const hubFinanceiro = document.getElementById('hub-financeiro')
     hubFinanceiro.innerHTML = ""
 
@@ -53,4 +57,4 @@ function mostrarCards (contas) {
     });
 }
 
-export {criarCard, mostrarCards}
+export { criarCard, mostrarCards }
