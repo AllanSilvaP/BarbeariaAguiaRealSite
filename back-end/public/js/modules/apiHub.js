@@ -39,7 +39,9 @@ async function buscarContas(status) {
 }
 
 async function carregarContas(status) {
+    console.log("Carregando contas com status:", status);
     const contas = await buscarContas(status)
+    console.log("Contas retornadas:", contas);
     mostrarCards(contas)
 }
 

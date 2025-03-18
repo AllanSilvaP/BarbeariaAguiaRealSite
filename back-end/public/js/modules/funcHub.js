@@ -5,6 +5,18 @@ function criarCard(conta) {
 
     const statusClasse = conta.status === "A Pagar" ? "pagar" : "pago"
 
+    const dataVencimento = new Date(conta.data_vencimento + "T00:00:00")
+    const hoje = new Date()
+
+    const ontem = new Date();
+    ontem.setDate(hoje.getDate() - 1);
+    ontem.setHours(0, 0, 0, 0);
+
+    const vencido = dataVencimento <= ontem ? 'style="color: red; font-weight: bold;"' : "";
+
+    dataVencimento.setHours(0,0,0,0)
+    hoje.setHours(0,0,0,0)
+
     card.innerHTML = `
     <div class="card-header ${statusClasse}">
         <h3>${conta.nome}</h3>
@@ -14,7 +26,7 @@ function criarCard(conta) {
         <p><strong>Categoria:</strong> ${conta.categoria}</p>
         <p><strong>Caixa:</strong> ${conta.caixa}</p>
         <p><strong>Valor:</strong> R$ ${parseFloat(conta.valor).toFixed(2)}</p>
-        <p><strong>Data de Vencimento:</strong> ${new Date(conta.data_vencimento + "T00:00:00").toLocaleDateString()}</p>
+        <p><strong>Data de Vencimento:</strong> <span ${vencido}> ${dataVencimento.toLocaleDateString()}</span></p>
         <p><strong>Forma de Pagamento:</strong> ${conta.forma_pagamento}</p>
         ${conta.total_parcelas > 1 ? `<p><strong>Parcela:</strong> ${conta.num_parcela} de ${conta.total_parcelas}</p>` : ""}
     </div>

@@ -13,8 +13,11 @@ const btAPagar = document.getElementById('bt-a-pagar')
 const btPagos = document.getElementById('bt-pagos')
 const btAddConta = document.getElementById('bt-add-conta')
 
+const btHoje = document.getElementById('bt-hoje')
+const btAmanha = document.getElementById('bt-amanha')
+const btMes = document.getElementById('bt-mes')
 
-const formulario = document.getElementById('formCadastroConta')
+
 //PRIMEIRA PARTE - A PAGAR e PAGOS
 btPagar.addEventListener("click", () => {
     painelFinanceiro.style.display = "block"
@@ -137,6 +140,18 @@ function ativarBotaoCad() {
     });
 }
 
+btHoje.addEventListener('click', () => {
+    const dataAtual = new Date().toISOString().split("T")[0]
+    const parametro = new URLSearchParams({ data_vencimento: dataAtual })
+    carregarPesquisaContas(parametro)
+})
+
+btAmanha.addEventListener('click', () => {
+    const dataAtual = new Date().toISOString().split("T")[0]
+    const parametro = new URLSearchParams({ data_vencimento: dataAtual })
+    carregarPesquisaContas(parametro)
+})
+
 
 function ativarBotaoPesquisa() {
     btPesquisar.addEventListener('click', () => {
@@ -176,8 +191,8 @@ function ativarBotaoPesquisa() {
                 <button type="submit">Pesquisar</button>
          </form>`
 
-         const formPesquisa = document.getElementById('formPesquisaConta')
-         formPesquisa.addEventListener('submit', async (event) => {
+        const formPesquisa = document.getElementById('formPesquisaConta')
+        formPesquisa.addEventListener('submit', async (event) => {
             event.preventDefault()
 
             const formData = new FormData(event.target)
@@ -185,7 +200,7 @@ function ativarBotaoPesquisa() {
 
             const params = new URLSearchParams()
             Object.keys(dados).forEach(key => {
-                if(dados[key]) {
+                if (dados[key]) {
                     params.append(key, dados[key])
                 }
             })
@@ -196,7 +211,7 @@ function ativarBotaoPesquisa() {
             } catch (error) {
                 console.error('Erro' + error)
             }
-         })
+        })
     })
 }
 
@@ -292,6 +307,17 @@ function ativarBotaoEditar() {
                             }
                         );
                         alert("Conta atualizada com sucesso!");
+                        console.log("Status após edição:", dados.status); // Verifica se o status é 'A Pagar'
+                        /*if (dados.status === 'A Pagar') {
+                            ativarBotaoAux(btAPagar, btPagos)
+                            carregarContas('A Pagar')
+                        } else if (dados.status === 'Pago') {
+                            ativarBotaoAux(btPagos, btAPagar);
+                            carregarContas('Pago');
+                        }*/
+
+                        const status = dados.status === 'A Pagar' ? 'Pago' : 'A Pagar'
+                        carregarContas(status)
                     } catch (error) {
                         alert("Erro ao cadastrar conta. Verifique os campos e tente novamente.");
                         console.error(error);

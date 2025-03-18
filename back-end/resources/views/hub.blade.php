@@ -49,9 +49,9 @@
 
                 <div class="datas">
                     <button id="bt-pesquisar">Pesquisar</button>
-                    <button>Hoje</button>
-                    <button>Amanhã</button>
-                    <button>Esse mês</button>
+                    <button id="bt-hoje">Hoje</button>
+                    <button id="bt-amanha">Amanhã</button>
+                    <button id="bt-mes">Esse mês</button>
                 </div>
                 <div class="hub-financeiro" id="hub-financeiro"></div>
             </div>
