@@ -1,4 +1,4 @@
-import { carregarContas, cadastrarConta, buscarContaPorId, editarConta } from "./apiHub.js"
+import { carregarContas, cadastrarConta, buscarContaPorId, editarConta, carregarPesquisaContas } from "./apiHub.js"
 
 const painelFinanceiro = document.getElementById('painel-financeiro')
 const painelEspecialidade = document.getElementById('hub-financeiro')
@@ -144,10 +144,10 @@ function ativarBotaoPesquisa() {
         painelEspecialidade.innerHTML = `
         <form id="formPesquisaConta">
                 <label for="nome">Nome da Conta:</label>
-                <input type="text" id="nome" name="nome" required>
+                <input type="text" id="nome" name="nome">
 
                 <label for="categoria">Categoria:</label>
-                <select id="categoria" name="categoria" required>
+                <select id="categoria" name="categoria">
                     <option value=""></option>
                     <option value="Aluguel">Aluguel</option>
                     <option value="Energia">Energia</option>
@@ -160,7 +160,7 @@ function ativarBotaoPesquisa() {
                 </select>
 
                 <label for="caixa">Caixa:</label>
-                <select id="caixa" name="caixa" required>
+                <select id="caixa" name="caixa">
                     <option value=""></option>
                     <option value="BRB Empresa">BRB Empresa</option>
                     <option value="Dinheiro">Dinheiro</option>
@@ -168,15 +168,35 @@ function ativarBotaoPesquisa() {
                 </select>
 
                 <label for="dataVencimento">Data de Vencimento:</label>
-                <input type="date" id="dataVencimento" name="data_vencimento" required>
+                <input type="date" id="dataVencimento" name="data_vencimento">
 
                 <label for="valor">Valor:</label>
-                <input type="number" id="valor" name="valor" required>
+                <input type="number" id="valor" name="valor">
 
                 <button type="submit">Pesquisar</button>
          </form>`
 
          const formPesquisa = document.getElementById('formPesquisaConta')
+         formPesquisa.addEventListener('submit', async (event) => {
+            event.preventDefault()
+
+            const formData = new FormData(event.target)
+            const dados = Object.fromEntries(formData.entries())
+
+            const params = new URLSearchParams()
+            Object.keys(dados).forEach(key => {
+                if(dados[key]) {
+                    params.append(key, dados[key])
+                }
+            })
+
+            const parametros = params.toString()
+            try {
+                await carregarPesquisaContas(parametros)
+            } catch (error) {
+                console.error('Erro' + error)
+            }
+         })
     })
 }
 

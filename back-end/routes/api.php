@@ -21,5 +21,7 @@ Route::patch('/pagar/conta/{id}', [ContaController::class, 'pagarConta'])->name(
 
 Route::patch('/voltar/conta/{id}', [ContaController::class, 'voltarConta'])->name('voltarConta');
 
-Route::put('/editar/conta/{id}', [ContaController::class, 'editarConta'])->name('editarConta')
+Route::put('/editar/conta/{id}', [ContaController::class, 'editarConta'])->name('editarConta');
+
+Route::get('/pesquisar/conta', [ContaController::class, 'pesquisarConta'])->name('pesquisarConta');
 ?>

@@ -55,9 +55,46 @@ class ContaController extends Controller
 
     public function pesquisarConta(Request $request) {
         try {
-            //code...
-        } catch (\Throwable $th) {
-            //throw $th;
+            Log::info("Iniciando pesquisa de contas", ['params' => $request->all()]); // Log de entrada
+
+            $buscador = Contas::query();
+
+            if ($request->filled('nome')) {
+                $buscador->where('nome', 'like', '%' . $request->nome . '%');
+                Log::info("Filtrando por nome", ['nome' => $request->nome]);
+            }
+
+            if ($request->filled('categoria')) {
+                $buscador->where('categoria', $request->categoria);
+                Log::info("Filtrando por categoria", ['categoria' => $request->categoria]);
+            }
+
+            if ($request->filled('caixa')) {
+                $buscador->where('caixa', $request->caixa);
+                Log::info("Filtrando por caixa", ['caixa' => $request->caixa]);
+            }
+
+            if ($request->filled('data_vencimento')) {
+                $buscador->whereDate('data_vencimento', $request->data_vencimento);
+                Log::info("Filtrando por data de vencimento", ['data_vencimento' => $request->data_vencimento]);
+            }
+
+            if ($request->filled('valor')) {
+                $buscador->where('valor', $request->valor);
+                Log::info("Filtrando por valor", ['valor' => $request->valor]);
+            }
+
+            $contas = $buscador->get();
+            Log::info("Contas encontradas", ['total' => count($contas)]);
+
+            return response()->json($contas, 200);
+        } catch (\Exception $e) {
+            Log::error("Erro ao buscar contas", ['error' => $e->getMessage()]);
+
+            return response()->json([
+                'error' => 'Erro ao buscar contas.',
+                'details' => $e->getMessage()
+            ], 500);
         }
     }
 

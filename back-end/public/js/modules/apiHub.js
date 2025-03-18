@@ -43,6 +43,11 @@ async function carregarContas(status) {
     mostrarCards(contas)
 }
 
+async function carregarPesquisaContas (contaPesquisada) {
+    const contas = await pesquisarConta(contaPesquisada)
+    mostrarCards(contas)
+}
+
 async function buscarContaPorId (id) {
     try {
         const response = await fetch(`${API_URL}/api/buscar/conta/${id}`);
@@ -61,6 +66,24 @@ async function buscarContaPorData (data) {
         if (!response.ok) throw new Error("Erro ao buscar contas");
 
         return await response.json()
+    } catch (error) {
+        console.error("Erro ao carregar contas:", error);
+        return [];
+    }
+}
+
+async function pesquisarConta(contaPesquisada) {
+    try {
+        const response = await fetch(`${API_URL}/api/pesquisar/conta?${contaPesquisada}`, {
+            method: 'GET',
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        if (!response.ok) throw new Error("Erro ao buscar contas");
+
+        const data = await response.json();
+        console.log("Dados recebidos:", data); // Debug
+        return data;
     } catch (error) {
         console.error("Erro ao carregar contas:", error);
         return [];
@@ -152,4 +175,4 @@ async function editarConta (id, contaData) {
     }
 }
 
-export { pagarConta, carregarContas, cadastrarConta, excluirConta, editarConta, buscarContaPorId, voltarConta, buscarContaPorData};
+export { pagarConta, carregarContas, carregarPesquisaContas, cadastrarConta, excluirConta, editarConta, buscarContaPorId, voltarConta, buscarContaPorData};
