@@ -1,3 +1,3 @@
-# Site versão 1.0
+# Site versão 2.0 (W.I.P)
 
 ## Link https://barbeariaaguiareal.com/
