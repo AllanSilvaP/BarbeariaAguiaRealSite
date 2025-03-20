@@ -2,15 +2,15 @@ import { mostrarCards } from "./funcHub.js";
 
 const API_URL = "http://127.0.0.1:8000";
 
-async function cadastrarConta(nome, categoria, caixa, data_vencimento, valor, forma_pagamento, status, data_pagamento, num_parcela, total_parcelas, id_parcelamento, criado_em) {
+async function cadastrarConta(conta, tipo) {
     try {
-        const response = await fetch(`${API_URL}/api/cadastrar/conta`, {
+        const response = await fetch(`${API_URL}/api/cadastrar/conta/{tipo}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 "X-Requested-With": "XMLHttpRequest",
             },
-            body: JSON.stringify({ nome, categoria, caixa, data_vencimento, valor, forma_pagamento, status, data_pagamento, num_parcela, total_parcelas, id_parcelamento, criado_em})
+            body: JSON.stringify(conta)
         });
 
         const data = await response.json();
@@ -39,9 +39,7 @@ async function buscarContas(status) {
 }
 
 async function carregarContas(status) {
-    console.log("Carregando contas com status:", status);
     const contas = await buscarContas(status)
-    console.log("Contas retornadas:", contas);
     mostrarCards(contas)
 }
 

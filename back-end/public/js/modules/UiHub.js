@@ -17,6 +17,9 @@ const btHoje = document.getElementById('bt-hoje')
 const btAmanha = document.getElementById('bt-amanha')
 const btMes = document.getElementById('bt-mes')
 
+const tipoPagar = 'Pagar'
+const tipoReceber = 'Receber'
+
 
 //PRIMEIRA PARTE - A PAGAR e PAGOS
 btPagar.addEventListener("click", () => {
@@ -118,18 +121,21 @@ function ativarBotaoCad() {
 
             try {
                 await cadastrarConta(
-                    dados.nome,
-                    dados.categoria,
-                    dados.caixa,
-                    dados.data_vencimento,
-                    dados.valor,
-                    dados.forma_pagamento,
-                    dados.status,
-                    dados.data_pagamento,
-                    dados.num_parcela,
-                    dados.total_parcelas,
-                    dados.id_parcelamento,
-                    dados.criado_em
+                    {
+                        nome: dados.nome,
+                        categoria: dados.categoria,
+                        caixa: dados.caixa,
+                        data_vencimento: dados.data_vencimento,
+                        valor: dados.valor,
+                        forma_pagamento: dados.forma_pagamento,
+                        status: dados.status,
+                        data_pagamento: dados.data_pagamento,
+                        num_parcela: dados.num_parcela,
+                        total_parcelas: dados.total_parcelas,
+                        id_parcelamento: dados.id_parcelamento,
+                        criado_em: dados.criado_em
+                        , tipoPagar
+                    }
                 );
                 alert("Conta cadastrada com sucesso!");
             } catch (error) {
@@ -139,19 +145,6 @@ function ativarBotaoCad() {
         });
     });
 }
-
-btHoje.addEventListener('click', () => {
-    const dataAtual = new Date().toISOString().split("T")[0]
-    const parametro = new URLSearchParams({ data_vencimento: dataAtual })
-    carregarPesquisaContas(parametro)
-})
-
-btAmanha.addEventListener('click', () => {
-    const dataAtual = new Date().toISOString().split("T")[0]
-    const parametro = new URLSearchParams({ data_vencimento: dataAtual })
-    carregarPesquisaContas(parametro)
-})
-
 
 function ativarBotaoPesquisa() {
     btPesquisar.addEventListener('click', () => {
@@ -307,17 +300,7 @@ function ativarBotaoEditar() {
                             }
                         );
                         alert("Conta atualizada com sucesso!");
-                        console.log("Status após edição:", dados.status); // Verifica se o status é 'A Pagar'
-                        /*if (dados.status === 'A Pagar') {
-                            ativarBotaoAux(btAPagar, btPagos)
-                            carregarContas('A Pagar')
-                        } else if (dados.status === 'Pago') {
-                            ativarBotaoAux(btPagos, btAPagar);
-                            carregarContas('Pago');
-                        }*/
-
-                        const status = dados.status === 'A Pagar' ? 'Pago' : 'A Pagar'
-                        carregarContas(status)
+                        carregarContas(dados.status)
                     } catch (error) {
                         alert("Erro ao cadastrar conta. Verifique os campos e tente novamente.");
                         console.error(error);
@@ -335,5 +318,11 @@ function gerarOpcoesSelect(valorAtual, opcoes) {
     return opcoes.map(opcao => `<option value="${opcao}" ${opcao === valorAtual ? 'selected' : ''}>${opcao}</option>`).join('');
 }
 
+//SEGUNDA PARTE - A RECEBER E RECEBIDOS
+
+btReceber.addEventListener('click', () => {
+    painelEspecialidade.style.display = "block"
+
+})
 
 export { ativarBotaoAux, ativarBotaoCad, ativarBotaoEditar, ativarBotaoPesquisa }

@@ -14,11 +14,13 @@ class ContaController extends Controller
 {
     //CRUD
 
-    public function buscarContas(Request $request)
+    public function buscarContas(Request $request, $tipo)
     {
         try {
             $status = $request->input('status');
-            $buscador = Contas::where('status', $status)->get();
+            $buscador = Contas::where('status', $status)
+            ->where('tipo', $tipo)
+            ->paginate(50);
 
             return response()->json($buscador);
         } catch (Exception $e) {
@@ -41,9 +43,11 @@ class ContaController extends Controller
         }
     }
 
-    public function buscarContaPorData($data) {
+    public function buscarContaPorData($data, $tipo) {
         try {
-            $buscador = Contas::where('data_vencimento', $data)->get();
+            $buscador = Contas::where('data_vencimento', $data)
+            ->where('tipo', $tipo)
+            ->paginate(50);
 
             return response()->json($buscador);
         } catch (Exception $e) {
@@ -53,44 +57,36 @@ class ContaController extends Controller
         }
     }
 
-    public function pesquisarConta(Request $request) {
+    public function pesquisarConta(Request $request, $tipo) {
         try {
-            Log::info("Iniciando pesquisa de contas", ['params' => $request->all()]); // Log de entrada
-
             $buscador = Contas::query();
+
+            $buscador = Contas::where('tipo', $tipo);
 
             if ($request->filled('nome')) {
                 $buscador->where('nome', 'like', '%' . $request->nome . '%');
-                Log::info("Filtrando por nome", ['nome' => $request->nome]);
             }
 
             if ($request->filled('categoria')) {
                 $buscador->where('categoria', $request->categoria);
-                Log::info("Filtrando por categoria", ['categoria' => $request->categoria]);
             }
 
             if ($request->filled('caixa')) {
                 $buscador->where('caixa', $request->caixa);
-                Log::info("Filtrando por caixa", ['caixa' => $request->caixa]);
             }
 
             if ($request->filled('data_vencimento')) {
                 $buscador->whereDate('data_vencimento', $request->data_vencimento);
-                Log::info("Filtrando por data de vencimento", ['data_vencimento' => $request->data_vencimento]);
             }
 
             if ($request->filled('valor')) {
                 $buscador->where('valor', $request->valor);
-                Log::info("Filtrando por valor", ['valor' => $request->valor]);
             }
 
-            $contas = $buscador->get();
-            Log::info("Contas encontradas", ['total' => count($contas)]);
+            $contas = $buscador->paginate(50);
 
             return response()->json($contas, 200);
         } catch (\Exception $e) {
-            Log::error("Erro ao buscar contas", ['error' => $e->getMessage()]);
-
             return response()->json([
                 'error' => 'Erro ao buscar contas.',
                 'details' => $e->getMessage()
@@ -98,8 +94,12 @@ class ContaController extends Controller
         }
     }
 
-    public function cadastrarConta(Request $request)
+    public function cadastrarConta(Request $request, $tipo)
     {
+
+        if (!in_array($tipo, ['Receber', 'Pagar'])) {
+            return response()->json(['message' => 'ERRO: Tipo inválido. Use "Receber" ou "Pagar".'], 400);
+        }
 
         try {
             $analisador = $request->validate([
@@ -115,6 +115,7 @@ class ContaController extends Controller
                 'total_parcelas' => 'required|integer|min:1',
             ]);
 
+            $analisador['tipo'] = $tipo;
             $analisador['id_parcelamento'] = null;
             $analisador['criado_em'] = now();
 
@@ -175,11 +176,15 @@ class ContaController extends Controller
         }
     }
 
-    public function editarConta($id, Request $request)
+    public function editarConta($id, Request $request, $tipo)
 {
+
+    if (!in_array($tipo, ['Receber', 'Pagar'])) {
+        return response()->json(['message' => 'ERRO: Tipo inválido'], 400);
+    }
     try {
         // Validação dos dados
-        $request->validate([
+        $analisador = $request->validate([
             'nome' => 'required|string|max:255',
             'categoria' => ['required', Rule::in(['Aluguel', 'Energia', 'Salário Barbeiro', 'Doces', 'Comidas', 'Bebidas', 'Sinuca', 'Equipamento'])],
             'caixa' => ['required', Rule::in(['BRB Empresa', 'Dinheiro', 'BRB Pessoal'])],
@@ -192,22 +197,12 @@ class ContaController extends Controller
             'total_parcelas' => 'required|integer|min:1',
         ]);
 
+        $analisador['tipo'] = $tipo;
+
         // Encontrando a conta
         $conta = Contas::findOrFail($id);
         // Atualizando os dados da conta
-        $conta->update($request->only([
-            'nome',
-            'categoria',
-            'caixa',
-            'data_vencimento',
-            'valor',
-            'forma_pagamento',
-            'status',
-            'data_pagamento',
-            'num_parcela',
-            'total_parcelas',
-            'id_parcelamento'
-        ]));
+        $conta->update($analisador);
 
         return response()->json(['message' => 'Conta atualizada com sucesso!'], 200);
     } catch (Exception $e) {

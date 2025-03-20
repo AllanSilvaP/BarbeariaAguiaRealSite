@@ -25,6 +25,7 @@ class Contas extends Model
         'num_parcela',
         'total_parcela',
         'id_parcelamento',
-        'criado_em'
+        'criado_em',
+        'tipo'
     ];
 }
