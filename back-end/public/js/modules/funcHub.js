@@ -1,4 +1,8 @@
 import { excluirConta, pagarConta, voltarConta, carregarContas } from "./apiHub.js";
+
+const tipoPagar = 'Pagar'
+const tipoReceber = 'Receber'
+
 function criarCard(conta) {
     const card = document.createElement('div')
     card.classList.add('card-pagamento')
@@ -44,7 +48,7 @@ function criarCard(conta) {
         btnExcluir.addEventListener('click', () => {
             if(conta.status === "A Pagar") {
                 excluirConta(conta.id)
-                carregarContas(conta.status);
+                carregarContas(conta.status, tipoPagar);
 
             } else {
                 voltarConta(conta.id)
@@ -56,7 +60,7 @@ function criarCard(conta) {
     if (btnPagar) {
         btnPagar.addEventListener('click', () => {
             pagarConta(conta.id)
-            carregarContas(conta.status);
+            carregarContas(conta.status, tipoPagar);
         })
     }
     return card

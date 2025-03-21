@@ -4,7 +4,7 @@ const API_URL = "http://127.0.0.1:8000";
 
 async function cadastrarConta(conta, tipo) {
     try {
-        const response = await fetch(`${API_URL}/api/cadastrar/conta/{tipo}`, {
+        const response = await fetch(`${API_URL}/api/cadastrar/conta/${tipo}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -26,9 +26,9 @@ async function cadastrarConta(conta, tipo) {
     }
 }
 
-async function buscarContas(status) {
+async function buscarContas(status, tipo) {
     try {
-        const response = await fetch(`${API_URL}/api/buscar/contas?status=${status}`);
+        const response = await fetch(`${API_URL}/api/buscar/contas?status=${status}/${tipo}`);
         if (!response.ok) throw new Error("Erro ao buscar contas");
 
         return await response.json()
@@ -38,8 +38,8 @@ async function buscarContas(status) {
     }
 }
 
-async function carregarContas(status) {
-    const contas = await buscarContas(status)
+async function carregarContas(status, tipo) {
+    const contas = await buscarContas(status, tipo)
     mostrarCards(contas)
 }
 

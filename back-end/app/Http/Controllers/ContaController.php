@@ -97,6 +97,7 @@ class ContaController extends Controller
     public function cadastrarConta(Request $request, $tipo)
     {
 
+        Log::info('Log recebido', ['tipo' => $tipo]);
         if (!in_array($tipo, ['Receber', 'Pagar'])) {
             return response()->json(['message' => 'ERRO: Tipo inválido. Use "Receber" ou "Pagar".'], 400);
         }

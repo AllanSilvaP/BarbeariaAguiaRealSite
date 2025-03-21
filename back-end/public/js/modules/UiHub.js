@@ -24,17 +24,17 @@ const tipoReceber = 'Receber'
 //PRIMEIRA PARTE - A PAGAR e PAGOS
 btPagar.addEventListener("click", () => {
     painelFinanceiro.style.display = "block"
-    carregarContas('A Pagar')
+    carregarContas('A Pagar', 'Pagar')
 })
 
 btAPagar.addEventListener("click", () => {
     ativarBotaoAux(btAPagar, btPagos)
-    carregarContas('A Pagar')
+    carregarContas('A Pagar', tipoPagar)
 })
 
 btPagos.addEventListener("click", () => {
     ativarBotaoAux(btPagos, btAPagar)
-    carregarContas('Pago')
+    carregarContas('Pago', tipoPagar)
 })
 
 function ativarBotaoAux(ativo, inativo) {
