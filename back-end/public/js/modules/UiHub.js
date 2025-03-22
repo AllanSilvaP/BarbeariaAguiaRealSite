@@ -24,7 +24,7 @@ const tipoReceber = 'Receber'
 //PRIMEIRA PARTE - A PAGAR e PAGOS
 btPagar.addEventListener("click", () => {
     painelFinanceiro.style.display = "block"
-    carregarContas('A Pagar', 'Pagar')
+    carregarContas('A Pagar', tipoPagar)
 })
 
 btAPagar.addEventListener("click", () => {
@@ -134,8 +134,7 @@ function ativarBotaoCad() {
                         total_parcelas: dados.total_parcelas,
                         id_parcelamento: dados.id_parcelamento,
                         criado_em: dados.criado_em
-                        , tipoPagar
-                    }
+                    }, tipoPagar
                 );
                 alert("Conta cadastrada com sucesso!");
             } catch (error) {
@@ -297,7 +296,7 @@ function ativarBotaoEditar() {
                                 total_parcelas: dados.total_parcelas,
                                 id_parcelamento: dados.id_parcelamento,
                                 criado_em: dados.criado_em
-                            }
+                            }, tipoPagar
                         );
                         alert("Conta atualizada com sucesso!");
                         carregarContas(dados.status)

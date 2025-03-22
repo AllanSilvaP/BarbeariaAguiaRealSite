@@ -9,7 +9,7 @@ Route::post('/login', [UsuarioController::class, 'loginUsuario'])->name('loginUs
 
 //CONTAS A PAGAR
 
-Route::get('/buscar/contas/{tipo}', [ContaController::class, 'buscarContas'])->name('buscarContas');
+Route::get('/buscar/contas', [ContaController::class, 'buscarContas'])->name('buscarContas');
 
 Route::get('/buscar/conta/{id}', [ContaController::class, 'buscarContaPorId'])->name('buscarContaPorId');
 

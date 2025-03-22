@@ -14,13 +14,15 @@ class ContaController extends Controller
 {
     //CRUD
 
-    public function buscarContas(Request $request, $tipo)
+    public function buscarContas(Request $request)
     {
+        //Log::info('Log recebido', ['status' => $request->input('status'), 'tipo' => $request->input('tipo')]);
         try {
             $status = $request->input('status');
+            $tipo = $request->input('tipo');
             $buscador = Contas::where('status', $status)
-            ->where('tipo', $tipo)
-            ->paginate(50);
+                ->where('tipo', $tipo)
+                ->paginate(50);
 
             return response()->json($buscador);
         } catch (Exception $e) {
@@ -31,7 +33,8 @@ class ContaController extends Controller
         }
     }
 
-    public function buscarContaPorId($id) {
+    public function buscarContaPorId($id)
+    {
         try {
             $buscador = Contas::where('id', $id)->first();
 
@@ -43,11 +46,12 @@ class ContaController extends Controller
         }
     }
 
-    public function buscarContaPorData($data, $tipo) {
+    public function buscarContaPorData($data, $tipo)
+    {
         try {
             $buscador = Contas::where('data_vencimento', $data)
-            ->where('tipo', $tipo)
-            ->paginate(50);
+                ->where('tipo', $tipo)
+                ->paginate(50);
 
             return response()->json($buscador);
         } catch (Exception $e) {
@@ -57,7 +61,8 @@ class ContaController extends Controller
         }
     }
 
-    public function pesquisarConta(Request $request, $tipo) {
+    public function pesquisarConta(Request $request, $tipo)
+    {
         try {
             $buscador = Contas::query();
 
@@ -96,8 +101,6 @@ class ContaController extends Controller
 
     public function cadastrarConta(Request $request, $tipo)
     {
-
-        Log::info('Log recebido', ['tipo' => $tipo]);
         if (!in_array($tipo, ['Receber', 'Pagar'])) {
             return response()->json(['message' => 'ERRO: Tipo inválido. Use "Receber" ou "Pagar".'], 400);
         }
@@ -178,37 +181,37 @@ class ContaController extends Controller
     }
 
     public function editarConta($id, Request $request, $tipo)
-{
+    {
+        Log::info ('RECEBIDO:', ['message' => $tipo]);
+        if (!in_array($tipo, ['Receber', 'Pagar'])) {
+            return response()->json(['message' => 'ERRO: Tipo inválido'], 400);
+        }
+        try {
+            // Validação dos dados
+            $analisador = $request->validate([
+                'nome' => 'required|string|max:255',
+                'categoria' => ['required', Rule::in(['Aluguel', 'Energia', 'Salário Barbeiro', 'Doces', 'Comidas', 'Bebidas', 'Sinuca', 'Equipamento'])],
+                'caixa' => ['required', Rule::in(['BRB Empresa', 'Dinheiro', 'BRB Pessoal'])],
+                'data_vencimento' => 'required|date',
+                'valor' => 'required|numeric|min:0',
+                'forma_pagamento' => 'required|string|max:100',
+                'status' => ['required', Rule::in(['A pagar', 'Pago'])],
+                'data_pagamento' => 'nullable|date',
+                'num_parcela' => 'required|integer|min:1',
+                'total_parcelas' => 'required|integer|min:1',
+            ]);
 
-    if (!in_array($tipo, ['Receber', 'Pagar'])) {
-        return response()->json(['message' => 'ERRO: Tipo inválido'], 400);
+            $analisador['tipo'] = $tipo;
+
+            // Encontrando a conta
+            $conta = Contas::findOrFail($id);
+            // Atualizando os dados da conta
+            $conta->update($analisador);
+
+            return response()->json(['message' => 'Conta atualizada com sucesso!'], 200);
+        } catch (Exception $e) {
+
+            return response()->json(['error' => 'Erro ao atualizar a conta'], 500);
+        }
     }
-    try {
-        // Validação dos dados
-        $analisador = $request->validate([
-            'nome' => 'required|string|max:255',
-            'categoria' => ['required', Rule::in(['Aluguel', 'Energia', 'Salário Barbeiro', 'Doces', 'Comidas', 'Bebidas', 'Sinuca', 'Equipamento'])],
-            'caixa' => ['required', Rule::in(['BRB Empresa', 'Dinheiro', 'BRB Pessoal'])],
-            'data_vencimento' => 'required|date',
-            'valor' => 'required|numeric|min:0',
-            'forma_pagamento' => 'required|string|max:100',
-            'status' => ['required', Rule::in(['A pagar', 'Pago'])],
-            'data_pagamento' => 'nullable|date',
-            'num_parcela' => 'required|integer|min:1',
-            'total_parcelas' => 'required|integer|min:1',
-        ]);
-
-        $analisador['tipo'] = $tipo;
-
-        // Encontrando a conta
-        $conta = Contas::findOrFail($id);
-        // Atualizando os dados da conta
-        $conta->update($analisador);
-
-        return response()->json(['message' => 'Conta atualizada com sucesso!'], 200);
-    } catch (Exception $e) {
-
-        return response()->json(['error' => 'Erro ao atualizar a conta'], 500);
-    }
-}
 }

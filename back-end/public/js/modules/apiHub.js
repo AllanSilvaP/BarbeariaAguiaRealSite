@@ -28,10 +28,12 @@ async function cadastrarConta(conta, tipo) {
 
 async function buscarContas(status, tipo) {
     try {
-        const response = await fetch(`${API_URL}/api/buscar/contas?status=${status}/${tipo}`);
+        const response = await fetch(`${API_URL}/api/buscar/contas?status=${encodeURIComponent(status)}&tipo=${encodeURIComponent(tipo)}`);
         if (!response.ok) throw new Error("Erro ao buscar contas");
 
-        return await response.json()
+        const data = await response.json();
+
+        return data.data;
     } catch (error) {
         console.error("Erro ao carregar contas:", error);
         return [];
@@ -154,9 +156,9 @@ async function voltarConta (id) {
     }
 }
 
-async function editarConta (id, contaData) {
+async function editarConta (id, contaData, tipo) {
     try {
-        const response = await fetch (`${API_URL}/api/editar/conta/${id}`, {
+        const response = await fetch (`${API_URL}/api/editar/conta/${tipo}/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -168,6 +170,7 @@ async function editarConta (id, contaData) {
         if (!response.ok) {
             throw new Error(data.message || "Erro ao editar")
         }
+        console.log(data)
 
         return data
     } catch (error) {
