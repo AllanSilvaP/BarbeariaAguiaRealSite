@@ -158,7 +158,7 @@ async function voltarConta (id) {
 
 async function editarConta (id, contaData, tipo) {
     try {
-        const response = await fetch (`${API_URL}/api/editar/conta/${tipo}/${id}`, {
+        const response = await fetch (`${API_URL}/api/editar/conta/${id}/${tipo}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -170,7 +170,6 @@ async function editarConta (id, contaData, tipo) {
         if (!response.ok) {
             throw new Error(data.message || "Erro ao editar")
         }
-        console.log(data)
 
         return data
     } catch (error) {

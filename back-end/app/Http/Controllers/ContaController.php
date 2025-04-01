@@ -113,7 +113,7 @@ class ContaController extends Controller
                 'data_vencimento' => 'required|date',
                 'valor' => 'required|numeric|min:0',
                 'forma_pagamento' => 'required|string|max:100',
-                'status' => ['required', Rule::in(['A pagar', 'Pago'])],
+                'status' => ['required', Rule::in(['A pagar', 'Pago', 'A Receber', 'Recebido'])],
                 'data_pagamento' => 'nullable|date',
                 'num_parcela' => 'required|integer|min:1',
                 'total_parcelas' => 'required|integer|min:1',
@@ -182,10 +182,6 @@ class ContaController extends Controller
 
     public function editarConta($id, Request $request, $tipo)
     {
-        Log::info ('RECEBIDO:', ['message' => $tipo]);
-        if (!in_array($tipo, ['Receber', 'Pagar'])) {
-            return response()->json(['message' => 'ERRO: Tipo inválido'], 400);
-        }
         try {
             // Validação dos dados
             $analisador = $request->validate([
@@ -200,6 +196,11 @@ class ContaController extends Controller
                 'num_parcela' => 'required|integer|min:1',
                 'total_parcelas' => 'required|integer|min:1',
             ]);
+
+            //validação do tipo
+            if (!in_array($tipo, ['Receber', 'Pagar'])) {
+                return response()->json(['message' => 'ERRO: Tipo inválido'], 400);
+            }
 
             $analisador['tipo'] = $tipo;
 

@@ -299,10 +299,9 @@ function ativarBotaoEditar() {
                             }, tipoPagar
                         );
                         alert("Conta atualizada com sucesso!");
-                        carregarContas(dados.status)
+                        carregarContas(dados.status, tipoPagar)
                     } catch (error) {
                         alert("Erro ao cadastrar conta. Verifique os campos e tente novamente.");
-                        console.error(error);
                     }
                 })
 
@@ -316,12 +315,5 @@ function ativarBotaoEditar() {
 function gerarOpcoesSelect(valorAtual, opcoes) {
     return opcoes.map(opcao => `<option value="${opcao}" ${opcao === valorAtual ? 'selected' : ''}>${opcao}</option>`).join('');
 }
-
-//SEGUNDA PARTE - A RECEBER E RECEBIDOS
-
-btReceber.addEventListener('click', () => {
-    painelEspecialidade.style.display = "block"
-
-})
 
 export { ativarBotaoAux, ativarBotaoCad, ativarBotaoEditar, ativarBotaoPesquisa }
