@@ -18,11 +18,13 @@ class ContaController extends Controller
     {
         //Log::info('Log recebido', ['status' => $request->input('status'), 'tipo' => $request->input('tipo')]);
         try {
+
             $status = $request->input('status');
             $tipo = $request->input('tipo');
-            $buscador = Contas::where('status', $status)
+            $buscador = Contas::with(['categoria', 'caixa','formaPagamento'])
+                ->where('status', $status)
                 ->where('tipo', $tipo)
-                ->paginate(50);
+                ->v;
 
             return response()->json($buscador);
         } catch (Exception $e) {
@@ -36,7 +38,8 @@ class ContaController extends Controller
     public function buscarContaPorId($id)
     {
         try {
-            $buscador = Contas::where('id', $id)->first();
+            $buscador = Contas::with(['categoria', 'caixa', 'formaPagamento'])
+            ->where('id', $id)->first();
 
             return response()->json($buscador);
         } catch (Exception $e) {
@@ -49,7 +52,8 @@ class ContaController extends Controller
     public function buscarContaPorData($data, $tipo)
     {
         try {
-            $buscador = Contas::where('data_vencimento', $data)
+            $buscador = Contas::where(['categoria', 'caixa', 'formaPagamento'])
+                ->where('data_vencimento', $data)
                 ->where('tipo', $tipo)
                 ->paginate(50);
 
@@ -72,12 +76,12 @@ class ContaController extends Controller
                 $buscador->where('nome', 'like', '%' . $request->nome . '%');
             }
 
-            if ($request->filled('categoria')) {
-                $buscador->where('categoria', $request->categoria);
+            if ($request->filled('categoria_id')) {
+                $buscador->where('categoria_id', $request->categoria_id);
             }
 
-            if ($request->filled('caixa')) {
-                $buscador->where('caixa', $request->caixa);
+            if ($request->filled('caixa_id')) {
+                $buscador->where('caixa_id', $request->caixa_id);
             }
 
             if ($request->filled('data_vencimento')) {
@@ -88,7 +92,8 @@ class ContaController extends Controller
                 $buscador->where('valor', $request->valor);
             }
 
-            $contas = $buscador->paginate(50);
+            $contas = $buscador->with(['categoria', 'caixa', 'formaPagamento'])
+            ->paginate(50);
 
             return response()->json($contas, 200);
         } catch (\Exception $e) {
@@ -108,11 +113,11 @@ class ContaController extends Controller
         try {
             $analisador = $request->validate([
                 'nome' => 'required|string|max:255',
-                'categoria' => ['required', Rule::in(['Aluguel', 'Energia', 'Salário Barbeiro', 'Doces', 'Comidas', 'Bebidas', 'Sinuca', 'Equipamento'])],
-                'caixa' => ['required', Rule::in(['BRB Empresa', 'Dinheiro', 'BRB Pessoal'])],
+                'categoria_id' => 'required|exists:categorias,id',
+                'caixa_id' => 'required|exists:categorias,id',
                 'data_vencimento' => 'required|date',
                 'valor' => 'required|numeric|min:0',
-                'forma_pagamento' => 'required|string|max:100',
+                'forma_pagamento_id' => 'required|exists:categorias,id',
                 'status' => ['required', Rule::in(['A pagar', 'Pago', 'A Receber', 'Recebido'])],
                 'data_pagamento' => 'nullable|date',
                 'num_parcela' => 'required|integer|min:1',
@@ -186,12 +191,12 @@ class ContaController extends Controller
             // Validação dos dados
             $analisador = $request->validate([
                 'nome' => 'required|string|max:255',
-                'categoria' => ['required', Rule::in(['Aluguel', 'Energia', 'Salário Barbeiro', 'Doces', 'Comidas', 'Bebidas', 'Sinuca', 'Equipamento'])],
-                'caixa' => ['required', Rule::in(['BRB Empresa', 'Dinheiro', 'BRB Pessoal'])],
+                'categoria_id' => 'required|exists:categorias,id',
+                'caixa_id' => 'required|exists:categorias,id',
                 'data_vencimento' => 'required|date',
                 'valor' => 'required|numeric|min:0',
-                'forma_pagamento' => 'required|string|max:100',
-                'status' => ['required', Rule::in(['A pagar', 'Pago'])],
+                'forma_pagamento_id' => 'required|exists:categorias,id',
+                'status' => ['required', Rule::in(['A pagar', 'Pago', 'A Receber', 'Recebido'])],
                 'data_pagamento' => 'nullable|date',
                 'num_parcela' => 'required|integer|min:1',
                 'total_parcelas' => 'required|integer|min:1',

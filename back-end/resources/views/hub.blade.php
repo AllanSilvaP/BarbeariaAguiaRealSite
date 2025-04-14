@@ -27,6 +27,7 @@
                 <button>Financeiro</button>
                 <button>Agendamento</button>
                 <button>Estoque</button>
+                <button id="bt-admin">Administrativo</button>
             </div>
 
             <div class="hub-bt-funcionalidades" >

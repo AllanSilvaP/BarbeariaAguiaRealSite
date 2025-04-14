@@ -15,17 +15,29 @@ class Contas extends Model
 
     protected $fillable = [
         'nome',
-        'categoria',
-        'caixa',
         'data_vencimento',
+        'categoria_id',
+        'caixa_id',
+        'forma_pagamento_id',
         'valor',
-        'forma_pagamento',
         'status',
         'data_pagamento',
         'num_parcela',
         'total_parcela',
         'id_parcelamento',
         'criado_em',
-        'tipo'
+        'tipo',
     ];
+
+    public function categoria() {
+        return $this->belongsTo(Categoria::class, 'categoria_id');
+    }
+
+    public function caixa() {
+        return $this->belongsTo(Categoria::class, 'caixa_id');
+    }
+
+    public function formaPagamento() {
+        return $this->belongsTo(Categoria::class, 'forma_pagamento_id');
+    }
 }

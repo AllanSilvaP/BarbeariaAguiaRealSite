@@ -3,6 +3,8 @@ import { excluirConta, pagarConta, voltarConta, carregarContas } from "./apiHub.
 const tipoPagar = 'Pagar'
 const tipoReceber = 'Receber'
 
+const statusPagar = 'A Pagar'
+
 function criarCard(conta) {
     const card = document.createElement('div')
     card.classList.add('card-pagamento')
@@ -16,7 +18,8 @@ function criarCard(conta) {
     ontem.setDate(hoje.getDate() - 1);
     ontem.setHours(0, 0, 0, 0);
 
-    const vencido = dataVencimento <= ontem ? 'style="color: red; font-weight: bold;"' : "";
+    const vencido = dataVencimento <= ontem && conta.status == statusPagar ? 'style="color: red; font-weight: bold;"' : "";
+
 
     dataVencimento.setHours(0,0,0,0)
     hoje.setHours(0,0,0,0)
@@ -27,11 +30,11 @@ function criarCard(conta) {
         <span class="status">${conta.status}</span>
     </div>
     <div class="card-body">
-        <p><strong>Categoria:</strong> ${conta.categoria}</p>
-        <p><strong>Caixa:</strong> ${conta.caixa}</p>
+        <p><strong>Categoria:</strong> ${conta.categoria?.nome ?? 'Não informada'}</p>
+        <p><strong>Caixa:</strong> ${conta.caixa?.nome ?? 'Não informada'}</p>
         <p><strong>Valor:</strong> R$ ${parseFloat(conta.valor).toFixed(2)}</p>
         <p><strong>Data de Vencimento:</strong> <span ${vencido}> ${dataVencimento.toLocaleDateString()}</span></p>
-        <p><strong>Forma de Pagamento:</strong> ${conta.forma_pagamento}</p>
+        <p><strong>Forma de Pagamento:</strong> ${conta.forma_pagamento?.nome ?? 'Não informada'}</p>
         ${conta.total_parcelas > 1 ? `<p><strong>Parcela:</strong> ${conta.num_parcela} de ${conta.total_parcelas}</p>` : ""}
     </div>
     <div class="card-footer">
