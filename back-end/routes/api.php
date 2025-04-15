@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\CategoriaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ContaController;
@@ -28,4 +30,14 @@ Route::put('/editar/conta/{tipo}/{id}', [ContaController::class, 'editarConta'])
 Route::get('/pesquisar/conta/{tipo}', [ContaController::class, 'pesquisarConta'])->name('pesquisarConta');
 
 //CONTAS A RECEBER
+
+// CATEGORIAS CONTROLLER
+
+Route::get('/buscar/categoria', [CategoriaController::class, 'carregarCategorias']);
+
+Route::post('/adicionar/categoria', [CategoriaController::class, 'addCategoria']);
+
+Route::put('/editar/categoria/{id}', [ContaController::class, 'editCategoria']);
+
+Route::delete('/deletar/categoria/{id}', [ContaController::class, 'excluirCategoria']);
 ?>
