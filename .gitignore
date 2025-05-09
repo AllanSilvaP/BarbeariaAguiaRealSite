@@ -1,23 +1,44 @@
-/.phpunit.cache
+# Laravel
+/vendor
 /node_modules
+/public/storage
 /public/build
 /public/hot
-/public/storage
+/public/mix-manifest.json
 /storage/*.key
 /storage/pail
-/vendor
+/storage/logs/*
+/bootstrap/cache/*
+!bootstrap/cache/.gitignore
+
+# Laravel environment
 .env
-.env.backup
-.env.production
-.phpactor.json
+.env.*
+auth.json
+
+# PHPUnit
+.phpunit.cache
 .phpunit.result.cache
-Homestead.json
+
+# IDEs & editors
+/.idea
+/.vscode
+/.fleet
+/.zed
+/.phpactor.json
+
+# Homestead
 Homestead.yaml
+Homestead.json
+
+# Debug logs
 npm-debug.log
 yarn-error.log
-/auth.json
-/.fleet
-/.idea
-/.nova
-/.vscode
-/.zed
+composer.lock.bak
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Tailwind (caso gere dentro de resources)
+resources/css/app.css
