@@ -40,5 +40,3 @@ composer.lock.bak
 .DS_Store
 Thumbs.db
 
-# Tailwind (caso gere dentro de resources)
-resources/css/app.css
