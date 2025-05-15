@@ -1,3 +1,7 @@
+@php
+$manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
+@endphp
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -13,8 +17,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
-    {{-- Tailwind CSS --}}
-    @vite(['resources/css/app.css', 'resources/js/index.js'])
+{{-- Tailwind CSS & JavaScript com Vite --}}
+@vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="bg-[#121212] text-white font-[Montserrat] scroll-smooth overflow-x-hidden m-0 p-0">
@@ -30,6 +34,7 @@
             <li><a href="#pag-inicial" class="text-[#f5f5f5] hover:text-[#FFC100]">Página Inicial</a></li>
             <li><a href="#servicos" class="text-[#f5f5f5] hover:text-[#FFC100]">Serviços</a></li>
             <li><a href="#contato" class="text-[#f5f5f5] hover:text-[#FFC100]">Contato</a></li>
+            <li><a href="{{ route('login')}}" class="text-[#f5f5f5] hover:text-[#FFC100]">Login</a></li>
         </ul>
     </nav>
 
