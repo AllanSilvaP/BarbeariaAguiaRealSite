@@ -1,7 +1,3 @@
-@php
-$manifest = json_decode(file_get_contents(public_path('build/manifest.json')), true);
-@endphp
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
