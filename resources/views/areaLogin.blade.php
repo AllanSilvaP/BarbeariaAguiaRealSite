@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Área do Funcionário</title>
-{{-- Fonts --}}
+    {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
@@ -37,17 +37,25 @@
     <div class="flex flex-col items-center justify-center py-12 pt-[80px]">
         <h2 class="text-3xl font-bold text-white mb-6" id="titulo-area">Área de Login</h2>
 
+
+        {{-- ÁREA DE ERRO/ALERT --}}
+
+        <div class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-4 text-sm" id="alerta-erro"></div>
+
         {{-- LOGIN FORM --}}
         <div class="w-full max-w-md bg-[#1f1f1f] p-8 rounded-xl shadow-md" id="login-form">
             <form>
                 <div class="mb-4">
                     <input id="email" name="email" type="email" placeholder="Digite seu email"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                    <p id="erro-email" class="hidden mt-1 text-sm text-red-500">Email inválido</p>
                 </div>
 
                 <div class="mb-4">
                     <input id="senha" name="senha" type="password" placeholder="Digite sua senha"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                    <p id="erro-senha-tam" class="hidden mt-1 text-sm text-red-500">Senha muito curta</p>
+                    <p id="erro-senha-num" class="hidden mt-1 text-sm text-red-500">Senha está sem um número</p>
                 </div>
 
                 <div class="flex flex-col space-y-3 mt-6 p-4 rounded-lg">

@@ -47,4 +47,45 @@ function verificarIgualdade(inputOriginal, inputConfirmacao) {
     }
 }
 
-export { areaLoginHandler, verificarIgualdade }
+function emailValido(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return regex.test(email)
+}
+
+function senhaValida(senha) {
+    const temNumero = /\d/.test(senha)
+    const tamanhoSuficiente = senha.length >=6
+    return temNumero && tamanhoSuficiente
+}
+
+const inputEmail = document.getElementById('email-cad')
+const erroEmail = document.getElementById('erro-email')
+
+const inputSenha = document.getElementById('senha-cad')
+const erroSenha = document.getElementById('erro-senha')
+
+inputEmail.addEventListener('input', () => {
+  if (!emailValido(inputEmail.value)) {
+    erroEmail.classList.remove('hidden')
+    inputEmail.classList.add('border-red-500')
+    inputEmail.classList.remove('border-green-500')
+  } else {
+    erroEmail.classList.add('hidden')
+    inputEmail.classList.remove('border-red-500')
+    inputEmail.classList.add('border-green-500')
+  }
+})
+
+inputSenha.addEventListener('input', () => {
+  if (!senhaValida(inputSenha.value)) {
+    erroSenha.classList.remove('hidden')
+    inputSenha.classList.add('border-red-500')
+    inputSenha.classList.remove('border-green-500')
+  } else {
+    erroSenha.classList.add('hidden')
+    inputSenha.classList.remove('border-red-500')
+    inputSenha.classList.add('border-green-500')
+  }
+})
+
+export { areaLoginHandler, verificarIgualdade, emailValido }
