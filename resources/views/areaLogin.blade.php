@@ -17,21 +17,7 @@
 
 <body class="bg-[#121212] text-white font-[Montserrat] scroll-smooth overflow-x-hidden m-0 p-0">
 
-    {{-- NAVBAR --}}
-    <nav class="bg-[#333333] h-[60px] fixed top-0 w-full z-50 flex items-center">
-        <ul class="flex justify-around w-full list-none p-0 m-0 text-xs sm:text-sm md:text-base">
-            <li>
-                <a href="{{ route('home') }}#pag-inicial">
-                    <img src="{{ asset('img/barbearia-frente.png') }}" alt="Logo" class="h-[30px] w-[30px]">
-                </a>
-            </li>
-            <li><a href="{{ route('home') }}#pag-inicial" class="text-[#f5f5f5] hover:text-[#FFC100]">Página Inicial</a></li>
-            <li><a href="{{ route('home') }}#servicos" class="text-[#f5f5f5] hover:text-[#FFC100]">Serviços</a></li>
-            <li><a href="{{ route('home') }}#contato" class="text-[#f5f5f5] hover:text-[#FFC100]">Contato</a></li>
-            <li><a href="{{ route('login')}}" class="text-[#f5f5f5] hover:text-[#FFC100]">Login</a></li>
-        </ul>
-    </nav>
-
+    <x-navbar />
 
     {{-- ÁREA DE LOGIN --}}
     <div class="flex flex-col items-center justify-center py-12 pt-[80px]">
@@ -44,57 +30,12 @@
 
         {{-- LOGIN FORM --}}
         <div class="w-full max-w-md bg-[#1f1f1f] p-8 rounded-xl shadow-md" id="login-form">
-            <form>
-                <div class="mb-4">
-                    <input id="email" name="email" type="email" placeholder="Digite seu email"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-                    <p id="erro-email" class="hidden mt-1 text-sm text-red-500">Email inválido</p>
-                </div>
-
-                <div class="mb-4">
-                    <input id="senha" name="senha" type="password" placeholder="Digite sua senha"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-                    <p id="erro-senha-tam" class="hidden mt-1 text-sm text-red-500">Senha muito curta</p>
-                    <p id="erro-senha-num" class="hidden mt-1 text-sm text-red-500">Senha está sem um número</p>
-                </div>
-
-                <div class="flex flex-col space-y-3 mt-6 p-4 rounded-lg">
-                    <button id="bt-login" type="button"
-                        class="bg-white text-black font-semibold py-2 rounded hover:bg-red-100 hover:cursor-pointer">Login</button>
-                    <p>Não tem conta? <a href="#" class="text-[#FFC100] font-bold" id="link-cadastro">Cadastre-se</a></p>
-                </div>
-            </form>
+            <x-login/>
         </div>
 
         {{-- CADASTRO FORM --}}
         <div class="w-full max-w-md bg-[#1f1f1f] p-8 rounded-xl shadow-md hidden" id="cad-form">
-            <form>
-                <div class="mb-4">
-                    <input id="email-cad" name="emailCad" type="email" placeholder="Digite seu email"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-                </div>
-
-                <div class="mb-4">
-                    <input id="email-confirm" name="emailCad" type="email" placeholder="Confirme seu email"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-                </div>
-
-                <div class="mb-4">
-                    <input id="senha-cad" name="senha" type="password" placeholder="Crie sua senha"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-                </div>
-
-                <div class="mb-4">
-                    <input id="senha-confirm" name="senha" type="password" placeholder="Confirme sua senha"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
-                </div>
-
-                <div class="flex flex-col space-y-3 mt-6 p-4 rounded-lg">
-                    <button id="bt-cadastro" type="button"
-                        class="bg-white text-black font-semibold py-2 rounded hover:bg-red-100 hover: cursor-pointer">Cadastrar</button>
-                    <p>Tem conta? <a href="#" class="text-[#FFC100] font-bold" id="link-login">Fazer Login</a></p>
-                </div>
-            </form>
+            <x-cadastro/>
         </div>
     </div>
 </body>
