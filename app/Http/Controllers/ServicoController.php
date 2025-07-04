@@ -13,7 +13,7 @@ class ServicoController extends Controller
      */
     public function index()
     {
-        //
+        return Servico::all();
     }
 
     /**
@@ -29,15 +29,25 @@ class ServicoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $usuario = auth('api')->user();
+
+        $servico = Servico::create([
+            'nome' => $request->nome,
+            'descricao' => $request->descricao,
+            'preco' => $request->preco,
+            'duracao_minutos' => $request->duracao_minutos,
+            'id_barbeiro' => $usuario->tipo_usuario === 'barbeiro' ? $usuario->id_usuario : $request->id_barbeiro,
+        ]);
+
+        return $servico;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Servico $servico)
+    public function show($id)
     {
-        //
+        return Servico::findOrFail($id);
     }
 
     /**
@@ -51,16 +61,24 @@ class ServicoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Servico $servico)
+    public function update(Request $request, $id)
     {
-        //
+        $servico = Servico::findOrFail($id);
+        $servico->update($request->all());
+        return $servico;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Servico $servico)
+    public function destroy($id)
     {
-        //
+        Servico::destroy($id);
+        return response()->json(['mensagem' => 'Serviço removido']);
+    }
+
+    public function meusServicos() {
+        $usuario = auth('api')->user();
+        return Servico::where('id_barbeiro', $usuario->id_usuario)->get();
     }
 }

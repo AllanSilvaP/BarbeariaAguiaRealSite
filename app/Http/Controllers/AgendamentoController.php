@@ -13,7 +13,7 @@ class AgendamentoController extends Controller
      */
     public function index()
     {
-        //
+        return Agendamento::with(['cliente', 'barbeiro', 'servico'])->get();
     }
 
     /**
@@ -29,15 +29,25 @@ class AgendamentoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $usuario = auth('api')->user();
+
+        $agendamento = Agendamento::create([
+            'id_cliente' => $usuario->id_usuario,
+            'id_barbeiro' => $request->id_barbeiro,
+            'id_servico' => $request->id_servico,
+            'data_hora' => $request->data_hora,
+            'status' => 'pendente'
+        ]);
+
+        return $agendamento;
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Agendamento $agendamento)
+    public function show($id)
     {
-        //
+        return Agendamento::with(['cliente', 'barbeiro', 'servico'])->findOrFail($id);
     }
 
     /**
