@@ -61,16 +61,33 @@ class AgendamentoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Agendamento $agendamento)
+    public function update(Request $request, $id)
     {
-        //
+        $agendamento = Agendamento::findOrFail($id);
+        $agendamento->update($request->all());
+        return $agendamento;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Agendamento $agendamento)
+    public function destroy($id)
     {
-        //
+        Agendamento::destroy($id);
+        return response()->json(['mensagem' => 'Agendamento cancelado']);
+    }
+
+    public function meusAgendamentos() {
+        $usuario = auth('api')->user();
+
+        if($usuario->tipo_usuario === 'cliente') {
+            return Agendamento::where('id_cliente', $usuario->id_usuario)->with('servico')->get();
+        }
+
+        if($usuario->tipo_usuario === 'barbeiro') {
+            return Agendamento::where('id_barbeiro', $usuario->id_usuario)->with('cliente')->get();
+        }
+
+        return response()->json(['erro' => 'Perfil não autorizado'],403);
     }
 }

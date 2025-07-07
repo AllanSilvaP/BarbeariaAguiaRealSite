@@ -9,3 +9,7 @@ Route::get('/', function () {
 Route::get('/login', function() {
     return view('areaLogin');
 })->name('login');
+
+Route::view('/hubadmin', 'hubs.hubadmin')->name('hubadmin');
+Route::view('/hubbarbeiro', 'hubs.hubbarbeiro')->name('hubbarbeiro');
+Route::view('/hubcliente', 'hubs.hubcliente')->name('hubcliente');

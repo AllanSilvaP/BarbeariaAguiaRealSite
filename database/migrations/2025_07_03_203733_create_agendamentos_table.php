@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_agendamento');
             $table->foreignId('id_cliente')->constrained('usuarios', 'id_usuario');
             $table->foreignId('id_barbeiro')->constrained('usuarios', 'id_usuario');
-            $table->foreignId('id_servico')->constrained('servicos', 'id_servicos');
+            $table->foreignId('id_servico')->constrained('servicos', 'id_servico');
             $table->dateTime('data_hora');
             $table->enum('status', ['pendente', 'confirmado', 'cancelado', 'concluido'])->default('pendente');
             $table->timestamps();

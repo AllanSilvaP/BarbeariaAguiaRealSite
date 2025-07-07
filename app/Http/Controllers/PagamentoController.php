@@ -13,7 +13,7 @@ class PagamentoController extends Controller
      */
     public function index()
     {
-        //
+        return Pagamento::with(['cliente', 'agendamento'])->get();
     }
 
     /**
@@ -29,15 +29,20 @@ class PagamentoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return Pagamento::create([
+            'id_cliente' => $request->id_cliente,
+            'id_agendamento' => $request->id_agendamento,
+            'valor' => $request->valor,
+            'forma_pagamento' => $request->forma_pagamento,
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Pagamento $pagamento)
+    public function show($id)
     {
-        //
+        return Pagamento::with('cliente')->findOrFail($id);
     }
 
     /**
@@ -51,16 +56,24 @@ class PagamentoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pagamento $pagamento)
+    public function update(Request $request, $id)
     {
-        //
+        $pagamento = Pagamento::findOrFail($id);
+        $pagamento->update($request->all());
+        return $pagamento;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pagamento $pagamento)
+    public function destroy($id)
     {
-        //
+        Pagamento::destroy($id);
+        return response()->json(['mensagem' => 'Pagamento excluído']);
+    }
+
+    public function meusPagamentos() {
+        $usuario = auth('api')->user();
+        return Pagamento::where('id_cliente', $usuario->id_usuario)->get();
     }
 }
