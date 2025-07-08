@@ -1,10 +1,12 @@
 import {
     areaLoginHandler,
     verificarIgualdade,
-    aplicarValidacoesCadastro
+    aplicarValidacoesCadastro,
+    mascaraNumero
 } from './modules/arealogin/loginHandler.js'
 
 import { handleLoginSubmit } from './modules/arealogin/loginSubmit.js'
+import { handleCadastroSubmit } from './modules/arealogin/cadastroSubmit.js'
 
 document.addEventListener('DOMContentLoaded', () => {
     const emailCad = document.getElementById('email-cad')
@@ -22,4 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if(form) {
         handleLoginSubmit(form)
     }
+
+    //cadastro
+    const formCad = document.getElementById('form-cadastro')
+    if(formCad) {
+        handleCadastroSubmit(formCad)
+    }
+
+    //mascara telefone
+    mascaraNumero()
 })

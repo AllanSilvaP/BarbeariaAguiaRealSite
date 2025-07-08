@@ -1,24 +1,33 @@
+
+import IMask from 'imask';
+
 function areaLoginHandler() {
-    const loginForm = document.getElementById('login-form')
-    const cadForm = document.getElementById('cad-form')
-    const tituloArea = document.getElementById('titulo-area')
-    const linkCadastro = document.getElementById('link-cadastro')
-    const linkLogin = document.getElementById('link-login')
+    const loginForm = document.getElementById('login-form');
+    const cadForm = document.getElementById('cad-form');
+    const tituloArea = document.getElementById('titulo-area');
 
-    linkCadastro.addEventListener('click', (e) => {
-        e.preventDefault()
-        loginForm.classList.add('hidden')
-        cadForm.classList.remove('hidden')
-        tituloArea.innerHTML = 'Área de Cadastro'
-    })
+    const linkCadastro = document.getElementById('link-cadastro');
+    const linkLogin = document.getElementById('link-login');
 
-    linkLogin.addEventListener('click', (e) => {
-        e.preventDefault()
-        loginForm.classList.remove('hidden')
-        cadForm.classList.add('hidden')
-        tituloArea.innerHTML = 'Área de Login'
-    })
+    if (linkCadastro && linkLogin && loginForm && cadForm && tituloArea) {
+        linkCadastro.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginForm.classList.add('hidden');
+            cadForm.classList.remove('hidden');
+            tituloArea.innerHTML = 'Área de Cadastro Cliente';
+        });
+
+        linkLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            loginForm.classList.remove('hidden');
+            cadForm.classList.add('hidden');
+            tituloArea.innerHTML = 'Área de Login';
+        });
+    } else {
+        console.warn('Elementos do login/cadastro não encontrados.');
+    }
 }
+
 
 function verificarIgualdade(inputOriginal, inputConfirmacao) {
     inputOriginal.addEventListener('input', verificar)
@@ -82,4 +91,23 @@ function aplicarValidacoesCadastro() {
     })
 }
 
-export { areaLoginHandler, verificarIgualdade, aplicarValidacoesCadastro }
+function mascaraNumero () {
+    const phoneInput = document.getElementById('telefone');;
+
+    const opcoesMascara = {
+        mask: [
+            {
+                mask: '(00) 0000-0000',
+                lazy: false
+            },
+            {
+                mask: '(00) 00000-0000',
+                lazy: false
+            }
+        ]
+    }
+
+    const telefoneMascara = IMask(phoneInput, opcoesMascara)
+}
+
+export { mascaraNumero, areaLoginHandler, verificarIgualdade, aplicarValidacoesCadastro }

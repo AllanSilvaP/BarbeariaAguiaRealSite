@@ -155,7 +155,7 @@
                 </div>
                 <div class="flex items-center mb-2">
                     <img src="{{ asset('img/Endereco.png') }}" alt="Endereço" class="w-7 h-7 mr-2">
-                    <span>Qnn 22 Conjunto P Lote 28</span>
+                    <span>Qnn 24 Conjunto N Lote 01 Loja 03</span>
                 </div>
             </div>
             <div class="flex flex-col items-start">

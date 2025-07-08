@@ -14,7 +14,7 @@ export async function handleLoginSubmit(form) {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json' // ❗ Corrigido: estava 'aplication'
+                    'Accept': 'application/json' 
                 },
                 body: JSON.stringify({ email, senha })
             })
