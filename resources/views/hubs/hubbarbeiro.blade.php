@@ -19,7 +19,7 @@
 <body class="bg-[#121212] text-white font-[Montserrat] scroll-smooth overflow-x-hidden m-0 p-0">
     <x-navbar-hub />
 
-    <div class="mt-80">
+    <div class="mt-20">
         <x-selecionar-dias/>
     </div>
 </body>
