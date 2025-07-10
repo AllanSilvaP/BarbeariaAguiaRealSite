@@ -16,7 +16,7 @@ $botoes = ['Barbeiro1', 'Pagamentos', 'Serviços']
 
     <link rel="icon" href="{{ asset('img/barbearia-frente.png') }}" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/index.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/internal/indexHub.js'])
 </head>
 
 
