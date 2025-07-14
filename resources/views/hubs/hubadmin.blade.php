@@ -1,5 +1,6 @@
 @php
-$botoes = ['Barbeiros', 'Pagamentos', 'Serviços', 'Usuarios','Agendas']
+$botoes = ['Barbeiros', 'Pagamentos', 'Serviços', 'Usuarios','Agendas'];
+$barbeiros = ['Samuel', 'Smolk', 'Elisson'];
 @endphp
 
 <!DOCTYPE html>
@@ -83,7 +84,7 @@ $botoes = ['Barbeiros', 'Pagamentos', 'Serviços', 'Usuarios','Agendas']
 
     <div class="max-w-screen-xl mx-auto flex w-full px-4 m-6 min-h-[500px]">
         <div class="w-3/4 pr-4">
-            <x-agenda-cliente />
+            <x-agendas.-agenda-admin :valoresBarber="$barbeiros" />
         </div>
         <div class="w-1/4 pl-4">
             <x-barra-lateral titulo="Opções" :valoresBt="$botoes" />

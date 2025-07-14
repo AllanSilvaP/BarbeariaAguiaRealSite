@@ -1,12 +1,12 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Secoes;
 
 use Closure;
 use Illuminate\View\Component;
 use Illuminate\Contracts\View\View;
 
-class AgendaCliente extends Component
+class -SecaoBarbeiro extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class AgendaCliente extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.agendas.-agenda-cliente');
+        return view('components.secoes.-secao-barbeiro');
     }
 }

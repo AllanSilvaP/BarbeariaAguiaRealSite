@@ -68,6 +68,11 @@ class UsuarioController extends Controller
             'tipo_usuario' => $request->tipo_usuario,
         ]);
 
+        if($request->filled('senha')) {
+            $usuario->senha = Hash::make($request->senha);
+            $usuario->save();
+        }
+
         return $usuario;
     }
 
