@@ -84,4 +84,9 @@ class UsuarioController extends Controller
         Usuario::destroy($id);
         return response()->json(['mensagem' => 'Usuário deletado com sucesso']);
     }
+
+    public function listarBarbeiros() {
+        $barbeiros = Usuario::where('tipo_usuario', 'Barbeiro')->get();
+        return response()->json($barbeiros);
+    }
 }
