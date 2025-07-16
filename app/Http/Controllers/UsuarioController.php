@@ -14,7 +14,7 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        return Usuario::all();
+        return response()->json(Usuario::all());
     }
 
     /**

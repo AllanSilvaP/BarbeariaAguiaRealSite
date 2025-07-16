@@ -1,40 +1,42 @@
-export async function renderSecaoBarbeiros() {
+export async function renderSecaoUsuarios() {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch('/api/barbeiros', {
+        const response = await fetch('/api/usuarios', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
             }
         });
 
-        if (!response.ok) throw new Error('Erro ao buscar barbeiros');
+        if (!response.ok) throw new Error('Erro ao buscar usuarios');
 
-        const barbeiros = await response.json();
+        const usuarios = await response.json();
 
         const html = `
         <div class="bg-white text-black rounded p-4 shadow-md">
             <div class="flex justify-between items-center">
-            <h2 class="text-xl font-bold mb-4">Barbeiros</h2>
-            <button id="cad-barbeiro" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">Cadastrar Barbeiro</button>
+            <h2 class="text-xl font-bold mb-4">Usuarios</h2>
+            <button id="cad-usuario" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">Cadastrar Usuario</button>
             </div>
-            ${barbeiros.length > 0 ? `
+            ${usuarios.length > 0 ? `
                 <table class="w-full text-left border">
                     <thead class="bg-gray-200">
                         <tr>
                             <th class="p-2 border">Nome</th>
                             <th class="p-2 border">Email</th>
                             <th class="p-2 border">Telefone</th>
+                            <th class="p-2 border">Tipo Usuario</th>
                             <th class="p-2 border">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        ${barbeiros.map(b => `
+                        ${usuarios.map(b => `
                             <tr>
                                 <td class="p-2 border">${b.nome}</td>
                                 <td class="p-2 border">${b.email}</td>
                                 <td class="p-2 border">${b.telefone}</td>
+                                <td class="p-2 border">${b.tipo_usuario}</td>
                                 <td class="p-2 border flex gap-2">
                                     <button class="editar-barbeiro text-blue-600" data-id="${b.id_usuario}">✏️</button>
                                     <button class="excluir-barbeiro text-red-600" data-id="${b.id_usuario}">❌</button>
@@ -46,9 +48,9 @@ export async function renderSecaoBarbeiros() {
             ` : `<p class="text-gray-500">Nenhum barbeiro cadastrado.</p>`}
         </div>`;
 
-        document.getElementById('secao-barbeiro').innerHTML = html;
+        document.getElementById('secao-usuario').innerHTML = html;
 
-        const botao = document.getElementById('cad-barbeiro');
+        const botao = document.getElementById('cad-usuario');
         if (botao) {
             botao.addEventListener('click', () => renderCadBarbeiro())
         }
@@ -57,7 +59,7 @@ export async function renderSecaoBarbeiros() {
         document.querySelectorAll('.editar-barbeiro').forEach(botao => {
             botao.addEventListener('click', (e) => {
                 const id = e.target.dataset.id
-                renderEditarBarbeiro(id)
+                renderEditarUsuario(id)
             })
         })
 
@@ -84,7 +86,7 @@ export async function renderSecaoBarbeiros() {
                     }
 
                     alert('Barbeiro excluído com sucesso!');
-                    renderSecaoBarbeiros(); // Atualiza a listagem
+                    renderSecaoUsuarios(); // Atualiza a listagem
                 } catch (error) {
                     console.error(error);
                     alert('Erro ao excluir barbeiro');
@@ -94,24 +96,24 @@ export async function renderSecaoBarbeiros() {
 
     } catch (error) {
         console.error(error);
-        document.getElementById('secao-barbeiro').innerHTML = `<p class="text-red-500">Erro ao carregar barbeiros.</p>`;
+        document.getElementById('secao-usuario').innerHTML = `<p class="text-red-500">Erro ao carregar usuarios.</p>`;
     }
 }
 
 
 function renderCadBarbeiro() {
-    const container = document.getElementById('secao-barbeiro')
+    const container = document.getElementById('secao-usuario')
 
     const html = `
     <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
-        <h2 class="text-xl font-bold mb-4">Cadastrar Barbeiro</h2>
+        <h2 class="text-xl font-bold mb-4">Cadastrar Usuario</h2>
 
-        <form id="form-cad-barbeiro" class="space-y-4">
+        <form id="form-cad-usuario" class="space-y-4">
             <input type="text" name="nome" placeholder="Nome" class="input w-full border p-2 rounded" required>
             <input type="email" name="email" placeholder="Email" class="input w-full border p-2 rounded" required>
             <input type="tel" name="telefone" placeholder="Telefone" class="input w-full border p-2 rounded" required>
-            <input type="password" name="senha" placeholder="Senha" class="input w-full border p-2 rounded" required>
             <input type="hidden" name="tipo_usuario" value="Barbeiro">
+            <input type="password" name="senha" placeholder="Senha" class="input w-full border p-2 rounded" required>
 
             <button type="submit" class="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-800">
                 Cadastrar
@@ -122,7 +124,7 @@ function renderCadBarbeiro() {
 
     container.innerHTML = html;
 
-    const form = document.getElementById('form-cad-barbeiro');
+    const form = document.getElementById('form-cad-usuario');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault()
@@ -150,7 +152,7 @@ function renderCadBarbeiro() {
             }
 
             alert('Barbeiro cadastrado com Sucesso!');
-            renderSecaoBarbeiros()
+            renderSecaoUsuarios()
         } catch (error) {
             console.error(error)
         }
@@ -158,8 +160,8 @@ function renderCadBarbeiro() {
     })
 }
 
-async function renderEditarBarbeiro(id) {
-    const container = document.getElementById('secao-barbeiro');
+async function renderEditarUsuario(id) {
+    const container = document.getElementById('secao-usuario');
     const token = localStorage.getItem('token');
 
     try {
@@ -221,7 +223,7 @@ async function renderEditarBarbeiro(id) {
                 }
 
                 alert('Barbeiro atualizado com sucesso!');
-                renderSecaoBarbeiros();
+                renderSecaoUsuarios();
 
             } catch (err) {
                 console.error(err);

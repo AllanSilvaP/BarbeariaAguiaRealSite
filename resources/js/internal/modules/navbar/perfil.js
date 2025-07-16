@@ -14,14 +14,10 @@ export async function getPerfil() {
 
         if (!me.ok) throw new Error('Usuario nao encontrado!')
         const usuario = await me.json()
-
-        console.log(usuario)
-        console.log(usuario.nome)
         spanNome.innerHTML = `<p>${usuario.nome}</p>`
     } catch (error) {
         console.error(error)
         spanNome.textContent = 'Usuario'
-        console.log(usuario)
         alert('Erro ao pegar nome!')
     }
 

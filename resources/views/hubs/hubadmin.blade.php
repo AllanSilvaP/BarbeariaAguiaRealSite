@@ -85,6 +85,7 @@ $barbeiros = ['Samuel', 'Smolk', 'Elisson'];
     <div class="max-w-screen-xl mx-auto flex w-full px-4 m-6 min-h-[500px]">
         <div class="w-3/4 pr-4">
             <div id="secao-barbeiro"></div>
+            <div id="secao-usuario"></div>
         </div>
         <div class="w-1/4 pl-4">
             <x-barra-lateral titulo="Opções" :valoresBt="$botoes" />
