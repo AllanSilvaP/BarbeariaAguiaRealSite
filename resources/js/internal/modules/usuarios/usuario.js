@@ -38,8 +38,8 @@ export async function renderSecaoUsuarios() {
                                 <td class="p-2 border">${b.telefone}</td>
                                 <td class="p-2 border">${b.tipo_usuario}</td>
                                 <td class="p-2 border flex gap-2">
-                                    <button class="editar-barbeiro text-blue-600" data-id="${b.id_usuario}">✏️</button>
-                                    <button class="excluir-barbeiro text-red-600" data-id="${b.id_usuario}">❌</button>
+                                    <button class="editar-usuario text-blue-600" data-id="${b.id_usuario}">✏️</button>
+                                    <button class="excluir-usuario text-red-600" data-id="${b.id_usuario}">❌</button>
                                 </td>
                             </tr>
                         `).join('')}
@@ -48,15 +48,15 @@ export async function renderSecaoUsuarios() {
             ` : `<p class="text-gray-500">Nenhum barbeiro cadastrado.</p>`}
         </div>`;
 
-        document.getElementById('secao-usuario').innerHTML = html;
+        document.getElementById('secao-conteudo').innerHTML = html;
 
         const botao = document.getElementById('cad-usuario');
         if (botao) {
-            botao.addEventListener('click', () => renderCadBarbeiro())
+            botao.addEventListener('click', () => renderCadUsuario())
         }
 
         //EDITAR
-        document.querySelectorAll('.editar-barbeiro').forEach(botao => {
+        document.querySelectorAll('.editar-usuario').forEach(botao => {
             botao.addEventListener('click', (e) => {
                 const id = e.target.dataset.id
                 renderEditarUsuario(id)
@@ -64,7 +64,7 @@ export async function renderSecaoUsuarios() {
         })
 
         //EXCLUIR
-        document.querySelectorAll('.excluir-barbeiro').forEach(botao => {
+        document.querySelectorAll('.excluir-usuario').forEach(botao => {
             botao.addEventListener('click', async (e) => {
                 const id = e.target.dataset.id;
                 const confirmar = confirm('Tem certeza que deseja excluir este barbeiro?')
@@ -85,7 +85,7 @@ export async function renderSecaoUsuarios() {
                         throw new Error(erro.message || 'Erro ao excluir barbeiro');
                     }
 
-                    alert('Barbeiro excluído com sucesso!');
+                    alert('Usuario excluído com sucesso!');
                     renderSecaoUsuarios(); // Atualiza a listagem
                 } catch (error) {
                     console.error(error);
@@ -96,13 +96,13 @@ export async function renderSecaoUsuarios() {
 
     } catch (error) {
         console.error(error);
-        document.getElementById('secao-usuario').innerHTML = `<p class="text-red-500">Erro ao carregar usuarios.</p>`;
+        document.getElementById('secao-conteudo').innerHTML = `<p class="text-red-500">Erro ao carregar usuarios.</p>`;
     }
 }
 
 
-function renderCadBarbeiro() {
-    const container = document.getElementById('secao-usuario')
+function renderCadUsuario() {
+    const container = document.getElementById('secao-conteudo')
 
     const html = `
     <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
@@ -112,8 +112,14 @@ function renderCadBarbeiro() {
             <input type="text" name="nome" placeholder="Nome" class="input w-full border p-2 rounded" required>
             <input type="email" name="email" placeholder="Email" class="input w-full border p-2 rounded" required>
             <input type="tel" name="telefone" placeholder="Telefone" class="input w-full border p-2 rounded" required>
-            <input type="hidden" name="tipo_usuario" value="Barbeiro">
             <input type="password" name="senha" placeholder="Senha" class="input w-full border p-2 rounded" required>
+            <label for="tipo_usuario">Tipo de Usuário:</label>
+            <select name="tipo_usuario" id="tipo_usuario" required>
+                <option value="">Selecione o tipo</option>
+                <option value="Administrador">Administrador</option>
+                <option value="Usuario">Usuario</option>
+                <option value="Usuario">Usuario</option>
+            </select>
 
             <button type="submit" class="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-800">
                 Cadastrar
@@ -148,10 +154,10 @@ function renderCadBarbeiro() {
 
             if (!response.ok) {
                 const erro = await response.json()
-                throw new Error(erro.message || 'Erro ao cadastrar Barbeiro')
+                throw new Error(erro.message || 'Erro ao cadastrar Usuario')
             }
 
-            alert('Barbeiro cadastrado com Sucesso!');
+            alert('Usuario cadastrado com Sucesso!');
             renderSecaoUsuarios()
         } catch (error) {
             console.error(error)
@@ -161,7 +167,7 @@ function renderCadBarbeiro() {
 }
 
 async function renderEditarUsuario(id) {
-    const container = document.getElementById('secao-usuario');
+    const container = document.getElementById('secao-conteudo');
     const token = localStorage.getItem('token');
 
     try {
@@ -178,14 +184,20 @@ async function renderEditarUsuario(id) {
 
         const html = `
         <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
-            <h2 class="text-xl font-bold mb-4">Editar Barbeiro</h2>
+            <h2 class="text-xl font-bold mb-4">Editar Usuario</h2>
 
-            <form id="form-editar-barbeiro" class="space-y-4">
+            <form id="form-editar-usuario" class="space-y-4">
                 <input type="text" name="nome" value="${b.nome}" class="input w-full border p-2 rounded" required>
                 <input type="email" name="email" value="${b.email}" class="input w-full border p-2 rounded" required>
                 <input type="tel" name="telefone" value="${b.telefone}" class="input w-full border p-2 rounded" required>
                 <input type="password" name="senha" placeholder="Nova senha (opcional)" class="input w-full border p-2 rounded">
-                <input type="hidden" name="tipo_usuario" value="Barbeiro">
+                 <label for="tipo_usuario">Tipo de Usuário:</label>
+            <select name="tipo_usuario" id="tipo_usuario" required>
+                <option value="">Selecione o tipo</option>
+                <option value="Administrador">Administrador</option>
+                <option value="Usuario">Usuario</option>
+                <option value="Usuario">Usuario</option>
+            </select>
 
                 <button type="submit" class="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-800">
                     Atualizar
@@ -196,7 +208,7 @@ async function renderEditarUsuario(id) {
 
         container.innerHTML = html;
 
-        const form = document.getElementById('form-editar-barbeiro');
+        const form = document.getElementById('form-editar-usuario');
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -222,7 +234,7 @@ async function renderEditarUsuario(id) {
                     throw new Error(erro.message || 'Erro ao atualizar barbeiro');
                 }
 
-                alert('Barbeiro atualizado com sucesso!');
+                alert('Usuario atualizado com sucesso!');
                 renderSecaoUsuarios();
 
             } catch (err) {

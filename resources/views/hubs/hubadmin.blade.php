@@ -17,7 +17,7 @@ $barbeiros = ['Samuel', 'Smolk', 'Elisson'];
 
     <link rel="icon" href="{{ asset('img/barbearia-frente.png') }}" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/index.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/internal/indexHub.js'])
 </head>
 
 
@@ -84,8 +84,7 @@ $barbeiros = ['Samuel', 'Smolk', 'Elisson'];
 
     <div class="max-w-screen-xl mx-auto flex w-full px-4 m-6 min-h-[500px]">
         <div class="w-3/4 pr-4">
-            <div id="secao-barbeiro"></div>
-            <div id="secao-usuario"></div>
+            <div id="secao-conteudo"></div>
         </div>
         <div class="w-1/4 pl-4">
             <x-barra-lateral titulo="Opções" :valoresBt="$botoes" />

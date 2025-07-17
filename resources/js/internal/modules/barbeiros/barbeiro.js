@@ -46,7 +46,15 @@ export async function renderSecaoBarbeiros() {
             ` : `<p class="text-gray-500">Nenhum barbeiro cadastrado.</p>`}
         </div>`;
 
-        document.getElementById('secao-barbeiro').innerHTML = html;
+        const container = document.getElementById('secao-conteudo');
+        if (!container) {
+            console.error('Elemento com id "secao-conteudo" não encontrado.');
+            return;
+        }
+
+        container.innerHTML = html
+
+
 
         const botao = document.getElementById('cad-barbeiro');
         if (botao) {
