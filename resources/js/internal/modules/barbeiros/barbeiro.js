@@ -102,13 +102,13 @@ export async function renderSecaoBarbeiros() {
 
     } catch (error) {
         console.error(error);
-        document.getElementById('secao-barbeiro').innerHTML = `<p class="text-red-500">Erro ao carregar barbeiros.</p>`;
+        document.getElementById('secao-conteudo').innerHTML = `<p class="text-red-500">Erro ao carregar barbeiros.</p>`;
     }
 }
 
 
 function renderCadBarbeiro() {
-    const container = document.getElementById('secao-barbeiro')
+    const container = document.getElementById('secao-conteudo')
 
     const html = `
     <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
@@ -167,7 +167,7 @@ function renderCadBarbeiro() {
 }
 
 async function renderEditarBarbeiro(id) {
-    const container = document.getElementById('secao-barbeiro');
+    const container = document.getElementById('secao-conteudo');
     const token = localStorage.getItem('token');
 
     try {
