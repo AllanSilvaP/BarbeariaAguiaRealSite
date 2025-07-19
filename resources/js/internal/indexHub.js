@@ -1,6 +1,8 @@
 import { getPerfil } from "./modules/navbar/perfil"
 import { renderSecaoBarbeiros } from "./modules/barbeiros/barbeiro"
 import { renderSecaoUsuarios } from "./modules/usuarios/usuario"
+import { renderSecaoServicos } from "./modules/servicos/servico"
+import { renderSecaoAgendaAdmin } from "./modules/agendas/agendaAdmin"
 
 document.addEventListener('DOMContentLoaded', () => {
     getPerfil()
@@ -20,6 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'Barbeiros':
                 renderSecaoBarbeiros(container);
+                break;
+
+            case 'Serviços':
+                renderSecaoServicos(container);
+                break;
+
+            case 'Agendas':
+                renderSecaoAgendaAdmin(container);
                 break;
             default:
                 container.innerHTML = `<p>Seção "${secao}" não encontrada.</p>`;

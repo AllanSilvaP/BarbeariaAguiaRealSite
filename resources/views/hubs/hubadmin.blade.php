@@ -77,7 +77,7 @@ $barbeiros = ['Samuel', 'Smolk', 'Elisson'];
     <div class="w-[600px] h-[3px] bg-white opacity-50 mx-auto"></div>
 
     <div class="flex justify-center py-4 ">
-        <button class="py-2 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out bg-[#8B5F2A] hover:bg-[#A07C42] text-white">
+        <button id="agendar-corte" class="py-2 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out bg-[#8B5F2A] hover:bg-[#A07C42] text-white">
             Agendar Corte
         </button>
     </div>

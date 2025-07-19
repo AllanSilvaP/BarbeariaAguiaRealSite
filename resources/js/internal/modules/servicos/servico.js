@@ -17,7 +17,7 @@ export async function renderSecaoServicos() {
         <div class="bg-white text-black rounded p-4 shadow-md">
             <div class="flex justify-between items-center">
             <h2 class="text-xl font-bold mb-4">Servicos</h2>
-            <button id="cad-usuario" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">Cadastrar Usuario</button>
+            <button id="cad-usuario" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">Cadastrar Servico</button>
             </div>
             ${servicos.length > 0 ? `
                 <table class="w-full text-left border">
@@ -36,7 +36,7 @@ export async function renderSecaoServicos() {
                                 <td class="p-2 border">${s.nome}</td>
                                 <td class="p-2 border">${s.descricao}</td>
                                 <td class="p-2 border">${s.preco}</td>
-                                <td class="p-2 border">${s.duracao_minuto}</td>
+                                <td class="p-2 border">${s.duracao_minutos}</td>
                                 <td class="p-2 border flex gap-2">
                                     <button class="editar-servico text-blue-600" data-id="${s.id_servico}">✏️</button>
                                     <button class="excluir-servico text-red-600" data-id="${s.id_servico}">❌</button>
@@ -52,14 +52,14 @@ export async function renderSecaoServicos() {
 
         const botao = document.getElementById('cad-usuario');
         if (botao) {
-            botao.addEventListener('click', () => renderCadUsuario())
+            botao.addEventListener('click', () => renderCadServico())
         }
 
         //EDITAR
         document.querySelectorAll('.editar-servico').forEach(botao => {
             botao.addEventListener('click', (e) => {
                 const id = e.target.dataset.id
-                renderEditarUsuario(id)
+                renderEditarServico(id)
             })
         })
 
@@ -85,7 +85,7 @@ export async function renderSecaoServicos() {
                         throw new Error(erro.message || 'Erro ao excluir servico');
                     }
 
-                    alert('Usuario excluído com sucesso!');
+                    alert('Servico excluído com sucesso!');
                     renderSecaoServicos(); // Atualiza a listagem
                 } catch (error) {
                     console.error(error);
@@ -101,26 +101,18 @@ export async function renderSecaoServicos() {
 }
 
 
-function renderCadUsuario() {
+function renderCadServico() {
     const container = document.getElementById('secao-conteudo')
 
     const html = `
     <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
-        <h2 class="text-xl font-bold mb-4">Cadastrar Usuario</h2>
+        <h2 class="text-xl font-bold mb-4">Cadastrar Servico</h2>
 
         <form id="form-cad-usuario" class="space-y-4">
             <input type="text" name="nome" placeholder="Nome" class="input w-full border p-2 rounded" required>
             <textarea name="descricao" placeholder="Digite a descrição..." maxlenght="60" class="input w-full border p-2 rounded" required></textarea>
-            <input type="tel" name="telefone" placeholder="Telefone" class="input w-full border p-2 rounded" required>
-            <input type="password" name="senha" placeholder="Senha" class="input w-full border p-2 rounded" required>
-            <label for="tipo_usuario">Tipo de Usuário:</label>
-            <select name="tipo_usuario" id="tipo_usuario" required>
-                <option value="">Selecione o tipo</option>
-                <option value="Administrador">Administrador</option>
-                <option value="Usuario">Usuario</option>
-                <option value="Usuario">Usuario</option>
-            </select>
-
+            <input type="integer" name="preco" placeholder="Preço" class="input w-full border p-2 rounded" required>
+            <input type="integer" name="duracao_minutos" placeholder="Duração em minutos" class="input w-full border p-2 rounded" required>
             <button type="submit" class="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-800">
                 Cadastrar
             </button>
@@ -154,10 +146,10 @@ function renderCadUsuario() {
 
             if (!response.ok) {
                 const erro = await response.json()
-                throw new Error(erro.message || 'Erro ao cadastrar Usuario')
+                throw new Error(erro.message || 'Erro ao cadastrar Servico')
             }
 
-            alert('Usuario cadastrado com Sucesso!');
+            alert('Servico cadastrado com Sucesso!');
             renderSecaoServicos()
         } catch (error) {
             console.error(error)
@@ -166,7 +158,7 @@ function renderCadUsuario() {
     })
 }
 
-async function renderEditarUsuario(id) {
+async function renderEditarServico(id) {
     const container = document.getElementById('secao-conteudo');
     const token = localStorage.getItem('token');
 
@@ -180,25 +172,19 @@ async function renderEditarUsuario(id) {
 
         if (!response.ok) throw new Error('Erro ao buscar servico');
 
-        const b = await response.json();
+        const s = await response.json();
 
         const html = `
         <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
-            <h2 class="text-xl font-bold mb-4">Editar Usuario</h2>
+            <h2 class="text-xl font-bold mb-4">Editar Servico</h2>
 
             <form id="form-editar-servico" class="space-y-4">
-                <input type="text" name="nome" value="${b.nome}" class="input w-full border p-2 rounded" required>
-                <input type="email" name="email" value="${b.email}" class="input w-full border p-2 rounded" required>
-                <input type="tel" name="telefone" value="${b.telefone}" class="input w-full border p-2 rounded" required>
-                <input type="password" name="senha" placeholder="Nova senha (opcional)" class="input w-full border p-2 rounded">
-                 <label for="tipo_usuario">Tipo de Usuário:</label>
-            <select name="tipo_usuario" id="tipo_usuario" required>
-                <option value="">Selecione o tipo</option>
-                <option value="Administrador">Administrador</option>
-                <option value="Usuario">Usuario</option>
-                <option value="Usuario">Usuario</option>
-            </select>
-
+            <input type="text" name="nome" value="${s.nome}" class="input w-full border p-2 rounded" required>
+            <textarea name="descricao" maxlenght="60" class="input w-full border p-2 rounded" required>
+            ${s.descricao}
+            </textarea>
+            <input type="integer" name="preco" value="${s.preco}" class="input w-full border p-2 rounded" required>
+            <input type="integer" name="duracao_minutos" value="${s.duracao_minutos}" class="input w-full border p-2 rounded" required>
                 <button type="submit" class="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-800">
                     Atualizar
                 </button>
@@ -234,7 +220,7 @@ async function renderEditarUsuario(id) {
                     throw new Error(erro.message || 'Erro ao atualizar servico');
                 }
 
-                alert('Usuario atualizado com sucesso!');
+                alert('Servico atualizado com sucesso!');
                 renderSecaoServicos();
 
             } catch (err) {

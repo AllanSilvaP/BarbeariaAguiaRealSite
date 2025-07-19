@@ -27,6 +27,8 @@ Route::middleware(['auth:api'])->group(function() {
         Route::apiResource('pagamentos', PagamentoController::class);
         //getBarbeiro
         Route::get('/barbeiros', [UsuarioController::class, 'listarBarbeiros']);
+        //agendamentosAdmin
+        Route::get('/barbeiros-agendamentos', [AgendamentoController::class, 'agendamentosPorBarbeiro']);
     });
 
     //barbeiro
