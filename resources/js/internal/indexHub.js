@@ -3,6 +3,7 @@ import { renderSecaoBarbeiros } from "./modules/barbeiros/barbeiro"
 import { renderSecaoUsuarios } from "./modules/usuarios/usuario"
 import { renderSecaoServicos } from "./modules/servicos/servico"
 import { renderSecaoAgendaAdmin } from "./modules/agendas/agendaAdmin"
+import { agendar } from "./modules/agendas/agendar"
 
 document.addEventListener('DOMContentLoaded', () => {
     getPerfil()
@@ -38,4 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //TELA PADRAO
     window.renderSecao('Barbeiros')
+
+    agendar()
 })

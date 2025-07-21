@@ -14,7 +14,7 @@ class AgendamentoController extends Controller
      */
     public function index()
     {
-        return Agendamento::with(['cliente', 'barbeiro', 'servico'])->get();
+        return Agendamento::with(['cliente', 'barbeiro', 'servicos'])->get();
     }
 
     /**
@@ -32,15 +32,23 @@ class AgendamentoController extends Controller
     {
         $usuario = auth('api')->user();
 
+        $request->validate([
+            'id_barbeiro' => 'required|exists:usuarios,id_usuario',
+            'servicos' => 'required|array|min:1',
+            'servicos.*' => 'exists:servicos,id_servico',
+            'data_hora' => 'required|date'
+        ]);
+
         $agendamento = Agendamento::create([
             'id_cliente' => $usuario->id_usuario,
             'id_barbeiro' => $request->id_barbeiro,
-            'id_servico' => $request->id_servico,
             'data_hora' => $request->data_hora,
             'status' => 'pendente'
         ]);
 
-        return $agendamento;
+        $agendamento->servicos()->attach($request->servicos);
+
+        return $agendamento->load(['cliente','barbeiro','servicos']);
     }
 
     /**
@@ -48,7 +56,7 @@ class AgendamentoController extends Controller
      */
     public function show($id)
     {
-        return Agendamento::with(['cliente', 'barbeiro', 'servico'])->findOrFail($id);
+        return Agendamento::with(['cliente', 'barbeiro', 'servicos'])->findOrFail($id);
     }
 
     /**
@@ -83,7 +91,7 @@ class AgendamentoController extends Controller
         $usuario = auth('api')->user();
 
         if ($usuario->tipo_usuario === 'cliente') {
-            return Agendamento::where('id_cliente', $usuario->id_usuario)->with('servico')->get();
+            return Agendamento::where('id_cliente', $usuario->id_usuario)->with('servicos')->get();
         }
 
         if ($usuario->tipo_usuario === 'barbeiro') {
@@ -97,7 +105,7 @@ class AgendamentoController extends Controller
     //FUNCAO PARA LISTAR AGENDAMENTOS
 
     public function agendamentosPorBarbeiro() {
-        $agendamentos = Agendamento::with(['barbeiro', 'cliente', 'servico'])
+        $agendamentos = Agendamento::with(['barbeiro', 'cliente', 'servicos'])
         ->whereHas('barbeiro', function($query) {
             $query->where('tipo_usuario', 'barbeiro');
         })
@@ -120,7 +128,7 @@ class AgendamentoController extends Controller
 
             $agrupados[$barbeiroId]['agendamentos'][] = [
                 'cliente' => ['nome' => $agendamento->cliente->nome ?? 'N/A'],
-                'servico' => ['nome' => $agendamento->servico->nome ?? 'N\A'],
+                'servicos' => $agendamento->servicos->pluck('nome')->toArray(),
                 'data_hora' => $agendamento->data_hora,
                 'status' => $agendamento->status
             ];

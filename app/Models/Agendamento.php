@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Agendamento extends Model
 {
-    protected $primaryKey = 'id_servico';
+    protected $primaryKey = 'id_agendamento';
     protected $fillable = ['id_cliente', 'id_barbeiro', 'id_servico', 'data_hora', 'status'];
 
     public function cliente() {
@@ -17,7 +17,7 @@ class Agendamento extends Model
         return $this->belongsTo(Usuario::class, 'id_barbeiro');
     }
 
-    public function servico() {
-        return $this->belongsTo(Servico::class, 'id_servico');
+    public function servicos() {
+        return $this->belongsToMany(Servico::class, 'agendamento_servico', 'agendamento_id', 'servico_id');
     }
 }

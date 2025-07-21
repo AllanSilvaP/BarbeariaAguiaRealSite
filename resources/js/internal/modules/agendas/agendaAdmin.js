@@ -41,6 +41,7 @@ export async function renderSecaoAgendaAdmin() {
                         <p><strong>Serviço:</strong> ${ag.servico?.nome || 'N/A'}</p>
                         <p><strong>Horário:</strong> ${new Date(ag.data_hora).toLocaleString('pt-BR')}</p>
                         <p><strong>Status:</strong> ${ag.status}</p>
+                        <button id="botao-editar-status" class="bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Alterar o Status</button>
                     `
 
                     secao.appendChild(card)
@@ -55,4 +56,25 @@ export async function renderSecaoAgendaAdmin() {
         console.error('Erro ao carregar agendamentos', error)
         container.innerHTML = '<p class="text-red-500">Erro ao carregar agendamentos.</p>'
     }
+
+    document.querySelectorAll('#botao-editar-status').forEach(botao => {
+        botao.addEventListener('click', async (e) => {
+            const id = e.target.dataset.id
+            const token = localStorage.getItem('token')
+
+            try {
+                const response = await fetch(`/api/agendamentos/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                })
+            } catch (error) {
+
+            }
+        })
+    })
 }

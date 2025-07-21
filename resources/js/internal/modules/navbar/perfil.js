@@ -14,7 +14,7 @@ export async function getPerfil() {
 
         if (!me.ok) throw new Error('Usuario nao encontrado!')
         const usuario = await me.json()
-        spanNome.innerHTML = `<p>${usuario.nome}</p>`
+        spanNome.innerHTML = `Olá, <p>${usuario.nome}</p>`
     } catch (error) {
         console.error(error)
         spanNome.textContent = 'Usuario'

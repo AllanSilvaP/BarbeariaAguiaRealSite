@@ -18,6 +18,7 @@ Route::middleware(['auth:api'])->group(function() {
     //LOGIN E PERFIL
     Route::get('/me', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/agendamentos', [AgendamentoController::class, 'store']);
 
     //admin
     Route::middleware(['admin'])->group(function () {
@@ -41,7 +42,6 @@ Route::middleware(['auth:api'])->group(function() {
     //cliente
     Route::middleware(['cliente'])->group(function () {
         Route::get('/me/agendamentos', [AgendamentoController::class, 'meusAgendamentos']);
-        Route::post('/agendamentos', [AgendamentoController::class, 'store']);
     });
 });
 
