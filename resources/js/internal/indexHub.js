@@ -3,6 +3,7 @@ import { renderSecaoBarbeiros } from "./modules/barbeiros/barbeiro"
 import { renderSecaoUsuarios } from "./modules/usuarios/usuario"
 import { renderSecaoServicos } from "./modules/servicos/servico"
 import { renderSecaoAgendaAdmin } from "./modules/agendas/agendaAdmin"
+import { renderSecaoPagamentos } from "./modules/pagamentos.js/pagamento"
 import { agendar } from "./modules/agendas/agendar"
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -32,6 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'Agendas':
                 renderSecaoAgendaAdmin(container);
                 break;
+
+            case 'Pagamentos':
+                renderSecaoPagamentos(container);
+                break;
+
             default:
                 container.innerHTML = `<p>Seção "${secao}" não encontrada.</p>`;
         }
