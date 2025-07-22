@@ -127,6 +127,7 @@ class AgendamentoController extends Controller
             }
 
             $agrupados[$barbeiroId]['agendamentos'][] = [
+                'id_agendamento' => $agendamento->id_agendamento,
                 'cliente' => ['nome' => $agendamento->cliente->nome ?? 'N/A'],
                 'servicos' => $agendamento->servicos->pluck('nome')->toArray(),
                 'data_hora' => $agendamento->data_hora,
