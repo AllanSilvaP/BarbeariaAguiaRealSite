@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Pagamento;
 use App\Http\Controllers\Controller;
+use App\Models\Agendamento;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PagamentoController extends Controller
 {
@@ -29,6 +31,21 @@ class PagamentoController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'id_agendamento' => [
+                'required',
+                Rule::unique('pagamentos', 'id_agendamento')
+            ],
+            'valor' => 'required|numeric',
+            'forma_pagamento' => 'required|in:pix,dinheiro,cartão',
+        ]);
+
+        $pagamentoExistente = Pagamento::where('id_agendamento', $request->id_agendamento)->first();
+
+        if ($pagamentoExistente) {
+            return response()->json(['message' => 'Este agendamento já foi pago.'], 422);
+        }
+
         return Pagamento::create([
             'id_cliente' => $request->id_cliente,
             'id_agendamento' => $request->id_agendamento,
@@ -72,7 +89,8 @@ class PagamentoController extends Controller
         return response()->json(['mensagem' => 'Pagamento excluído']);
     }
 
-    public function meusPagamentos() {
+    public function meusPagamentos()
+    {
         $usuario = auth('api')->user();
         return Pagamento::where('id_cliente', $usuario->id_usuario)->get();
     }

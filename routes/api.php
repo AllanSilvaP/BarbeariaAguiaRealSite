@@ -30,6 +30,7 @@ Route::middleware(['auth:api'])->group(function() {
         Route::get('/barbeiros', [UsuarioController::class, 'listarBarbeiros']);
         //agendamentosAdmin
         Route::get('/barbeiros-agendamentos', [AgendamentoController::class, 'agendamentosPorBarbeiro']);
+        Route::get('/agendamentos-concluidos', [AgendamentoController::class, 'concluidos']);
     });
 
     //barbeiro

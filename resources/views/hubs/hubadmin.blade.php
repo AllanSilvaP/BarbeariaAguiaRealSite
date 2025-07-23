@@ -1,6 +1,5 @@
 @php
 $botoes = ['Barbeiros', 'Pagamentos', 'Serviços', 'Usuarios','Agendas'];
-$barbeiros = ['Samuel', 'Smolk', 'Elisson'];
 @endphp
 
 

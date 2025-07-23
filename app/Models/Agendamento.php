@@ -20,4 +20,10 @@ class Agendamento extends Model
     public function servicos() {
         return $this->belongsToMany(Servico::class, 'agendamento_servico', 'agendamento_id', 'servico_id');
     }
+
+    public function pagamento()
+{
+    return $this->hasOne(Pagamento::class, 'id_agendamento', 'id_agendamento');
+}
+
 }

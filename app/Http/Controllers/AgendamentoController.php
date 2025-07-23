@@ -137,4 +137,14 @@ class AgendamentoController extends Controller
         return array_values($agrupados);
     }
 
+    public function concluidos()
+    {
+        $agendamento = Agendamento::with(['cliente', 'barbeiro', 'servicos'])
+            ->where('status', 'concluido')
+            ->whereDoesntHave('pagamento')
+            ->get();
+
+        return response()->json($agendamento);
+    }
+
 }
