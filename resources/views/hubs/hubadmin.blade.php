@@ -38,6 +38,8 @@ $botoes = ['Barbeiros', 'Pagamentos', 'Serviços', 'Usuarios','Agendas'];
         </button>
     </div>
 
+    <div id="conteudo-edicao"></div>
+
     <x-form-agendamento/>
 
     <div class="max-w-screen-xl mx-auto flex w-full px-4 m-6 min-h-[500px]">

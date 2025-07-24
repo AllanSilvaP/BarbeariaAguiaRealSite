@@ -81,10 +81,24 @@ class AgendamentoController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-    {
+{
+    try {
         Agendamento::destroy($id);
-        return response()->json(['mensagem' => 'Agendamento cancelado']);
+        return response()->json(['mensagem' => 'Agendamento cancelado com sucesso.']);
+    } catch (\Illuminate\Database\QueryException $e) {
+        if ($e->getCode() === '23000') {
+            return response()->json([
+                'mensagem' => 'Não é possível cancelar o agendamento, pois já possui um pagamento registrado.'
+            ], 400);
+        }
+
+        return response()->json([
+            'mensagem' => 'Erro ao cancelar agendamento.',
+            'erro' => $e->getMessage()
+        ], 500);
     }
+}
+
 
     public function meusAgendamentos()
     {
@@ -104,38 +118,45 @@ class AgendamentoController extends Controller
 
     //FUNCAO PARA LISTAR AGENDAMENTOS
 
-    public function agendamentosPorBarbeiro() {
-        $agendamentos = Agendamento::with(['barbeiro', 'cliente', 'servicos'])
+    public function agendamentosPorBarbeiro(Request $request) {
+    $dataFiltro = $request->query('data'); // Recebe a data da query string
+
+    $agendamentosQuery = Agendamento::with(['barbeiro', 'cliente', 'servicos'])
         ->whereHas('barbeiro', function($query) {
             $query->where('tipo_usuario', 'barbeiro');
-        })
-        ->orderBy('data_hora', 'desc')
-        ->get();
+        });
 
-        $agrupados = [];
+    if ($dataFiltro) {
+        $agendamentosQuery->whereDate('data_hora', $dataFiltro); // Filtra pela data (ignora hora)
+    }
 
-        foreach ($agendamentos as $agendamento) {
-            $barbeiroId = $agendamento->barbeiro->id_usuario ?? null;
+    $agendamentos = $agendamentosQuery->orderBy('data_hora', 'desc')->get();
 
-            if (!$barbeiroId) continue;
+    $agrupados = [];
 
-            if(!isset($agrupados[$barbeiroId])) {
-                $agrupados[$barbeiroId] = [
-                    'nome' => $agendamento->barbeiro->nome,
-                    'agendamentos' => []
-                ];
-            }
+    foreach ($agendamentos as $agendamento) {
+        $barbeiroId = $agendamento->barbeiro->id_usuario ?? null;
 
-            $agrupados[$barbeiroId]['agendamentos'][] = [
-                'id_agendamento' => $agendamento->id_agendamento,
-                'cliente' => ['nome' => $agendamento->cliente->nome ?? 'N/A'],
-                'servicos' => $agendamento->servicos->pluck('nome')->toArray(),
-                'data_hora' => $agendamento->data_hora,
-                'status' => $agendamento->status
+        if (!$barbeiroId) continue;
+
+        if (!isset($agrupados[$barbeiroId])) {
+            $agrupados[$barbeiroId] = [
+                'nome' => $agendamento->barbeiro->nome,
+                'agendamentos' => []
             ];
         }
-        return array_values($agrupados);
+
+        $agrupados[$barbeiroId]['agendamentos'][] = [
+            'id_agendamento' => $agendamento->id_agendamento,
+            'cliente' => ['nome' => $agendamento->cliente->nome ?? 'N/A'],
+            'servicos' => $agendamento->servicos->pluck('nome')->toArray(),
+            'data_hora' => $agendamento->data_hora,
+            'status' => $agendamento->status
+        ];
     }
+
+    return array_values($agrupados);
+}
 
     public function concluidos()
     {

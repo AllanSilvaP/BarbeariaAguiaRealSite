@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Decide qual conteúdo renderizar
         switch (secao) {
             case 'Meus Pagamentos':
+                window.renderSecao(container)
                 break;
             case 'Meus Agendamentos':
                 break;
