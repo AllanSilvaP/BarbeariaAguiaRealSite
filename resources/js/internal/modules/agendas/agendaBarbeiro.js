@@ -1,134 +1,92 @@
-export async function renderSecaoAgendaAdmin(dataSelecionada = null) {
+export async function renderSecaoAgendaBarbeiro(dataSelecionada = null) {
     const token = localStorage.getItem('token')
     const container = document.getElementById('secao-conteudo')
-
 
     if (!token || !container) return
 
     const hoje = new Date().toISOString().split('T')[0]
-    const dataConsulta = dataSelecionada || hoje
+    let dataConsulta = dataSelecionada || hoje
+    if (typeof dataConsulta !== 'string' && dataConsulta instanceof HTMLInputElement) {
+        dataConsulta = dataConsulta.value
+    }
 
     try {
-        const response = await fetch(`/api/barbeiros-agendamentos?data=${dataConsulta}`, {
+        const response = await fetch(`/api/me/agendamentos?data=${dataConsulta}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
             }
         })
 
-        if (!response.ok) throw new Error('Erro ao buscar Agendamentos!')
-        const barbeiros = await response.json()
+        if (!response.ok) throw new Error('Erro ao buscar agendamentos!')
 
-        container.innerHTML = ''
-
-        if (barbeiros.length === 0) {
-            container.innerHTML = `
-                <div class="flex items-center justify-between mb-4">
-                <p class="text-gray-400">Sem agendamentos nesse dia</p>
+        const agendamentos = await response.json()
+        container.innerHTML = `
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-bold text-white">Meus Agendamentos</h2>
                 <div class="flex items-center">
-                <label for="filtro-data" class="text-white mr-2">Escolher dia:</label>
-                <input type="date" id="filtro-data" class="bg-gray-800 text-white rounded p-1">
+                    <label for="filtro-data" class="text-white mr-2">Escolher dia:</label>
+                    <input type="date" id="filtro-data" class="bg-gray-800 text-white rounded p-1">
                 </div>
-                </div>`
+            </div>
+        `
 
-            const inputData = document.getElementById('filtro-data');
-            if (inputData) {
-                inputData.value = dataConsulta;
-                inputData.addEventListener('change', (e) => {
-                    dataSelecionada = e.target.value;
-                    renderSecaoAgendaAdmin(dataSelecionada);
-                });
-            }
+        const inputData = document.getElementById('filtro-data')
+        inputData.value = dataConsulta
+        inputData.addEventListener('change', (e) => {
+            renderSecaoAgendaBarbeiro(e.target.value)
+        })
+
+        if (agendamentos.length === 0) {
+            container.innerHTML += `<p class="text-gray-400">Sem agendamentos neste dia.</p>`
             return
         }
 
-        barbeiros.forEach(barbeiro => {
-            const secao = document.createElement('div')
-            secao.className = 'mb-6 bg-gray-900 p-4 rounded'
+        agendamentos.forEach(ag => {
+            const card = document.createElement('div')
+            card.className = 'p-3 mb-2 bg-gray-800 rounded shadow'
 
-            secao.innerHTML = `
-            <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl mb-2 text-blue-400 font-bold">${barbeiro.nome}</h3>
-            <div class="flex items-center">
-            <label for="filtro-data" class="text-white mr-2">Escolher dia:</label>
-            <input type="date" id="filtro-data" class="bg-gray-800 text-white rounded p-1">
-            </div>
-            </div>
+            const statusOptions = ['pendente', 'confirmado', 'cancelado', 'concluido']
+                .map(status => `<option value="${status}" ${ag.status === status ? 'selected' : ''}>${status}</option>`)
+                .join('')
+
+            card.innerHTML = `
+                <p><strong>Cliente:</strong> ${ag.cliente?.nome || 'N/A'}</p>
+                <p><strong>Serviço:</strong> ${ag.servicos?.join(', ') || 'N/A'}</p>
+                <p><strong>Horário:</strong> ${new Date(ag.data_hora).toLocaleString('pt-BR')}</p>
+                <label class="block mt-2">
+                    <span class="text-white font-medium">Status:</span>
+                    <select data-id="${ag.id_agendamento}" class="select-status bg-gray-700 text-white rounded p-1 mt-1">
+                        ${statusOptions}
+                    </select>
+                </label>
+                <div class="flex gap-2 mt-2">
+                    <button class="btn-editar bg-blue-500 text-white px-2 py-1 rounded" data-id="${ag.id_agendamento}">Editar</button>
+                    <button class="btn-excluir bg-red-500 text-white px-2 py-1 rounded" data-id="${ag.id_agendamento}">Excluir</button>
+                </div>
             `
 
-            if (!barbeiro.agendamentos.length) {
-                secao.innerHTML += `
-                <div class="flex items-center justify-between mb-4">
-                <p class="text-gray-400">Sem agendamentos</p>
-                <div class="flex items-center">
-                <label for="filtro-data" class="text-white mr-2">Escolher dia:</label>
-                <input type="date" id="filtro-data" class="bg-gray-800 text-white rounded p-1">
-                </div>
-                </div>`
-            } else {
-                barbeiro.agendamentos.forEach(ag => {
-                    const card = document.createElement('div')
-                    card.className = 'p-3 mb-2 bg-gray-800 rounded shadow'
+            container.appendChild(card)
+        })
 
-                    //status
-                    const statusOptions = ['pendente', 'confirmado', 'cancelado', 'concluido']
-                        .map(status => `<option value="${status}" ${ag.status === status ? 'selected' : ''}>${status}</option>`)
-
-                    card.innerHTML = `
-                    <p><strong>Cliente:</strong> ${ag.cliente?.nome || 'N/A'}</p>
-                        <p><strong>Serviço:</strong> ${ag.servicos?.join(', ') || 'N/A'}</p>
-                        <p><strong>Horário:</strong> ${new Date(ag.data_hora).toLocaleString('pt-BR')}</p>
-                        <p><strong>Status:</strong> ${ag.status}</p>
-                        <label class="block mt-2">
-                            <span class="text-white font-medium">Status:</span>
-                            <select data-id="${ag.id_agendamento}" class="select-status bg-gray-700 text-white rounded p-1 mt-1">
-                                ${statusOptions}
-                            </select>
-                        </label>
-                        <div class="flex gap-2 mt-2">
-                        <button class="btn-editar bg-blue-500 text-white px-2 py-1 rounded" data-id="${ag.id_agendamento}">Editar</button>
-                        <button class="btn-excluir bg-red-500 text-white px-2 py-1 rounded" data-id="${ag.id_agendamento}">Excluir</button>
-                        </div>
-                    `
-                    secao.appendChild(card)
-                })
-            }
-
-            const inputData = secao.querySelector('#filtro-data');
-
-            if (inputData) {
-                inputData.value = dataConsulta; // já define a data atual no input
-
-                inputData.addEventListener('change', (e) => {
-                    dataSelecionada = e.target.value;
-                    renderSecaoAgendaAdmin(dataSelecionada); // recarrega os dados com nova data
-                });
-            }
-
-            container.appendChild(secao)
-        });
-
-
-
-
+        // Eventos para mudar status
         document.querySelectorAll('.select-status').forEach(select => {
             select.addEventListener('change', async (e) => {
                 const id = e.target.dataset.id
                 const novoStatus = e.target.value
-                const token = localStorage.getItem('token')
 
                 try {
-                    const response = await fetch(`/api/agendamentos/${id}`, {
+                    const res = await fetch(`/api/agendamentos/${id}`, {
                         method: 'PUT',
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Accept': 'application/json',
-                            'Content-Type': 'application/json',
+                            'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({ status: novoStatus })
                     })
 
-                    if (!response.ok) throw new Error('Erro ao atualizar status')
+                    if (!res.ok) throw new Error('Erro ao atualizar status')
                     alert('Status atualizado com sucesso!')
                 } catch (error) {
                     console.error(error)
@@ -137,16 +95,14 @@ export async function renderSecaoAgendaAdmin(dataSelecionada = null) {
             })
         })
 
-
+        // Eventos para excluir
         document.querySelectorAll('.btn-excluir').forEach(button => {
             button.addEventListener('click', async (e) => {
                 const id = e.target.dataset.id
-                const confirmar = confirm('Deseja excluir esse agendamento?')
-
-                if (!confirmar) return
+                if (!confirm('Deseja excluir esse agendamento?')) return
 
                 try {
-                    const response = await fetch(`/api/agendamentos/${id}`, {
+                    const res = await fetch(`/api/agendamentos/${id}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -154,27 +110,26 @@ export async function renderSecaoAgendaAdmin(dataSelecionada = null) {
                         }
                     })
 
-                    if (!response.ok) throw new Error('Erro ao excluir agendamento')
-
+                    if (!res.ok) throw new Error('Erro ao excluir agendamento')
                     alert('Agendamento excluído com sucesso!')
-                    renderSecaoAgendaAdmin(dataConsulta)
+                    renderSecaoAgendaBarbeiro(dataConsulta)
                 } catch (error) {
                     console.error(error)
-                    alert('Esse agendamento ja foi pago. Não é possivel excluir')
+                    alert('Esse agendamento já foi pago. Não é possível excluir.')
                 }
             })
         })
 
-        document.querySelectorAll('.btn-editar').forEach(botao => {
-            botao.addEventListener('click', async (e) => {
+        // Eventos para editar
+        document.querySelectorAll('.btn-editar').forEach(button => {
+            button.addEventListener('click', async (e) => {
                 const id = e.target.dataset.id
 
-                // Busca o agendamento pelo ID
                 try {
                     const res = await fetch(`/api/agendamentos/${id}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
-                            'Accept': 'application/json',
+                            'Accept': 'application/json'
                         }
                     })
 
@@ -182,14 +137,12 @@ export async function renderSecaoAgendaAdmin(dataSelecionada = null) {
 
                     const agendamento = await res.json()
                     renderFormEditarAgendamento(agendamento)
-
                 } catch (error) {
                     console.error(error)
                     alert('Erro ao carregar dados do agendamento.')
                 }
             })
         })
-
 
     } catch (error) {
         console.error('Erro ao carregar agendamentos', error)

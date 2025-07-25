@@ -19,34 +19,25 @@ export async function renderSecaoPagamentos() {
             <h2 class="text-xl font-bold mb-4">Pagamentos</h2>
             <button id="cad-usuario" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">Cadastrar Pagamento</button>
             </div>
-            ${pagamentos.length > 0 ? `
-                <table class="w-full text-left border">
-                    <thead class="bg-gray-200">
-                        <tr>
-                            <th class="p-2 border">Nome Cliente</th>
-                            <th clasas="p-2 border">Valor</th>
-                            <th class="p-2 border">Forma de Pagamento</th>
-                            <th class="p-2 border">Data Pagamento</th>
-                            <th class="p-2 border">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${pagamentos.map(p => `
-                            <tr>
-                                <td class="p-2 border">${p.cliente?.nome || 'Desconhecido'}</td>
-                                <td class="p-2 border">${p.valor}</td>
-                                <td class="p-2 border">${p.forma_pagamento}</td>
-                                <td class="p-2 border">${p.data_pagamento || '-'}</td>
-                                <td class="p-2 border flex gap-2">
-                                    <button class="editar-pagamento text-blue-600" data-id="${p.id_pagamento}">✏️</button>
-                                    <button class="excluir-pagamento text-red-600" data-id="${p.id_pagamento}">❌</button>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            ` : `<p class="text-gray-500">Nenhum pagamento cadastrado.</p>`}
-        </div>`;
+
+            <div class="flex items-center gap-4 mb-4">
+                <label>
+                    Data:
+                    <input type="date" id="filtro-data" class="border p-2 rounded" value="${new Date().toISOString().split('T')[0]}">
+                </label>
+
+                <label class="flex items-center gap-2">
+                    <input type="checkbox" id="group-barbeiro">
+                    Agrupar por Barbeiro
+                </label>
+
+        <button id="aplicar-filtro" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Aplicar</button>
+    </div>
+                    <button id="filtro-semana" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded">
+                Semana Atual
+                </button>
+        <div id="tabela-pagamentos"></div>`
+
 
         document.getElementById('secao-conteudo').innerHTML = html;
 
@@ -93,6 +84,58 @@ export async function renderSecaoPagamentos() {
                 }
             })
         })
+
+        const buscarSemanaAtual = async () => {
+            const hoje = new Date();
+            const inicio = new Date(hoje)
+            const fim = new Date(hoje)
+
+            const diaSemana = hoje.getDay()
+            inicio.setDate(hoje.getDate() - diaSemana);
+            fim.setDate(inicio.getDate() + 6)
+
+            const data_inicio = inicio.toISOString().split('T')[0];
+            const data_fim = fim.toISOString().split('T')[0];
+
+            try {
+                const res = await fetch(`/api/pagamentos?data_inicio=${data_inicio}&data_fim=${data_fim}&group=true`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (!res.ok) throw new Error('Erro ao buscar pagamentos da semana');
+
+                const result = await res.json();
+
+                const tabela = document.getElementById('tabela-pagamentos');
+                tabela.innerHTML = `
+                <div>
+                <h3 class="font-bold text-lg mb-2">Semana: ${new Date(data_inicio).toLocaleString('pt-BR')} - ${new Date(data_fim).toLocaleString('pt-BR')}</h3>
+                </div>
+                `
+                tabela.innerHTML += result.map(grupo => `
+            <div class="border p-4 rounded mb-4 shadow">
+                <h3 class="font-bold text-lg mb-2">${grupo.barbeiro || 'Sem nome'}</h3>
+                <p>Total: R$ ${parseFloat(grupo.total).toFixed(2)}</p>
+                <ul class="mt-2 text-sm text-gray-600">
+                    ${grupo.pagamentos.map(p => `<li>${p.forma_pagamento} - R$ ${p.valor}</li>`).join('')}
+                </ul>
+            </div>
+        `).join('');
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao buscar pagamentos da semana");
+            }
+        }
+
+        const filtro = document.getElementById('aplicar-filtro')
+        filtro.addEventListener('click', carregarPagamentosFiltrados)
+        await carregarPagamentosFiltrados();
+
+        const semana = document.getElementById('filtro-semana');
+        semana.addEventListener('click', buscarSemanaAtual);
 
     } catch (error) {
         console.error(error);
@@ -305,3 +348,64 @@ async function renderEditarPagamento(id) {
     }
 }
 
+async function carregarPagamentosFiltrados() {
+    const data = document.getElementById('filtro-data').value;
+    const agrupar = document.getElementById('group-barbeiro').checked;
+    const token = localStorage.getItem('token');
+
+    try {
+        const res = await fetch(`/api/pagamentos?data_pagamento=${data}&group=${agrupar}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+
+        if (!res.ok) throw new Error('Erro na requisição')
+
+        const result = await res.json();
+        console.log(result)
+
+        const tabela = document.getElementById('tabela-pagamentos');
+
+        if (agrupar) {
+            tabela.innerHTML = result.map(grupo =>
+                `
+                <div class="border p-4 rounded mb-4 shadow">
+                <h3 class="font-bold text-lg mb-2">${grupo.barbeiro || 'Sem nome'}</h3>
+                <p>Total: R$ ${grupo.total.toFixed(2)}</p>
+                <ul class="mt-2 text-sm text-gray-600">
+                    ${grupo.pagamentos.map(p => `<li>${p.forma_pagamento} - R$ ${p.valor}</li>`).join('')}
+                </ul>
+            </div>
+                `
+            ).join('');
+        } else {
+            tabela.innerHTML = `
+            <table class="w-full text-left border">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="p-2 border">Nome Cliente</th>
+                        <th class="p-2 border">Valor</th>
+                        <th class="p-2 border">Forma</th>
+                        <th class="p-2 border">Data</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${result.map(p => `
+                        <tr>
+                            <td class="p-2 border">${p.cliente?.nome || 'Desconhecido'}</td>
+                            <td class="p-2 border">${p.valor}</td>
+                            <td class="p-2 border">${p.forma_pagamento}</td>
+                            <td class="p-2 border">${new Date(p.data_pagamento).toLocaleDateString('pt-BR')}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+        }
+    } catch (error) {
+
+    }
+
+
+}

@@ -7,16 +7,52 @@ use App\Http\Controllers\Controller;
 use App\Models\Agendamento;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Carbon;
 
 class PagamentoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Pagamento::with(['cliente', 'agendamento'])->get();
+        $group = $request->boolean('group', false);
+        $dataInicial = $request->query('data_inicio');
+        $dataFinal = $request->query('data_fim');
+
+        $query = Pagamento::with('cliente', 'agendamento.barbeiro');
+
+        if ($dataInicial && $dataFinal) {
+            $query->whereBetween('data_pagamento', [$dataInicial, $dataFinal]);
+        } elseif ($request->has('data_pagamento')) {
+            $query->whereDate('data_pagamento', $request->query('data_pagamento'));
+        }
+
+        $pagamentos = $query->get();
+
+        if ($group) {
+            $agrupado = $pagamentos->groupBy(function ($pagamento) {
+                return $pagamento->agendamento->barbeiro->nome ?? 'Sem nome';
+            })->map(function ($items, $barbeiro) {
+                return [
+                    'barbeiro' => $barbeiro,
+                    'total' => $items->sum('valor'),
+                    'pagamentos' => $items->map(function ($p) {
+                        return [
+                            'forma_pagamento' => $p->forma_pagamento,
+                            'valor' => $p->valor,
+                        ];
+                    })->values()
+                ];
+            })->values();
+
+            return response()->json($agrupado);
+        }
+
+        return response()->json($pagamentos);
     }
+
+
 
     /**
      * Show the form for creating a new resource.

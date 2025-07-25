@@ -2,8 +2,6 @@
 $botoes = ['Barbeiros', 'Pagamentos', 'Serviços', 'Usuarios','Agendas'];
 @endphp
 
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -20,8 +18,6 @@ $botoes = ['Barbeiros', 'Pagamentos', 'Serviços', 'Usuarios','Agendas'];
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/internal/indexHub.js'])
 </head>
-
-
 
 <body class="bg-[#121212] text-white font-[Montserrat] scroll-smooth overflow-x-hidden m-0 p-0">
     <x-navbar-hub />

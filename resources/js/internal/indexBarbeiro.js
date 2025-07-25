@@ -1,6 +1,5 @@
 import { getPerfil } from "./modules/navbar/perfil"
-import { renderSecaoServicos } from "./modules/servicos/servico"
-import { renderSecaoPagamentos } from "./modules/pagamentos.js/pagamento"
+import { renderSecaoAgendaBarbeiro } from "./modules/agendas/agendaBarbeiro"
 import { agendar } from "./modules/agendas/agendar"
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,9 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Decide qual conteúdo renderizar
         switch (secao) {
             case 'Meus Pagamentos':
-                window.renderSecao(container)
+                renderSecaoAgendaBarbeiro()
                 break;
             case 'Meus Agendamentos':
+                renderSecaoAgendaBarbeiro()
                 break;
 
             default:

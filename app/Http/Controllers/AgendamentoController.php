@@ -100,20 +100,33 @@ class AgendamentoController extends Controller
 }
 
 
-    public function meusAgendamentos()
-    {
-        $usuario = auth('api')->user();
+    public function meusAgendamentos(Request $request)
+{
+    $usuario = auth('api')->user();
 
-        if ($usuario->tipo_usuario === 'cliente') {
-            return Agendamento::where('id_cliente', $usuario->id_usuario)->with('servicos')->get();
-        }
+    $query = Agendamento::with(['cliente', 'barbeiro', 'servicos']);
 
-        if ($usuario->tipo_usuario === 'barbeiro') {
-            return Agendamento::where('id_barbeiro', $usuario->id_usuario)->with('cliente')->get();
-        }
-
+    if ($usuario->tipo_usuario === 'cliente') {
+        $query->where('id_cliente', $usuario->id_usuario);
+    } elseif ($usuario->tipo_usuario === 'barbeiro') {
+        $query->where('id_barbeiro', $usuario->id_usuario);
+    } else {
         return response()->json(['erro' => 'Perfil não autorizado'], 403);
     }
+
+    // Filtro por data ou intervalo
+    if ($request->has('data')) {
+        $query->whereDate('data_hora', $request->query('data'));
+    } elseif ($request->has(['data_inicio', 'data_fim'])) {
+        $query->whereBetween('data_hora', [
+            $request->query('data_inicio'),
+            $request->query('data_fim')
+        ]);
+    }
+
+    return $query->orderBy('data_hora')->get();
+}
+
 
 
     //FUNCAO PARA LISTAR AGENDAMENTOS

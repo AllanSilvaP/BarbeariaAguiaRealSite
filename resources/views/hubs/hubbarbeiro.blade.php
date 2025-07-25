@@ -16,7 +16,7 @@ $botoes = ['Meus Pagamentos', 'Meus Agendamentos'];
 
     <link rel="icon" href="{{ asset('img/barbearia-frente.png') }}" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/internal/indexHub.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/internal/indexBarbeiro.js'])
 </head>
 
 <body class="bg-[#121212] text-white font-[Montserrat] scroll-smooth overflow-x-hidden m-0 p-0">
@@ -34,6 +34,8 @@ $botoes = ['Meus Pagamentos', 'Meus Agendamentos'];
         </button>
     </div>
 
+    <div id="conteudo-edicao"></div>
+
     <x-form-agendamento/>
 
     <div class="max-w-screen-xl mx-auto flex w-full px-4 m-6 min-h-[500px]">
@@ -45,6 +47,5 @@ $botoes = ['Meus Pagamentos', 'Meus Agendamentos'];
         </div>
     </div>
 </body>
-
 
 </html>

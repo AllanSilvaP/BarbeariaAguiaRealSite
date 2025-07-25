@@ -35,6 +35,7 @@ Route::middleware(['auth:api'])->group(function() {
 
     //barbeiro
     Route::middleware(['barbeiro'])->group(function () {
+        Route::apiResource('agendamentos', AgendamentoController::class);
         Route::get('/me/servicos', [ServicoController::class, 'meusServicos']);
         Route::get('/me/agendamentos', [AgendamentoController::class, 'meusAgendamentos']);
         Route::get('/me/pagamentos', [PagamentoController::class, 'meusPagamentos']);
