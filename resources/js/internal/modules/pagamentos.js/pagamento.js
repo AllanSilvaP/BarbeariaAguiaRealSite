@@ -2,7 +2,7 @@ export async function renderSecaoPagamentos() {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch('/api/pagamentos', {
+        const response = await fetch('/api/admin/pagamentos', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -63,7 +63,7 @@ export async function renderSecaoPagamentos() {
 
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await fetch(`/api/pagamentos/${id}`, {
+                    const response = await fetch(`/api/admin/pagamentos/${id}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -98,7 +98,7 @@ export async function renderSecaoPagamentos() {
             const data_fim = fim.toISOString().split('T')[0];
 
             try {
-                const res = await fetch(`/api/pagamentos?data_inicio=${data_inicio}&data_fim=${data_fim}&group=true`, {
+                const res = await fetch(`/api/admin/pagamentos?data_inicio=${data_inicio}&data_fim=${data_fim}&group=true`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json'
@@ -177,13 +177,13 @@ async function renderCadPagamento() {
     const selectAgendamento = document.getElementById('select-agendamento')
     const token = localStorage.getItem('token')
 
-    const resAg = await fetch('/api/agendamentos-concluidos', {
+    const resAg = await fetch('/api/admin/agendamentos-concluidos', {
         headers: { 'Authorization': `Bearer ${token}` }
     })
 
     const agendamentos = await resAg.json()
 
-    const resPag = await fetch('/api/pagamentos', {
+    const resPag = await fetch('/api/admin/pagamentos', {
         headers: { 'Authorization': `Bearer ${token}` }
     })
     const pagamentos = await resPag.json()
@@ -222,7 +222,7 @@ async function renderCadPagamento() {
             forma_pagamento: data.forma_pagamento,
         }
         try {
-            const response = await fetch('/api/pagamentos', {
+            const response = await fetch('/api/admin/pagamentos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -252,7 +252,7 @@ async function renderEditarPagamento(id) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`/api/pagamentos/${id}`, {
+        const response = await fetch(`/api/admin/pagamentos/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -318,7 +318,7 @@ async function renderEditarPagamento(id) {
             });
 
             try {
-                const updateResponse = await fetch(`/api/pagamentos/${id}`, {
+                const updateResponse = await fetch(`/api/admin/pagamentos/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -354,7 +354,7 @@ async function carregarPagamentosFiltrados() {
     const token = localStorage.getItem('token');
 
     try {
-        const res = await fetch(`/api/pagamentos?data_pagamento=${data}&group=${agrupar}`, {
+        const res = await fetch(`/api/admin/pagamentos?data_pagamento=${data}&group=${agrupar}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

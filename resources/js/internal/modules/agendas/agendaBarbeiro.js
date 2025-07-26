@@ -11,7 +11,7 @@ export async function renderSecaoAgendaBarbeiro(dataSelecionada = null) {
     }
 
     try {
-        const response = await fetch(`/api/me/agendamentos?data=${dataConsulta}`, {
+        const response = await fetch(`/api/barbeiro/me/agendamentos?data=${dataConsulta}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -21,6 +21,8 @@ export async function renderSecaoAgendaBarbeiro(dataSelecionada = null) {
         if (!response.ok) throw new Error('Erro ao buscar agendamentos!')
 
         const agendamentos = await response.json()
+    console.log(agendamentos)
+
         container.innerHTML = `
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-xl font-bold text-white">Meus Agendamentos</h2>
@@ -31,14 +33,26 @@ export async function renderSecaoAgendaBarbeiro(dataSelecionada = null) {
             </div>
         `
 
-        const inputData = document.getElementById('filtro-data')
-        inputData.value = dataConsulta
-        inputData.addEventListener('change', (e) => {
-            renderSecaoAgendaBarbeiro(e.target.value)
-        })
+        const inputData = document.getElementById('filtro-data');
+        if (inputData) {
+            inputData.value = dataConsulta;
+            inputData.addEventListener('change', (e) => {
+                dataSelecionada = e.target.value;
+                renderSecaoAgendaAdmin(dataSelecionada);
+            });
+        }
 
         if (agendamentos.length === 0) {
             container.innerHTML += `<p class="text-gray-400">Sem agendamentos neste dia.</p>`
+
+            const inputData = document.getElementById('filtro-data');
+            if (inputData) {
+                inputData.value = dataConsulta;
+                inputData.addEventListener('change', (e) => {
+                    dataSelecionada = e.target.value;
+                    renderSecaoAgendaBarbeiro(dataSelecionada);
+                });
+            }
             return
         }
 
@@ -52,7 +66,7 @@ export async function renderSecaoAgendaBarbeiro(dataSelecionada = null) {
 
             card.innerHTML = `
                 <p><strong>Cliente:</strong> ${ag.cliente?.nome || 'N/A'}</p>
-                <p><strong>Serviço:</strong> ${ag.servicos?.join(', ') || 'N/A'}</p>
+                <p><strong>Serviço:</strong> ${ag.servicos?.map(s => s.nome).join(', ') || 'N/A'}</p>
                 <p><strong>Horário:</strong> ${new Date(ag.data_hora).toLocaleString('pt-BR')}</p>
                 <label class="block mt-2">
                     <span class="text-white font-medium">Status:</span>
@@ -76,7 +90,7 @@ export async function renderSecaoAgendaBarbeiro(dataSelecionada = null) {
                 const novoStatus = e.target.value
 
                 try {
-                    const res = await fetch(`/api/agendamentos/${id}`, {
+                    const res = await fetch(`/api/barbeiro/agendamentos/${id}`, {
                         method: 'PUT',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -102,7 +116,7 @@ export async function renderSecaoAgendaBarbeiro(dataSelecionada = null) {
                 if (!confirm('Deseja excluir esse agendamento?')) return
 
                 try {
-                    const res = await fetch(`/api/agendamentos/${id}`, {
+                    const res = await fetch(`/api/barbeiro/agendamentos/${id}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -126,7 +140,7 @@ export async function renderSecaoAgendaBarbeiro(dataSelecionada = null) {
                 const id = e.target.dataset.id
 
                 try {
-                    const res = await fetch(`/api/agendamentos/${id}`, {
+                    const res = await fetch(`/api/barbeiro/agendamentos/${id}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Accept': 'application/json'
@@ -154,7 +168,7 @@ export async function renderFormEditarAgendamento(agendamento) {
     const token = localStorage.getItem('token')
 
     // Busca todos os serviços
-    const resServicos = await fetch('/api/servicos', {
+    const resServicos = await fetch('/api/barbeiro/servicos', {
         headers: { 'Authorization': `Bearer ${token}` }
     })
     if (!resServicos.ok) {
@@ -208,7 +222,7 @@ export async function renderFormEditarAgendamento(agendamento) {
         ).map(cb => cb.value)
 
         try {
-            const res = await fetch(`/api/agendamentos/${agendamento.id_agendamento}`, {
+            const res = await fetch(`/api/barbeiro/agendamentos/${agendamento.id_agendamento}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,

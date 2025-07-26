@@ -2,7 +2,7 @@ export async function renderSecaoUsuarios() {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch('/api/usuarios', {
+        const response = await fetch('/api/admin/usuarios', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -72,7 +72,7 @@ export async function renderSecaoUsuarios() {
 
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await fetch(`/api/usuarios/${id}`, {
+                    const response = await fetch(`/api/admin/usuarios/${id}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -142,7 +142,7 @@ function renderCadUsuario() {
         formData.forEach((value, key) => data[key] = value)
 
         try {
-            const response = await fetch('/api/usuarios', {
+            const response = await fetch('/api/admin/usuarios', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -171,7 +171,7 @@ async function renderEditarUsuario(id) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`/api/usuarios/${id}`, {
+        const response = await fetch(`/api/admin/usuarios/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -219,7 +219,7 @@ async function renderEditarUsuario(id) {
             });
 
             try {
-                const updateResponse = await fetch(`/api/usuarios/${id}`, {
+                const updateResponse = await fetch(`/api/admin/usuarios/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,

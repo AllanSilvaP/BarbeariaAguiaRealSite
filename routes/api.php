@@ -21,7 +21,7 @@ Route::middleware(['auth:api'])->group(function() {
     Route::post('/agendamentos', [AgendamentoController::class, 'store']);
 
     //admin
-    Route::middleware(['admin'])->group(function () {
+    Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::apiResource('usuarios', UsuarioController::class);
         Route::apiResource('servicos', ServicoController::class);
         Route::apiResource('agendamentos', AgendamentoController::class);
@@ -34,15 +34,16 @@ Route::middleware(['auth:api'])->group(function() {
     });
 
     //barbeiro
-    Route::middleware(['barbeiro'])->group(function () {
+    Route::middleware(['barbeiro'])->prefix('barbeiro')->group(function () {
         Route::apiResource('agendamentos', AgendamentoController::class);
+        Route::apiResource('servicos', ServicoController::class);
         Route::get('/me/servicos', [ServicoController::class, 'meusServicos']);
         Route::get('/me/agendamentos', [AgendamentoController::class, 'meusAgendamentos']);
         Route::get('/me/pagamentos', [PagamentoController::class, 'meusPagamentos']);
     });
 
     //cliente
-    Route::middleware(['cliente'])->group(function () {
+    Route::middleware(['cliente'])->prefix('cliente')->group(function () {
         Route::get('/me/agendamentos', [AgendamentoController::class, 'meusAgendamentos']);
     });
 });

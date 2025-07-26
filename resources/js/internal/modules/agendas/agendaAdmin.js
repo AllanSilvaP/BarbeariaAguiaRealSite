@@ -9,7 +9,7 @@ export async function renderSecaoAgendaAdmin(dataSelecionada = null) {
     const dataConsulta = dataSelecionada || hoje
 
     try {
-        const response = await fetch(`/api/barbeiros-agendamentos?data=${dataConsulta}`, {
+        const response = await fetch(`/api/admin/barbeiros-agendamentos?data=${dataConsulta}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -118,7 +118,7 @@ export async function renderSecaoAgendaAdmin(dataSelecionada = null) {
                 const token = localStorage.getItem('token')
 
                 try {
-                    const response = await fetch(`/api/agendamentos/${id}`, {
+                    const response = await fetch(`/api/admin/agendamentos/${id}`, {
                         method: 'PUT',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -146,7 +146,7 @@ export async function renderSecaoAgendaAdmin(dataSelecionada = null) {
                 if (!confirmar) return
 
                 try {
-                    const response = await fetch(`/api/agendamentos/${id}`, {
+                    const response = await fetch(`/api/admin/agendamentos/${id}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -171,7 +171,7 @@ export async function renderSecaoAgendaAdmin(dataSelecionada = null) {
 
                 // Busca o agendamento pelo ID
                 try {
-                    const res = await fetch(`/api/agendamentos/${id}`, {
+                    const res = await fetch(`/api/admin/agendamentos/${id}`, {
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Accept': 'application/json',
@@ -201,7 +201,7 @@ export async function renderFormEditarAgendamento(agendamento) {
     const token = localStorage.getItem('token')
 
     // Busca todos os serviços
-    const resServicos = await fetch('/api/servicos', {
+    const resServicos = await fetch('/api/admin/servicos', {
         headers: { 'Authorization': `Bearer ${token}` }
     })
     if (!resServicos.ok) {
@@ -255,7 +255,7 @@ export async function renderFormEditarAgendamento(agendamento) {
         ).map(cb => cb.value)
 
         try {
-            const res = await fetch(`/api/agendamentos/${agendamento.id_agendamento}`, {
+            const res = await fetch(`/api/admin/agendamentos/${agendamento.id_agendamento}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,

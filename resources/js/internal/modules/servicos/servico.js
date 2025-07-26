@@ -2,7 +2,7 @@ export async function renderSecaoServicos() {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch('/api/servicos', {
+        const response = await fetch('/api/admin/servicos', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -72,7 +72,7 @@ export async function renderSecaoServicos() {
 
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await fetch(`/api/servicos/${id}`, {
+                    const response = await fetch(`/api/admin/servicos/${id}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -134,7 +134,7 @@ function renderCadServico() {
         formData.forEach((value, key) => data[key] = value)
 
         try {
-            const response = await fetch('/api/servicos', {
+            const response = await fetch('/api/admin/servicos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -163,7 +163,7 @@ async function renderEditarServico(id) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`/api/servicos/${id}`, {
+        const response = await fetch(`/api/admin/servicos/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -205,7 +205,7 @@ async function renderEditarServico(id) {
             });
 
             try {
-                const updateResponse = await fetch(`/api/servicos/${id}`, {
+                const updateResponse = await fetch(`/api/admin/servicos/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
