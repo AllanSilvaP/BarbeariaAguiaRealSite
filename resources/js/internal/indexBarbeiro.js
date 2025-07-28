@@ -1,6 +1,7 @@
 import { getPerfil } from "./modules/navbar/perfil"
 import { renderSecaoAgendaBarbeiro } from "./modules/agendas/agendaBarbeiro"
-import { agendar } from "./modules/agendas/agendar"
+import { renderSecaoPagamentosBarbeiro } from "./modules/pagamentos.js/pagamentoBarbeiro"
+import { agendarCliente } from "./modules/agendas/agendarCliente"
 
 document.addEventListener('DOMContentLoaded', () => {
     getPerfil()
@@ -16,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Decide qual conteúdo renderizar
         switch (secao) {
             case 'Meus Pagamentos':
-                renderSecaoAgendaBarbeiro()
+                renderSecaoPagamentosBarbeiro()
                 break;
             case 'Meus Agendamentos':
                 renderSecaoAgendaBarbeiro()
@@ -30,5 +31,5 @@ document.addEventListener('DOMContentLoaded', () => {
     //TELA PADRAO
     window.renderSecao('Meus Agendamentos')
 
-    agendar()
+    agendarCliente()
 })

@@ -181,4 +181,16 @@ class AgendamentoController extends Controller
         return response()->json($agendamento);
     }
 
+    public function concluidosIndividual()
+    {
+        $usuario = auth('api')->user();
+        $agendamento = Agendamento::with(['cliente', 'barbeiro', 'servicos'])
+            ->where('status', 'concluido')
+            ->where('id_barbeiro', $usuario->id_usuario)
+            ->whereDoesntHave('pagamento')
+            ->get();
+
+        return response()->json($agendamento);
+    }
+
 }

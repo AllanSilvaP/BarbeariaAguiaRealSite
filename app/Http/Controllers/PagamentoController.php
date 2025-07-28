@@ -125,9 +125,44 @@ class PagamentoController extends Controller
         return response()->json(['mensagem' => 'Pagamento excluído']);
     }
 
-    public function meusPagamentos()
+    public function meusPagamentos(Request $request)
     {
         $usuario = auth('api')->user();
-        return Pagamento::where('id_cliente', $usuario->id_usuario)->get();
+
+        $query = Pagamento::with('agendamento.cliente', 'agendamento.servicos')
+        ->whereHas('agendamento', function ($q) use ($usuario) {
+            $q->where('id_barbeiro', $usuario->id_usuario);
+        });
+
+        if($request->filled('data_inicio') && $request->filled('data_fim')) {
+            $query->whereBetween('data_pagamento', [$request->data_inicio, $request->data_fim]);
+        }
+
+        if($request->has('data_pagamento')) {
+            $query->whereDate('data_pagamento', $request->query('data_pagamento'));
+        }
+
+          return response()->json($query->get());
+    }
+
+    public function meusPagamentosAgrupados (Request $request) {
+        $usuario = auth('api')->user();
+
+        $query = Pagamento::with('agendamento.cliente')
+        ->whereHas('agendamento', fn($q) => $q->where('id_barbeiro', $usuario->id_usuario));
+
+                if($request->filled('data_inicio') && $request->filled('data_fim')) {
+                    $query->whereBetween('data_pagamento', [$request->data_inicio, $request->data_fim]);
+                }
+
+                $agrupado = $query->get()->groupBy('forma_pagamento')->map(function ($grupo, $forma) {
+                    return [
+                        'forma_pagamento' => $forma,
+                        'total' => $grupo->sum('valor'),
+                        'pagamentos' => $grupo->values()
+                    ];
+                })->values();
+
+                return response()->json($agrupado);
     }
 }

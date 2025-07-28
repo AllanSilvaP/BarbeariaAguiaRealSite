@@ -1,8 +1,8 @@
-export async function renderSecaoPagamentos() {
+export async function renderSecaoPagamentosBarbeiro() {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch('/api/admin/pagamentos', {
+        const response = await fetch('/api/barbeiro/me/pagamentos', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -24,11 +24,6 @@ export async function renderSecaoPagamentos() {
                 <label>
                     Data:
                     <input type="date" id="filtro-data" class="border p-2 rounded" value="${new Date().toISOString().split('T')[0]}">
-                </label>
-
-                <label class="flex items-center gap-2">
-                    <input type="checkbox" id="group-barbeiro">
-                    Agrupar por Barbeiro
                 </label>
 
         <button id="aplicar-filtro" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Aplicar</button>
@@ -63,7 +58,7 @@ export async function renderSecaoPagamentos() {
 
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await fetch(`/api/admin/pagamentos/${id}`, {
+                    const response = await fetch(`/api/barbeiro/pagamentos/${id}`, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -77,7 +72,7 @@ export async function renderSecaoPagamentos() {
                     }
 
                     alert('Pagamento excluído com sucesso!');
-                    renderSecaoPagamentos(); // Atualiza a listagem
+                    renderSecaoPagamentosBarbeiro(); // Atualiza a listagem
                 } catch (error) {
                     console.error(error);
                     alert('Erro ao excluir pagamento');
@@ -91,14 +86,15 @@ export async function renderSecaoPagamentos() {
             const fim = new Date(hoje)
 
             const diaSemana = hoje.getDay()
-            inicio.setDate(hoje.getDate() - diaSemana);
+            inicio.setDate(hoje.getDate() - ((diaSemana + 1) % 7));
             fim.setDate(inicio.getDate() + 6)
 
             const data_inicio = inicio.toISOString().split('T')[0];
             const data_fim = fim.toISOString().split('T')[0];
 
             try {
-                const res = await fetch(`/api/admin/pagamentos?data_inicio=${data_inicio}&data_fim=${data_fim}&group=true`, {
+                const res = await fetch(
+                    `/api/barbeiro/me/pagamentos-agrupados?data_inicio=${data_inicio}&data_fim=${data_fim}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Accept': 'application/json'
@@ -108,19 +104,21 @@ export async function renderSecaoPagamentos() {
                 if (!res.ok) throw new Error('Erro ao buscar pagamentos da semana');
 
                 const result = await res.json();
-
                 const tabela = document.getElementById('tabela-pagamentos');
                 tabela.innerHTML = `
-                <div>
-                <h3 class="font-bold text-lg mb-2">Semana: ${new Date(data_inicio).toLocaleString('pt-BR')} - ${new Date(data_fim).toLocaleString('pt-BR')}</h3>
-                </div>
+                <h3 class="font-bold text-lg mb-2">
+                    Semana: ${data_inicio} até ${data_fim}
+                </h3>
                 `
                 tabela.innerHTML += result.map(grupo => `
             <div class="border p-4 rounded mb-4 shadow">
-                <h3 class="font-bold text-lg mb-2">${grupo.barbeiro || 'Sem nome'}</h3>
                 <p>Total: R$ ${parseFloat(grupo.total).toFixed(2)}</p>
                 <ul class="mt-2 text-sm text-gray-600">
-                    ${grupo.pagamentos.map(p => `<li>${p.forma_pagamento} - R$ ${p.valor}</li>`).join('')}
+                    ${grupo.pagamentos.map(p => `
+  <li>
+    ${new Date(p.data_pagamento).toLocaleDateString('pt-BR')} - ${p.forma_pagamento} - R$ ${p.valor}
+  </li>
+`).join('')}
                 </ul>
             </div>
         `).join('');
@@ -177,13 +175,13 @@ async function renderCadPagamento() {
     const selectAgendamento = document.getElementById('select-agendamento')
     const token = localStorage.getItem('token')
 
-    const resAg = await fetch('/api/admin/agendamentos-concluidos', {
+    const resAg = await fetch('/api/barbeiro/me/agendamentos-concluidos', {
         headers: { 'Authorization': `Bearer ${token}` }
     })
 
     const agendamentos = await resAg.json()
 
-    const resPag = await fetch('/api/admin/pagamentos', {
+    const resPag = await fetch('/api/barbeiro/me/pagamentos', {
         headers: { 'Authorization': `Bearer ${token}` }
     })
     const pagamentos = await resPag.json()
@@ -222,7 +220,7 @@ async function renderCadPagamento() {
             forma_pagamento: data.forma_pagamento,
         }
         try {
-            const response = await fetch('/api/admin/pagamentos', {
+            const response = await fetch('/api/barbeiro/pagamentos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -237,9 +235,8 @@ async function renderCadPagamento() {
                 throw new Error(erro.message || 'Erro ao cadastrar Pagamento')
             }
 
-            console.log(response.json())
             alert('Pagamento cadastrado com Sucesso!');
-            renderSecaoPagamentos()
+            renderSecaoPagamentosBarbeiro()
         } catch (error) {
             console.error(error)
         }
@@ -252,7 +249,7 @@ async function renderEditarPagamento(id) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch(`/api/admin/pagamentos/${id}`, {
+        const response = await fetch(`/api/barbeiro/pagamentos/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -318,7 +315,7 @@ async function renderEditarPagamento(id) {
             });
 
             try {
-                const updateResponse = await fetch(`/api/admin/pagamentos/${id}`, {
+                const updateResponse = await fetch(`/api/barbeiro/pagamentos/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -334,7 +331,7 @@ async function renderEditarPagamento(id) {
                 }
 
                 alert('Pagamento atualizado com sucesso!');
-                renderSecaoPagamentos();
+                renderSecaoPagamentosBarbeiro();
 
             } catch (err) {
                 console.error(err);
@@ -350,36 +347,24 @@ async function renderEditarPagamento(id) {
 
 async function carregarPagamentosFiltrados() {
     const data = document.getElementById('filtro-data').value;
-    const agrupar = document.getElementById('group-barbeiro').checked;
     const token = localStorage.getItem('token');
 
     try {
-        const res = await fetch(`/api/admin/pagamentos?data_pagamento=${data}&group=${agrupar}`, {
+        const res = await fetch(`/api/barbeiro/me/pagamentos?data_pagamento=${data}`, {
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
             }
         })
 
         if (!res.ok) throw new Error('Erro na requisição')
 
         const result = await res.json();
+        console.log(result)
 
         const tabela = document.getElementById('tabela-pagamentos');
 
-        if (agrupar) {
-            tabela.innerHTML = result.map(grupo =>
-                `
-                <div class="border p-4 rounded mb-4 shadow">
-                <h3 class="font-bold text-lg mb-2">${grupo.barbeiro || 'Sem nome'}</h3>
-                <p>Total: R$ ${grupo.total.toFixed(2)}</p>
-                <ul class="mt-2 text-sm text-gray-600">
-                    ${grupo.pagamentos.map(p => `<li>${p.forma_pagamento} - R$ ${p.valor}</li>`).join('')}
-                </ul>
-            </div>
-                `
-            ).join('');
-        } else {
-            tabela.innerHTML = `
+        tabela.innerHTML = `
             <table class="w-full text-left border">
                 <thead class="bg-gray-200">
                     <tr>
@@ -392,7 +377,7 @@ async function carregarPagamentosFiltrados() {
                 <tbody>
                     ${result.map(p => `
                         <tr>
-                            <td class="p-2 border">${p.cliente?.nome || 'Desconhecido'}</td>
+                            <td class="p-2 border">${p.agendamento?.cliente?.nome || 'Desconhecido'}</td>
                             <td class="p-2 border">${p.valor}</td>
                             <td class="p-2 border">${p.forma_pagamento}</td>
                             <td class="p-2 border">${new Date(p.data_pagamento).toLocaleDateString('pt-BR')}</td>
@@ -401,9 +386,9 @@ async function carregarPagamentosFiltrados() {
                 </tbody>
             </table>
         `;
-        }
     } catch (error) {
-
+        console.error(error);
+        alert('Erro ao buscar pagamentos filtrados');
     }
 
 

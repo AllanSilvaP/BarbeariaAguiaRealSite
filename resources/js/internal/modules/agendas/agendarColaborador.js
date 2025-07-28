@@ -1,4 +1,4 @@
-export async function agendar() {
+export async function agendarColaborador(tipoUsuario = null) {
     const token = localStorage.getItem('token')
     const botao = document.getElementById('agendar-corte')
     const modal = document.getElementById('modal-agendamento')
@@ -25,7 +25,7 @@ export async function agendar() {
             nomeCliente.value = me.nome
 
             // Buscar barbeiros
-            const resBarbeiros = await fetch('/api/barbeiros', {
+            const resBarbeiros = await fetch('/api/admin/barbeiros', {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             if (!resBarbeiros.ok) throw new Error('Erro ao buscar barbeiros')
@@ -36,7 +36,7 @@ export async function agendar() {
             ).join('')
 
             // Buscar serviços
-            const resServicos = await fetch('/api/servicos', {
+            const resServicos = await fetch('/api/admin/servicos', {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             if (!resServicos.ok) throw new Error('Erro ao buscar serviços')
@@ -75,7 +75,7 @@ export async function agendar() {
         ).map(cb => cb.value)
 
         try {
-            const res = await fetch('/api/agendamentos', {
+            const res = await fetch('/api/admin/agendamentos', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

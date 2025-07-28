@@ -39,7 +39,12 @@ Route::middleware(['auth:api'])->group(function() {
         Route::apiResource('servicos', ServicoController::class);
         Route::get('/me/servicos', [ServicoController::class, 'meusServicos']);
         Route::get('/me/agendamentos', [AgendamentoController::class, 'meusAgendamentos']);
+        Route::get('/me/agendamentos-concluidos', [AgendamentoController::class, 'concluidosIndividual']);
         Route::get('/me/pagamentos', [PagamentoController::class, 'meusPagamentos']);
+        Route::delete('/pagamentos/{id}', [PagamentoController::class, 'destroy']);
+        Route::post('/pagamentos', [PagamentoController::class, 'store']);
+        Route::put('/pagamentos/{id}', [PagamentoController::class, 'update']);
+        Route::get('/me/pagamentos-agrupados', [PagamentoController::class, 'meusPagamentosAgrupados']);
     });
 
     //cliente
