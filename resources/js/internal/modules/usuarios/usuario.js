@@ -195,8 +195,8 @@ async function renderEditarUsuario(id) {
             <select name="tipo_usuario" id="tipo_usuario" required>
                 <option value="">Selecione o tipo</option>
                 <option value="Administrador">Administrador</option>
-                <option value="Usuario">Usuario</option>
-                <option value="Usuario">Usuario</option>
+                <option value="barbeiro">Barbeiro</option>
+                <option value="cliente">Cliente</option>
             </select>
 
                 <button type="submit" class="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-800">

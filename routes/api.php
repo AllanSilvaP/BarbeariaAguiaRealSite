@@ -53,6 +53,9 @@ Route::middleware(['auth:api'])->group(function() {
     //cliente
     Route::middleware(['cliente'])->prefix('cliente')->group(function () {
         Route::get('/me/agendamentos', [AgendamentoController::class, 'meusAgendamentos']);
+        Route::get('/servicos', [ServicoController::class, 'index']);
+        Route::get('/barbeiros', [UsuarioController::class, 'listarBarbeiros']);
+        Route::post('/agendamentos', [UsuarioController::class, 'store']);
     });
 });
 

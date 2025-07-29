@@ -25,7 +25,7 @@ export async function agendarCliente() {
             nomeCliente.value = me.nome
 
             // Buscar barbeiros
-            const resBarbeiros = await fetch('/api/admin/barbeiros', {
+            const resBarbeiros = await fetch('/api/cliente/barbeiros', {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             if (!resBarbeiros.ok) throw new Error('Erro ao buscar barbeiros')
@@ -36,7 +36,7 @@ export async function agendarCliente() {
             ).join('')
 
             // Buscar serviços
-            const resServicos = await fetch('/api/admin/servicos', {
+            const resServicos = await fetch('/api/cliente/servicos', {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             if (!resServicos.ok) throw new Error('Erro ao buscar serviços')
@@ -75,7 +75,7 @@ export async function agendarCliente() {
         ).map(cb => cb.value)
 
         try {
-            const res = await fetch('/api/admin/agendamentos', {
+            const res = await fetch('/api/cliente/agendamentos', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -84,7 +84,8 @@ export async function agendarCliente() {
                 body: JSON.stringify({
                     id_barbeiro,
                     data_hora,
-                    servicos: servicosSelecionados
+                    servicos: servicosSelecionados,
+                    nome: nomeCliente.value
                 })
             })
 

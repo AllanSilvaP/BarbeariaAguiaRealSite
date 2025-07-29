@@ -15,8 +15,6 @@ $botoes = ['Barbeiros', 'Pagamentos', 'Serviços', 'Usuarios','Agendas'];
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
     <link rel="icon" href="{{ asset('img/barbearia-frente.png') }}" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
-
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/internal/indexHub.js'])
 </head>
@@ -51,4 +49,3 @@ $botoes = ['Barbeiros', 'Pagamentos', 'Serviços', 'Usuarios','Agendas'];
 </body>
 
 </html>
-<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
