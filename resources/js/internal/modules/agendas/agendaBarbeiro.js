@@ -21,7 +21,6 @@ export async function renderSecaoAgendaBarbeiro(dataSelecionada = null) {
         if (!response.ok) throw new Error('Erro ao buscar agendamentos!')
 
         const agendamentos = await response.json()
-    console.log(agendamentos)
 
         container.innerHTML = `
             <div class="flex items-center justify-between mb-4">

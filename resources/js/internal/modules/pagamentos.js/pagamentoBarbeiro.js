@@ -41,45 +41,6 @@ export async function renderSecaoPagamentosBarbeiro() {
             botao.addEventListener('click', () => renderCadPagamento())
         }
 
-        //EDITAR
-        document.querySelectorAll('.editar-pagamento').forEach(botao => {
-            botao.addEventListener('click', (e) => {
-                const id = e.target.dataset.id
-                renderEditarPagamento(id)
-            })
-        })
-
-        //EXCLUIR
-        document.querySelectorAll('.excluir-pagamento').forEach(botao => {
-            botao.addEventListener('click', async (e) => {
-                const id = e.target.dataset.id;
-                const confirmar = confirm('Tem certeza que deseja excluir este pagamento?')
-                if (!confirmar) return;
-
-                try {
-                    const token = localStorage.getItem('token');
-                    const response = await fetch(`/api/barbeiro/pagamentos/${id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Accept': 'application/json'
-                        }
-                    });
-
-                    if (!response.ok) {
-                        const erro = await response.json();
-                        throw new Error(erro.message || 'Erro ao excluir pagamento');
-                    }
-
-                    alert('Pagamento excluído com sucesso!');
-                    renderSecaoPagamentosBarbeiro(); // Atualiza a listagem
-                } catch (error) {
-                    console.error(error);
-                    alert('Erro ao excluir pagamento');
-                }
-            })
-        })
-
         const buscarSemanaAtual = async () => {
             const hoje = new Date();
             const inicio = new Date(hoje)
@@ -244,12 +205,106 @@ async function renderCadPagamento() {
     })
 }
 
+async function carregarPagamentosFiltrados() {
+    const data = document.getElementById('filtro-data').value;
+    const token = localStorage.getItem('token');
+
+    try {
+        const res = await fetch(`/api/barbeiro/me/pagamentos?data_pagamento=${data}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/json'
+            }
+        })
+
+        if (!res.ok) throw new Error('Erro na requisição')
+
+        const result = await res.json();
+
+        const tabela = document.getElementById('tabela-pagamentos');
+
+        tabela.innerHTML = `
+            <table class="w-full text-left border">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="p-2 border">Nome Cliente</th>
+                        <th class="p-2 border">Valor</th>
+                        <th class="p-2 border">Forma</th>
+                        <th class="p-2 border">Data</th>
+                        <th class="p-2 border">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${result.map(p => `
+                        <tr>
+                            <td class="p-2 border">${p.agendamento?.cliente?.nome || 'Desconhecido'}</td>
+                            <td class="p-2 border">${p.valor}</td>
+                            <td class="p-2 border">${p.forma_pagamento}</td>
+                            <td class="p-2 border">${new Date(p.data_pagamento).toLocaleDateString('pt-BR')}</td>
+                            <td class="p-2 border">
+                                 <div class="flex gap-2">
+                                <button class="editar-pagamento text-blue-600" data-id="${p.id_pagamento}">✏️</button>
+                                <button class="excluir-pagamento text-red-600" data-id="${p.id_pagamento}">❌</button>
+                            </div>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+
+        //EDITAR
+        document.querySelectorAll('.editar-pagamento').forEach(botao => {
+            botao.addEventListener('click', (e) => {
+                const id = e.target.dataset.id
+                renderEditarPagamento(id)
+            })
+        })
+
+        //EXCLUIR
+        document.querySelectorAll('.excluir-pagamento').forEach(botao => {
+            botao.addEventListener('click', async (e) => {
+                const id = e.target.dataset.id;
+                const confirmar = confirm('Tem certeza que deseja excluir este pagamento?')
+                if (!confirmar) return;
+
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`/api/barbeiro/pagamentos/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const erro = await response.json();
+                        throw new Error(erro.message || 'Erro ao excluir pagamento');
+                    }
+
+                    alert('Pagamento excluído com sucesso!');
+                    renderSecaoPagamentosBarbeiro(); // Atualiza a listagem
+                } catch (error) {
+                    console.error(error);
+                    alert('Erro ao excluir pagamento');
+                }
+            })
+        })
+
+    } catch (error) {
+        console.error(error);
+        alert('Erro ao buscar pagamentos filtrados');
+    }
+}
+
 async function renderEditarPagamento(id) {
     const container = document.getElementById('secao-conteudo');
     const token = localStorage.getItem('token');
 
     try {
         const response = await fetch(`/api/barbeiro/pagamentos/${id}`, {
+            method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -269,7 +324,7 @@ async function renderEditarPagamento(id) {
                     <label class="block text-sm font-medium text-gray-700 mb-1">Agendamento</label>
                     <input
                         type="text"
-                        value="${pagamento.cliente?.nome || 'Desconhecido'} - ${new Date(pagamento.agendamento?.data_hora || pagamento.data_pagamento).toLocaleString('pt-BR')}"
+                        value="${new Date(pagamento.agendamento?.data_hora || pagamento.data_pagamento).toLocaleString('pt-BR')}"
                         class="input w-full border p-2 rounded bg-gray-100 text-gray-500"
                         disabled
                     >
@@ -343,53 +398,4 @@ async function renderEditarPagamento(id) {
         console.error(err);
         container.innerHTML = `<p class="text-red-600">Erro ao carregar pagamento para edição.</p>`;
     }
-}
-
-async function carregarPagamentosFiltrados() {
-    const data = document.getElementById('filtro-data').value;
-    const token = localStorage.getItem('token');
-
-    try {
-        const res = await fetch(`/api/barbeiro/me/pagamentos?data_pagamento=${data}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json'
-            }
-        })
-
-        if (!res.ok) throw new Error('Erro na requisição')
-
-        const result = await res.json();
-        console.log(result)
-
-        const tabela = document.getElementById('tabela-pagamentos');
-
-        tabela.innerHTML = `
-            <table class="w-full text-left border">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="p-2 border">Nome Cliente</th>
-                        <th class="p-2 border">Valor</th>
-                        <th class="p-2 border">Forma</th>
-                        <th class="p-2 border">Data</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${result.map(p => `
-                        <tr>
-                            <td class="p-2 border">${p.agendamento?.cliente?.nome || 'Desconhecido'}</td>
-                            <td class="p-2 border">${p.valor}</td>
-                            <td class="p-2 border">${p.forma_pagamento}</td>
-                            <td class="p-2 border">${new Date(p.data_pagamento).toLocaleDateString('pt-BR')}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-        `;
-    } catch (error) {
-        console.error(error);
-        alert('Erro ao buscar pagamentos filtrados');
-    }
-
-
 }

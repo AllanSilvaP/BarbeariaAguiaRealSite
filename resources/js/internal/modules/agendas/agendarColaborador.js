@@ -1,3 +1,6 @@
+import TomSelect from 'tom-select'
+import 'tom-select/dist/css/tom-select.default.min.css'
+
 export async function agendarColaborador(tipoUsuario = null) {
     const token = localStorage.getItem('token')
     const botao = document.getElementById('agendar-corte')
@@ -22,10 +25,34 @@ export async function agendarColaborador(tipoUsuario = null) {
             })
             if (!resMe.ok) throw new Error('Erro ao buscar perfil')
             const me = await resMe.json()
-            nomeCliente.value = me.nome
+            let tipoUsuario = me.tipo_usuario
+
+            if(tipoUsuario == 'administrador') {
+                tipoUsuario = 'admin'
+            }
+
+            const resUsers = await fetch (`api/${tipoUsuario}/listar-usuarios`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+
+            if(!resUsers.ok) throw new Error('Erro ao listar Usuarios')
+            const usuariosNomes = await resUsers.json()
+
+            const selectCliente = document.getElementById('select-cliente')
+            selectCliente.innerHTML = Object.entries(usuariosNomes).map(([id,nome]) =>
+                `<option value="${id}">${nome}</option>`
+            ).join('')
+
+            new TomSelect("#select-cliente", {
+                create: false,
+                sortField: {field: "text", direction: "asc"},
+                placeholder: "Selecione um cliente...",
+                allowEmptyOption: true,
+                maxOptions: 10
+            })
 
             // Buscar barbeiros
-            const resBarbeiros = await fetch('/api/admin/barbeiros', {
+            const resBarbeiros = await fetch(`/api/${tipoUsuario}/barbeiros`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             if (!resBarbeiros.ok) throw new Error('Erro ao buscar barbeiros')
@@ -36,7 +63,7 @@ export async function agendarColaborador(tipoUsuario = null) {
             ).join('')
 
             // Buscar serviços
-            const resServicos = await fetch('/api/admin/servicos', {
+            const resServicos = await fetch(`/api/${tipoUsuario}/servicos`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
             if (!resServicos.ok) throw new Error('Erro ao buscar serviços')
@@ -75,7 +102,7 @@ export async function agendarColaborador(tipoUsuario = null) {
         ).map(cb => cb.value)
 
         try {
-            const res = await fetch('/api/admin/agendamentos', {
+            const res = await fetch(`/api/${tipoUsuario}/agendamentos`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,

@@ -16,6 +16,7 @@ $botoes = ['Meus Pagamentos', 'Meus Agendamentos'];
 
     <link rel="icon" href="{{ asset('img/barbearia-frente.png') }}" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/internal/indexBarbeiro.js'])
 </head>
 
@@ -23,7 +24,7 @@ $botoes = ['Meus Pagamentos', 'Meus Agendamentos'];
     <x-navbar-hub />
 
     <div class="mt-20">
-        <x-selecionar-dias/>
+        <x-selecionar-dias />
     </div>
 
     <div class="w-[600px] h-[3px] bg-white opacity-50 mx-auto"></div>
@@ -36,7 +37,7 @@ $botoes = ['Meus Pagamentos', 'Meus Agendamentos'];
 
     <div id="conteudo-edicao"></div>
 
-    <x-form-agendamento/>
+    <x-form-agendamento-admin />
 
     <div class="max-w-screen-xl mx-auto flex w-full px-4 m-6 min-h-[500px]">
         <div class="w-3/4 pr-4">
@@ -49,3 +50,4 @@ $botoes = ['Meus Pagamentos', 'Meus Agendamentos'];
 </body>
 
 </html>
+ <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>

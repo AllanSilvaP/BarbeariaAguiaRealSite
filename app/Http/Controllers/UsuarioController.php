@@ -89,4 +89,10 @@ class UsuarioController extends Controller
         $barbeiros = Usuario::where('tipo_usuario', 'Barbeiro')->get();
         return response()->json($barbeiros);
     }
+
+    public function listarUsuarios() {
+        $usuarios = Usuario::pluck('nome', 'id_usuario');
+        return response()->json($usuarios);
+    }
 }
+

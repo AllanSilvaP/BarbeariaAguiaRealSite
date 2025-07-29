@@ -31,6 +31,7 @@ Route::middleware(['auth:api'])->group(function() {
         //agendamentosAdmin
         Route::get('/barbeiros-agendamentos', [AgendamentoController::class, 'agendamentosPorBarbeiro']);
         Route::get('/agendamentos-concluidos', [AgendamentoController::class, 'concluidos']);
+        Route::get('/listar-usuarios', [UsuarioController::class, 'listarUsuarios']);
     });
 
     //barbeiro
@@ -45,6 +46,8 @@ Route::middleware(['auth:api'])->group(function() {
         Route::post('/pagamentos', [PagamentoController::class, 'store']);
         Route::put('/pagamentos/{id}', [PagamentoController::class, 'update']);
         Route::get('/me/pagamentos-agrupados', [PagamentoController::class, 'meusPagamentosAgrupados']);
+        Route::get('/barbeiros', [UsuarioController::class, 'listarBarbeiros']);
+        Route::get('/listar-usuarios', [UsuarioController::class, 'listarUsuarios']);
     });
 
     //cliente

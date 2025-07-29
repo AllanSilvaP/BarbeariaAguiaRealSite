@@ -4,7 +4,7 @@ import { renderSecaoUsuarios } from "./modules/usuarios/usuario"
 import { renderSecaoServicos } from "./modules/servicos/servico"
 import { renderSecaoAgendaAdmin } from "./modules/agendas/agendaAdmin"
 import { renderSecaoPagamentos } from "./modules/pagamentos.js/pagamento"
-import { agendar } from "./modules/agendas/agendar"
+import { agendarColaborador } from "./modules/agendas/agendarColaborador"
 
 document.addEventListener('DOMContentLoaded', () => {
     getPerfil()
@@ -46,5 +46,5 @@ document.addEventListener('DOMContentLoaded', () => {
     //TELA PADRAO
     window.renderSecao('Barbeiros')
 
-    agendar()
+    agendarColaborador('admin')
 })

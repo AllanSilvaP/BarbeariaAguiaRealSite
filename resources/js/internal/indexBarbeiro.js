@@ -1,7 +1,7 @@
 import { getPerfil } from "./modules/navbar/perfil"
 import { renderSecaoAgendaBarbeiro } from "./modules/agendas/agendaBarbeiro"
 import { renderSecaoPagamentosBarbeiro } from "./modules/pagamentos.js/pagamentoBarbeiro"
-import { agendarCliente } from "./modules/agendas/agendarCliente"
+import { agendarColaborador } from "./modules/agendas/agendarColaborador"
 
 document.addEventListener('DOMContentLoaded', () => {
     getPerfil()
@@ -31,5 +31,5 @@ document.addEventListener('DOMContentLoaded', () => {
     //TELA PADRAO
     window.renderSecao('Meus Agendamentos')
 
-    agendarCliente()
+    agendarColaborador('barbeiro')
 })

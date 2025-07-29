@@ -46,45 +46,6 @@ export async function renderSecaoPagamentos() {
             botao.addEventListener('click', () => renderCadPagamento())
         }
 
-        //EDITAR
-        document.querySelectorAll('.editar-pagamento').forEach(botao => {
-            botao.addEventListener('click', (e) => {
-                const id = e.target.dataset.id
-                renderEditarPagamento(id)
-            })
-        })
-
-        //EXCLUIR
-        document.querySelectorAll('.excluir-pagamento').forEach(botao => {
-            botao.addEventListener('click', async (e) => {
-                const id = e.target.dataset.id;
-                const confirmar = confirm('Tem certeza que deseja excluir este pagamento?')
-                if (!confirmar) return;
-
-                try {
-                    const token = localStorage.getItem('token');
-                    const response = await fetch(`/api/admin/pagamentos/${id}`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Accept': 'application/json'
-                        }
-                    });
-
-                    if (!response.ok) {
-                        const erro = await response.json();
-                        throw new Error(erro.message || 'Erro ao excluir pagamento');
-                    }
-
-                    alert('Pagamento excluído com sucesso!');
-                    renderSecaoPagamentos(); // Atualiza a listagem
-                } catch (error) {
-                    console.error(error);
-                    alert('Erro ao excluir pagamento');
-                }
-            })
-        })
-
         const buscarSemanaAtual = async () => {
             const hoje = new Date();
             const inicio = new Date(hoje)
@@ -112,7 +73,7 @@ export async function renderSecaoPagamentos() {
                 const tabela = document.getElementById('tabela-pagamentos');
                 tabela.innerHTML = `
                 <div>
-                <h3 class="font-bold text-lg mb-2">Semana: ${new Date(data_inicio).toLocaleString('pt-BR')} - ${new Date(data_fim).toLocaleString('pt-BR')}</h3>
+                <h3 class="font-bold text-lg mb-2">Semana: ${data_inicio} - ${data_fim}</h3>
                 </div>
                 `
                 tabela.innerHTML += result.map(grupo => `
@@ -120,7 +81,7 @@ export async function renderSecaoPagamentos() {
                 <h3 class="font-bold text-lg mb-2">${grupo.barbeiro || 'Sem nome'}</h3>
                 <p>Total: R$ ${parseFloat(grupo.total).toFixed(2)}</p>
                 <ul class="mt-2 text-sm text-gray-600">
-                    ${grupo.pagamentos.map(p => `<li>${p.forma_pagamento} - R$ ${p.valor}</li>`).join('')}
+                    ${grupo.pagamentos.map(p => `<li>${new Date(p.data_pagamento).toLocaleDateString('pt-BR')} - ${p.forma_pagamento} - R$ ${p.valor}</li>`).join('')}
                 </ul>
             </div>
         `).join('');
@@ -247,6 +208,111 @@ async function renderCadPagamento() {
     })
 }
 
+async function carregarPagamentosFiltrados() {
+    const data = document.getElementById('filtro-data').value;
+    const agrupar = document.getElementById('group-barbeiro').checked;
+    const token = localStorage.getItem('token');
+
+    try {
+        const res = await fetch(`/api/admin/pagamentos?data_pagamento=${data}&group=${agrupar}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+
+        if (!res.ok) throw new Error('Erro na requisição')
+
+        const result = await res.json();
+
+        const tabela = document.getElementById('tabela-pagamentos');
+
+        if (agrupar) {
+            tabela.innerHTML = result.map(grupo =>
+                `
+                <div class="border p-4 rounded mb-4 shadow">
+                <h3 class="font-bold text-lg mb-2">${grupo.barbeiro || 'Sem nome'}</h3>
+                <p>Total: R$ ${grupo.total.toFixed(2)}</p>
+                <ul class="mt-2 text-sm text-gray-600">
+                    ${grupo.pagamentos.map(p => `<li>${p.forma_pagamento} - R$ ${p.valor}</li>`).join('')}
+                </ul>
+            </div>
+                `
+            ).join('');
+        } else {
+            tabela.innerHTML = `
+            <table class="w-full text-left border">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="p-2 border">Nome Cliente</th>
+                        <th class="p-2 border">Valor</th>
+                        <th class="p-2 border">Forma</th>
+                        <th class="p-2 border">Data</th>
+                        <th class="p-2 border">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${result.map(p => `
+                        <tr>
+                            <td class="p-2 border">${p.cliente?.nome || 'Desconhecido'}</td>
+                            <td class="p-2 border">${p.valor}</td>
+                            <td class="p-2 border">${p.forma_pagamento}</td>
+                            <td class="p-2 border">${new Date(p.data_pagamento).toLocaleDateString('pt-BR')}</td>
+                            <td class="p-2 border">
+                                 <div class="flex gap-2">
+                                    <button class="editar-pagamento text-blue-600" data-id="${p.id_pagamento}">✏️</button>
+                                    <button class="excluir-pagamento text-red-600" data-id="${p.id_pagamento}">❌</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+        }
+
+        //EDITAR
+        document.querySelectorAll('.editar-pagamento').forEach(botao => {
+            botao.addEventListener('click', (e) => {
+                const id = e.target.dataset.id
+                renderEditarPagamento(id)
+            })
+        })
+
+        //EXCLUIR
+        document.querySelectorAll('.excluir-pagamento').forEach(botao => {
+            botao.addEventListener('click', async (e) => {
+                const id = e.target.dataset.id;
+                const confirmar = confirm('Tem certeza que deseja excluir este pagamento?')
+                if (!confirmar) return;
+
+                try {
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`/api/admin/pagamentos/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const erro = await response.json();
+                        throw new Error(erro.message || 'Erro ao excluir pagamento');
+                    }
+
+                    alert('Pagamento excluído com sucesso!');
+                    renderSecaoPagamentos(); // Atualiza a listagem
+                } catch (error) {
+                    console.error(error);
+                    alert('Erro ao excluir pagamento');
+                }
+            })
+        })
+    } catch (error) {
+
+    }
+}
+
 async function renderEditarPagamento(id) {
     const container = document.getElementById('secao-conteudo');
     const token = localStorage.getItem('token');
@@ -348,63 +414,3 @@ async function renderEditarPagamento(id) {
     }
 }
 
-async function carregarPagamentosFiltrados() {
-    const data = document.getElementById('filtro-data').value;
-    const agrupar = document.getElementById('group-barbeiro').checked;
-    const token = localStorage.getItem('token');
-
-    try {
-        const res = await fetch(`/api/admin/pagamentos?data_pagamento=${data}&group=${agrupar}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-
-        if (!res.ok) throw new Error('Erro na requisição')
-
-        const result = await res.json();
-
-        const tabela = document.getElementById('tabela-pagamentos');
-
-        if (agrupar) {
-            tabela.innerHTML = result.map(grupo =>
-                `
-                <div class="border p-4 rounded mb-4 shadow">
-                <h3 class="font-bold text-lg mb-2">${grupo.barbeiro || 'Sem nome'}</h3>
-                <p>Total: R$ ${grupo.total.toFixed(2)}</p>
-                <ul class="mt-2 text-sm text-gray-600">
-                    ${grupo.pagamentos.map(p => `<li>${p.forma_pagamento} - R$ ${p.valor}</li>`).join('')}
-                </ul>
-            </div>
-                `
-            ).join('');
-        } else {
-            tabela.innerHTML = `
-            <table class="w-full text-left border">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="p-2 border">Nome Cliente</th>
-                        <th class="p-2 border">Valor</th>
-                        <th class="p-2 border">Forma</th>
-                        <th class="p-2 border">Data</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${result.map(p => `
-                        <tr>
-                            <td class="p-2 border">${p.cliente?.nome || 'Desconhecido'}</td>
-                            <td class="p-2 border">${p.valor}</td>
-                            <td class="p-2 border">${p.forma_pagamento}</td>
-                            <td class="p-2 border">${new Date(p.data_pagamento).toLocaleDateString('pt-BR')}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-        `;
-        }
-    } catch (error) {
-
-    }
-
-
-}

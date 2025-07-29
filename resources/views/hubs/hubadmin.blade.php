@@ -15,6 +15,8 @@ $botoes = ['Barbeiros', 'Pagamentos', 'Serviços', 'Usuarios','Agendas'];
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
     <link rel="icon" href="{{ asset('img/barbearia-frente.png') }}" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/internal/indexHub.js'])
 </head>
@@ -23,7 +25,7 @@ $botoes = ['Barbeiros', 'Pagamentos', 'Serviços', 'Usuarios','Agendas'];
     <x-navbar-hub />
 
     <div class="mt-20">
-        <x-selecionar-dias/>
+        <x-selecionar-dias />
     </div>
 
     <div class="w-[600px] h-[3px] bg-white opacity-50 mx-auto"></div>
@@ -36,7 +38,7 @@ $botoes = ['Barbeiros', 'Pagamentos', 'Serviços', 'Usuarios','Agendas'];
 
     <div id="conteudo-edicao"></div>
 
-    <x-form-agendamento/>
+    <x-form-agendamento-admin />
 
     <div class="max-w-screen-xl mx-auto flex w-full px-4 m-6 min-h-[500px]">
         <div class="w-3/4 pr-4">
@@ -49,3 +51,4 @@ $botoes = ['Barbeiros', 'Pagamentos', 'Serviços', 'Usuarios','Agendas'];
 </body>
 
 </html>
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
