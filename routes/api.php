@@ -55,7 +55,8 @@ Route::middleware(['auth:api'])->group(function() {
         Route::get('/me/agendamentos', [AgendamentoController::class, 'meusAgendamentos']);
         Route::get('/servicos', [ServicoController::class, 'index']);
         Route::get('/barbeiros', [UsuarioController::class, 'listarBarbeiros']);
-        Route::post('/agendamentos', [UsuarioController::class, 'store']);
+        Route::post('/agendamentos', [AgendamentoController::class, 'store']);
+        Route::get('/barbeiros/{id}/agenda', [AgendamentoController::class, 'agendaPorBarbeiro']);
     });
 });
 

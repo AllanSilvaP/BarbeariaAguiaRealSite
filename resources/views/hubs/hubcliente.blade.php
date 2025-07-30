@@ -1,5 +1,5 @@
 @php
-$botoes = ['Meus Agedamentos'];
+$botoes = ['Meus Agendamentos'];
 @endphp
 
 <!DOCTYPE html>
@@ -8,7 +8,7 @@ $botoes = ['Meus Agedamentos'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Área do Barbeiro</title>
+    <title>Área do Cliente</title>
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,6 +33,8 @@ $botoes = ['Meus Agedamentos'];
             Agendar Corte
         </button>
     </div>
+
+    <div class="flex flex-wrap justify-center gap-4 my-4" id="botoes-barbeiros"></div>
 
     <div id="conteudo-edicao"></div>
 

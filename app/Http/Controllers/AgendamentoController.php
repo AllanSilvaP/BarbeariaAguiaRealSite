@@ -193,4 +193,20 @@ class AgendamentoController extends Controller
         return response()->json($agendamento);
     }
 
+    public function agendaPorBarbeiro (Request $request, $id) {
+        $data = $request->query('data');
+
+        if(!$data) {
+            return response()->json(['erro' => 'Data obrigatória.'], 400);
+        }
+
+        $agendamentos = Agendamento::with(['cliente','servicos'])
+        ->where('id_barbeiro', $id)
+        ->whereDate('data_hora', $data)
+        ->orderBy('data_hora')
+        ->get();
+
+        return response()->json($agendamentos);
+    }
+
 }
