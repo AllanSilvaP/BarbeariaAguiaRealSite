@@ -18,9 +18,13 @@
                 <select id="select-barbeiro" class="w-full border p-2 rounded"></select>
             </div>
 
-            <div id="servicos-checkbox" class="grid grid-cols-2 gap-2 text-sm">
-                <label class="block text-sm font-medium">Serviço</label>
+            <div>
+                <label class="block text-sm font-medium">Serviços</label>
+                <div id="servicos-checkbox" class="grid grid-cols-2 gap-2 text-sm">
+                    <!-- checkboxes vão aqui -->
+                </div>
             </div>
+
 
             <div>
                 <label class="block text-sm font-medium">Data e Hora</label>

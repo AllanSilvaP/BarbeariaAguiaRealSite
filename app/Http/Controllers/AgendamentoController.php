@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Agendamento;
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\View\Components\Agendas;
 use Illuminate\Http\Request;
@@ -105,6 +106,13 @@ class AgendamentoController extends Controller
     $usuario = auth('api')->user();
 
     $query = Agendamento::with(['cliente', 'barbeiro', 'servicos']);
+
+    if ($request->boolean('ultimos_7_dias')) {
+        $hoje = Carbon::today();
+        $seteDiasAtras = $hoje->copy()->subDays(7);
+
+        $query->whereBetween('data_hora', [$seteDiasAtras, $hoje]);
+    }
 
     if ($usuario->tipo_usuario === 'cliente') {
         $query->where('id_cliente', $usuario->id_usuario);

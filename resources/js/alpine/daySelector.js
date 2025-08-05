@@ -2,28 +2,39 @@ import Alpine from 'alpinejs'
 
 Alpine.data('daySelector', () => ({
   days: Array.from({ length: 30 }, (_, i) => {
-    const d = new Date()
-    d.setDate(d.getDate() + i)
-    const dia = String(d.getDate()).padStart(2,'0')
-    const semana = d
-      .toLocaleDateString('pt-BR', { weekday:'long' })
-      .replace(/^./, m => m.toUpperCase())
-    return { date: d, dia, semana }
+    const date = new Date()
+    date.setDate(date.getDate() + i)
+
+    return {
+      date,
+      iso: date.toISOString().split('T')[0],
+      dia: String(date.getDate()).padStart(2, '0'),
+      semana: date.toLocaleDateString('pt-BR', { weekday: 'long' }).replace(/^./, m => m.toUpperCase())
+    }
   }),
+
   visible: 3,
   start: 0,
   selected: 0,
 
-  move(dir) {
-    if (dir === 'left') {
+  move(direction) {
+    if (direction === 'left') {
       this.start = Math.max(this.start - 1, 0)
-    } else {
+    } else if (direction === 'right') {
       this.start = Math.min(this.start + 1, this.days.length - this.visible)
     }
   },
 
-  select(idx) {
-    this.selected = idx
-    this.$dispatch('dia-selected', this.days[idx].date)
+  select(index) {
+    this.selected = index
+    const selectedDate = this.days[index].date
+
+    // Dispara evento (caso alguém esteja escutando)
+    this.$dispatch('dia-selected', selectedDate)
+
+    // Atualiza a agenda automaticamente
+    if (window.barbeiroSelecionado && typeof window.renderSecao === 'function') {
+      window.renderSecao('Agendas')
+    }
   }
 }))

@@ -13,7 +13,6 @@ export async function agendarCliente() {
     botao.addEventListener('click', async () => {
         const carregando = document.getElementById('carregando-formulario')
         carregando.classList.remove('hidden')
-        modal.classList.remove('hidden')
 
         try {
             // Buscar dados do usuário logado
@@ -50,6 +49,11 @@ export async function agendarCliente() {
                     ${s.nome} - ${s.duracao_minutos} minutos
                 </label>`
             ).join('')
+
+            const agora = new Date()
+
+            inputDataHora.min = agora.toISOString().slice(0, 16)
+            modal.classList.remove('hidden')
 
         } catch (error) {
             console.error('Erro ao carregar formulário:', error)

@@ -183,3 +183,63 @@ function formatarData(dataStr) {
         year: 'numeric'
     });
 }
+
+export async function renderMeusAgendamentos(somenteUltimos7Dias = true) {
+    const token = localStorage.getItem('token');
+    const container = document.getElementById('secao-conteudo');
+    container.innerHTML = `
+        <div class="flex items-center justify-center h-40">
+            <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gray-800"></div>
+        </div>
+    `;
+
+    try {
+        const query = somenteUltimos7Dias ? '?ultimos_7_dias=1' : '';
+        const res = await fetch(`/api/cliente/me/agendamentos${query}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        let agendamentos = await res.json();
+
+        agendamentos.sort((a, b) => new Date(b.data_hora) - new Date(a.data_hora));
+
+        const blocos = agendamentos.map(agendamento => {
+            const data = new Date(agendamento.data_hora);
+            const servicos = agendamento.servicos.map(s => s.nome).join(', ');
+            return `
+                <div class="p-4 rounded-xl shadow bg-white mb-2 border-l-4 ${agendamento.status === 'pendente' ? 'border-yellow-500' : 'border-green-600'}">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="font-semibold">${data.toLocaleDateString()} - ${data.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                            <p class="text-sm text-gray-600 italic">${servicos}</p>
+                        </div>
+                        <span class="text-sm font-medium ${agendamento.status === 'pendente' ? 'text-yellow-600' : 'text-green-600'}">${agendamento.status}</span>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = `
+            <div class="bg-white/90 p-6 rounded-2xl shadow-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-2xl font-bold text-gray-800">Meus Agendamentos</h2>
+                    <button id="alternar-filtro" class="text-sm text-blue-600 hover:underline">
+                        ${somenteUltimos7Dias ? 'Ver todos' : 'Ver últimos 7 dias'}
+                    </button>
+                </div>
+                <div class="flex flex-col gap-2">
+                    ${blocos.length ? blocos.join('') : '<p class="text-gray-500 text-sm">Nenhum agendamento encontrado.</p>'}
+                </div>
+            </div>
+        `;
+
+        // Corrigido: Arrow function com =>, e chamada recursiva correta
+        document.getElementById('alternar-filtro')?.addEventListener('click', () => {
+            renderMeusAgendamentos(!somenteUltimos7Dias);
+        });
+
+    } catch (error) {
+        console.error('Erro ao renderizar agendamentos:', error);
+        container.innerHTML = '<p class="text-red-500">Erro ao carregar agendamentos.</p>';
+    }
+}

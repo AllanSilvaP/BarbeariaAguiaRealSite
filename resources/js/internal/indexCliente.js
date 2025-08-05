@@ -1,39 +1,43 @@
-import { getPerfil } from "./modules/navbar/perfil"
-import { renderBotoesBarbeiros, renderAgendaBarbeiroSelecionado } from "./modules/agendas/agendaCliente"
-import { agendarCliente } from "./modules/agendas/agendarCliente"
+import { getPerfil } from "./modules/navbar/perfil";
+import { renderBotoesBarbeiros, renderAgendaBarbeiroSelecionado, renderMeusAgendamentos } from "./modules/agendas/agendaCliente";
+import { agendarCliente } from "./modules/agendas/agendarCliente";
 
 document.addEventListener('DOMContentLoaded', async () => {
-    getPerfil()
+    // Escuta evento de seleção de data do Alpine
+    document.addEventListener('dia-selected', (event) => {
+        const data = event.detail.toISOString().split('T')[0];
+        window.dataSelecionada = data;
 
-    await renderBotoesBarbeiros((idBarbeiro) => {
-        const data = getDataSelecionada()
-        renderAgendaBarbeiroSelecionado(idBarbeiro, data)
-    })
-
-    function getDataSelecionada() {
-        const diaSelecionado = document.querySelector('[x-data] [x-on\\:click^="select"]')?.parentElement?.__x?.$data;
-        if (diaSelecionado?.days && typeof diaSelecionado.selected === 'number') {
-            return diaSelecionado.days[diaSelecionado.selected]?.iso ?? new Date().toISOString().split('T')[0];
+        const idBarbeiro = window.barbeiroSelecionado;
+        if (idBarbeiro && typeof window.renderSecao === 'function') {
+            window.renderSecao('Agendas');
         }
-        return new Date().toISOString().split('T')[0]; // fallback
-    }
+    });
 
-    //RENDERIZA SECOES ADMIN
+    getPerfil();
+
+    // Renderiza os botões de barbeiros e carrega agenda do primeiro clique
+    await renderBotoesBarbeiros((idBarbeiro) => {
+        window.barbeiroSelecionado = idBarbeiro;
+        const data = window.dataSelecionada || new Date().toISOString().split('T')[0];
+        renderAgendaBarbeiroSelecionado(idBarbeiro, data);
+    });
+
+    // RENDERIZA SEÇÕES ADMIN
     window.renderSecao = function (secao) {
         const container = document.getElementById("secao-conteudo");
         if (!container) return;
 
-        // Limpa o conteúdo atual
         container.innerHTML = '';
 
-        // Decide qual conteúdo renderizar
         switch (secao) {
             case 'Meus Agendamentos':
+                renderMeusAgendamentos()
                 break;
 
             case 'Agendas':
                 const idBarbeiro = window.barbeiroSelecionado;
-                const data = getDataSelecionada();
+                const data = window.dataSelecionada || new Date().toISOString().split('T')[0];
                 if (idBarbeiro && data) {
                     renderAgendaBarbeiroSelecionado(idBarbeiro, data);
                 } else {
@@ -44,6 +48,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             default:
                 container.innerHTML = `<p>Seção "${secao}" não encontrada.</p>`;
         }
-    }
-    agendarCliente()
-})
+    };
+
+    window.renderSecao('Meus Agendamentos')
+
+    agendarCliente();
+});

@@ -28,15 +28,16 @@ $botoes = ['Meus Agendamentos'];
 
     <div class="w-[600px] h-[3px] bg-white opacity-50 mx-auto"></div>
 
+    <div id="conteudo-edicao"></div>
+
     <div class="flex justify-center py-4 ">
         <button id="agendar-corte" class="py-2 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out bg-[#8B5F2A] hover:bg-[#A07C42] text-white">
             Agendar Corte
         </button>
     </div>
 
-    <div class="flex flex-wrap justify-center gap-4 my-4" id="botoes-barbeiros"></div>
 
-    <div id="conteudo-edicao"></div>
+    <div class="flex flex-wrap justify-center gap-4 my-4" id="botoes-barbeiros"></div>
 
     <x-form-agendamento />
 
