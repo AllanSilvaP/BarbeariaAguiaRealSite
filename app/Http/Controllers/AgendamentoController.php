@@ -111,7 +111,8 @@ class AgendamentoController extends Controller
         $hoje = Carbon::today();
         $seteDiasAtras = $hoje->copy()->subDays(7);
 
-        $query->whereBetween('data_hora', [$seteDiasAtras, $hoje]);
+        $query->where('data_hora', '>=', $seteDiasAtras)
+        ->orderBy('data_hora', 'desc');
     }
 
     if ($usuario->tipo_usuario === 'cliente') {
@@ -132,7 +133,7 @@ class AgendamentoController extends Controller
         ]);
     }
 
-    return $query->orderBy('data_hora')->get();
+    return $query->orderBy('data_hora')->paginate(10);
 }
 
 

@@ -75,7 +75,7 @@ export async function renderAgendaBarbeiroSelecionado(idBarbeiro, dataSelecionad
             });
 
             if (agendamento) {
-                const ehUsuario = agendamento.cliente?.id === user?.id;
+                const ehUsuario = agendamento.cliente?.id_usuario === user?.id_usuario;
                 const duracao = agendamento.servicos.reduce((total, s) => total + s.duracao_minutos, 0);
                 const inicioAg = new Date(agendamento.data_hora);
                 const fimAg = new Date(inicioAg.getTime() + duracao * 60000);
@@ -184,7 +184,7 @@ function formatarData(dataStr) {
     });
 }
 
-export async function renderMeusAgendamentos(somenteUltimos7Dias = true) {
+export async function renderMeusAgendamentos(somenteUltimos7Dias = true, pagina = 1) {
     const token = localStorage.getItem('token');
     const container = document.getElementById('secao-conteudo');
     container.innerHTML = `
@@ -194,23 +194,24 @@ export async function renderMeusAgendamentos(somenteUltimos7Dias = true) {
     `;
 
     try {
-        const query = somenteUltimos7Dias ? '?ultimos_7_dias=1' : '';
+        const query = `${somenteUltimos7Dias ? '?ultimos_7_dias=1' : ''}${somenteUltimos7Dias ? '&' : '?'}page=${pagina}`;
         const res = await fetch(`/api/cliente/me/agendamentos${query}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        let agendamentos = await res.json();
-
-        agendamentos.sort((a, b) => new Date(b.data_hora) - new Date(a.data_hora));
+        let resposta = await res.json();
+        let agendamentos = resposta.data
 
         const blocos = agendamentos.map(agendamento => {
             const data = new Date(agendamento.data_hora);
             const servicos = agendamento.servicos.map(s => s.nome).join(', ');
+
             return `
                 <div class="p-4 rounded-xl shadow bg-white mb-2 border-l-4 ${agendamento.status === 'pendente' ? 'border-yellow-500' : 'border-green-600'}">
                     <div class="flex justify-between items-center">
                         <div>
-                            <p class="font-semibold">${data.toLocaleDateString()} - ${data.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                            <p class="text-lg font-semibold text-gray-800">${agendamento.barbeiro?.nome || 'N/A'}</p>
+                            <p class="font-semibold text-black">${data.toLocaleDateString()} - ${data.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                             <p class="text-sm text-gray-600 italic">${servicos}</p>
                         </div>
                         <span class="text-sm font-medium ${agendamento.status === 'pendente' ? 'text-yellow-600' : 'text-green-600'}">${agendamento.status}</span>
@@ -218,6 +219,29 @@ export async function renderMeusAgendamentos(somenteUltimos7Dias = true) {
                 </div>
             `;
         });
+
+        const totalPaginas = resposta.last_page;
+        const paginaAtual = resposta.current_page;
+
+        let botoesPagina = '';
+        for (let i = 1; i <= totalPaginas; i++) {
+            botoesPagina += `
+        <button class="px-3 py-1 rounded
+            ${i === paginaAtual ? 'bg-blue-600 text-white' : 'bg-gray-200 hover:bg-gray-300'}"
+            data-page="${i}">
+            ${i}
+        </button>
+    `;
+        }
+
+        const paginacao = `
+    <div class="flex justify-center mt-4 gap-2 flex-wrap text-black">
+        ${paginaAtual > 1 ? `<button class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300" data-page="${paginaAtual - 1}">Anterior</button>` : ''}
+        ${botoesPagina}
+        ${paginaAtual < totalPaginas ? `<button class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300" data-page="${paginaAtual + 1}">Próximo</button>` : ''}
+    </div>
+`;
+
 
         container.innerHTML = `
             <div class="bg-white/90 p-6 rounded-2xl shadow-lg">
@@ -230,8 +254,16 @@ export async function renderMeusAgendamentos(somenteUltimos7Dias = true) {
                 <div class="flex flex-col gap-2">
                     ${blocos.length ? blocos.join('') : '<p class="text-gray-500 text-sm">Nenhum agendamento encontrado.</p>'}
                 </div>
+                ${paginacao}
             </div>
         `;
+
+        document.querySelectorAll('[data-page]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const pagina = btn.getAttribute('data-page');
+                renderMeusAgendamentos(somenteUltimos7Dias, pagina)
+            })
+        })
 
         // Corrigido: Arrow function com =>, e chamada recursiva correta
         document.getElementById('alternar-filtro')?.addEventListener('click', () => {

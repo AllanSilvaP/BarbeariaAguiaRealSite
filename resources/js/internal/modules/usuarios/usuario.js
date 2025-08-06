@@ -1,8 +1,8 @@
-export async function renderSecaoUsuarios() {
+export async function renderSecaoUsuarios(pagina = 1) {
     const token = localStorage.getItem('token');
 
     try {
-        const response = await fetch('/api/admin/usuarios', {
+        const response = await fetch(`/api/admin/usuarios?page=${pagina}&per_page=25`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -13,13 +13,18 @@ export async function renderSecaoUsuarios() {
 
         const usuarios = await response.json();
 
+        const lista = usuarios.data;
+        const paginaAtual = usuarios.current_page;
+        const ultimaPagina = usuarios.last_page;
+
+
         const html = `
         <div class="bg-white text-black rounded p-4 shadow-md">
             <div class="flex justify-between items-center">
             <h2 class="text-xl font-bold mb-4">Usuarios</h2>
             <button id="cad-usuario" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">Cadastrar Usuario</button>
             </div>
-            ${usuarios.length > 0 ? `
+            ${lista.length > 0 ? `
                 <table class="w-full text-left border">
                     <thead class="bg-gray-200">
                         <tr>
@@ -31,7 +36,7 @@ export async function renderSecaoUsuarios() {
                         </tr>
                     </thead>
                     <tbody>
-                        ${usuarios.map(b => `
+                        ${lista.map(b => `
                             <tr>
                                 <td class="p-2 border">${b.nome}</td>
                                 <td class="p-2 border">${b.email}</td>
@@ -45,7 +50,14 @@ export async function renderSecaoUsuarios() {
                         `).join('')}
                     </tbody>
                 </table>
-            ` : `<p class="text-gray-500">Nenhum barbeiro cadastrado.</p>`}
+                ${ultimaPagina > 1 ? `
+    <div class="flex justify-center mt-4 space-x-2">
+        ${paginaAtual > 1 ? `<button id="anterior" class="px-4 py-2 bg-gray-300 rounded">Anterior</button>` : ''}
+        ${paginaAtual < ultimaPagina ? `<button id="proximo" class="px-4 py-2 bg-gray-300 rounded">Próximo</button>` : ''}
+    </div>
+` : ''}
+
+            ` : `<p class="text-gray-500">Nenhum usuario cadastrado.</p>`}
         </div>`;
 
         document.getElementById('secao-conteudo').innerHTML = html;
@@ -93,6 +105,13 @@ export async function renderSecaoUsuarios() {
                 }
             })
         })
+
+        document.getElementById('anterior')?.addEventListener('click', () => {
+            renderSecaoUsuarios(paginaAtual - 1);
+        });
+        document.getElementById('proximo')?.addEventListener('click', () => {
+            renderSecaoUsuarios(paginaAtual + 1);
+        });
 
     } catch (error) {
         console.error(error);

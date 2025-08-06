@@ -1,4 +1,4 @@
-export async function renderSecaoAgendaBarbeiro(dataSelecionada = null) {
+export async function renderSecaoAgendaBarbeiro(dataSelecionada = null, page = 1) {
     const token = localStorage.getItem('token')
     const container = document.getElementById('secao-conteudo')
 
@@ -11,7 +11,7 @@ export async function renderSecaoAgendaBarbeiro(dataSelecionada = null) {
     }
 
     try {
-        const response = await fetch(`/api/barbeiro/me/agendamentos?data=${dataConsulta}`, {
+        const response = await fetch(`/api/barbeiro/me/agendamentos?data=${dataConsulta}&page=${page}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -20,7 +20,8 @@ export async function renderSecaoAgendaBarbeiro(dataSelecionada = null) {
 
         if (!response.ok) throw new Error('Erro ao buscar agendamentos!')
 
-        const agendamentos = await response.json()
+        const json = await response.json()
+        const agendamentos = json.data
 
         container.innerHTML = `
             <div class="flex items-center justify-between mb-4">
@@ -37,7 +38,7 @@ export async function renderSecaoAgendaBarbeiro(dataSelecionada = null) {
             inputData.value = dataConsulta;
             inputData.addEventListener('change', (e) => {
                 dataSelecionada = e.target.value;
-                renderSecaoAgendaAdmin(dataSelecionada);
+                renderSecaoAgendaBarbeiro(dataSelecionada);
             });
         }
 

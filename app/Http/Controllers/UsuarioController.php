@@ -12,9 +12,11 @@ class UsuarioController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Usuario::all());
+        $perPage = $request->query('per_page', 5);
+        $usuarios = Usuario::paginate($perPage);
+        return response()->json($usuarios);
     }
 
     /**
