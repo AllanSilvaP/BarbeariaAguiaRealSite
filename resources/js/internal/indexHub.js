@@ -5,8 +5,10 @@ import { renderSecaoServicos } from "./modules/servicos/servico"
 import { renderSecaoAgendaAdmin } from "./modules/agendas/agendaAdmin"
 import { renderSecaoPagamentos } from "./modules/pagamentos.js/pagamento"
 import { agendarColaborador } from "./modules/agendas/agendarColaborador"
+import { verificarInatividade } from "../modules/arealogin/inatividade"
 
 document.addEventListener('DOMContentLoaded', () => {
+    verificarInatividade();
     getPerfil()
 
     //RENDERIZA SECOES ADMIN

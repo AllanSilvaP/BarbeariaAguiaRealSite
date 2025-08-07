@@ -15,6 +15,7 @@ export async function agendarCliente() {
         carregando.classList.remove('hidden')
 
         try {
+
             // Buscar dados do usuário logado
             const resMe = await fetch('/api/me', {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -78,7 +79,19 @@ export async function agendarCliente() {
             document.querySelectorAll('input[name="servicos"]:checked')
         ).map(cb => cb.value)
 
+        if (servicosSelecionados.length === 0) {
+            alert('Por favor, selecione pelo menos um serviço.')
+            return
+        }
+
+
         try {
+
+            const horaSelecionada = new Date(data_hora).getHours();
+            if (horaSelecionada < 9 || horaSelecionada > 20) {
+                alert('Por favor, selecione um horário entre 09:00 e 20:00')
+                return;
+            }
             const res = await fetch('/api/cliente/agendamentos', {
                 method: 'POST',
                 headers: {
@@ -95,7 +108,12 @@ export async function agendarCliente() {
 
             if (!res.ok) {
                 const erro = await res.json()
-                throw new Error(erro.message || 'Erro ao agendar')
+                if (res.status === 409 && erro.message === 'O barbeiro já possui um agendamento neste horário.') {
+                    alert('Erro: horário já reservado. Por favor, escolha outro horário.')
+                    return
+                } else {
+                    throw new Error(erro.message || 'Erro ao agendar')
+                }
             }
 
             alert('Agendamento realizado com sucesso!')

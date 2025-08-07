@@ -2,8 +2,10 @@ import { getPerfil } from "./modules/navbar/perfil"
 import { renderSecaoAgendaBarbeiro } from "./modules/agendas/agendaBarbeiro"
 import { renderSecaoPagamentosBarbeiro } from "./modules/pagamentos.js/pagamentoBarbeiro"
 import { agendarColaborador } from "./modules/agendas/agendarColaborador"
+import { verificarInatividade } from "../modules/arealogin/inatividade"
 
 document.addEventListener('DOMContentLoaded', () => {
+    verificarInatividade();
     getPerfil()
 
     //RENDERIZA SECOES ADMIN

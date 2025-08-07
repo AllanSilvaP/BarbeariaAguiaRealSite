@@ -1,3 +1,5 @@
+import IMask from "imask";
+
 export async function renderBotoesBarbeiros(callback) {
     const token = localStorage.getItem('token');
     const container = document.getElementById('botoes-barbeiros');
@@ -22,8 +24,9 @@ export async function renderBotoesBarbeiros(callback) {
 
         barbeiros.forEach(barbeiro => {
             const btn = document.createElement('button');
-            btn.textContent = `${barbeiro.nome} - ${barbeiro.telefone}`;
-            btn.className = 'bg-gray-700 text-white p-2 rounded hover:bg-gray-600';
+            const telefone = barbeiro.telefone
+            btn.textContent = `${barbeiro.nome} - ${mascaraNumero(telefone)}`;
+            btn.className = 'botao-barbeiro bg-gray-700 text-white p-2 rounded hover:bg-gray-600';
             btn.addEventListener('click', () => {
                 window.barbeiroSelecionado = barbeiro.id_usuario;
                 if (callback) callback(barbeiro.id_usuario);
@@ -274,4 +277,16 @@ export async function renderMeusAgendamentos(somenteUltimos7Dias = true, pagina 
         console.error('Erro ao renderizar agendamentos:', error);
         container.innerHTML = '<p class="text-red-500">Erro ao carregar agendamentos.</p>';
     }
+}
+
+function mascaraNumero (telefone) {
+
+    const mask = IMask.createMask({
+        mask: [
+            '(00) 0000-0000',
+            '(00) 00000-0000'
+        ]
+    });
+    mask.resolve(telefone);
+    return mask.value
 }

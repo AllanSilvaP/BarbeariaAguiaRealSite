@@ -1,8 +1,10 @@
 import { getPerfil } from "./modules/navbar/perfil";
 import { renderBotoesBarbeiros, renderAgendaBarbeiroSelecionado, renderMeusAgendamentos } from "./modules/agendas/agendaCliente";
 import { agendarCliente } from "./modules/agendas/agendarCliente";
+import { verificarInatividade } from "../modules/arealogin/inatividade"
 
 document.addEventListener('DOMContentLoaded', async () => {
+    verificarInatividade();
     // Escuta evento de seleção de data do Alpine
     document.addEventListener('dia-selected', (event) => {
         const data = event.detail.toISOString().split('T')[0];

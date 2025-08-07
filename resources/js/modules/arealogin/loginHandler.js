@@ -91,8 +91,8 @@ function aplicarValidacoesCadastro() {
     })
 }
 
-function mascaraNumero () {
-    const phoneInput = document.getElementById('telefone');;
+function mascaraNumero (id = 'telefone') {
+    const phoneInput = document.getElementById(id);;
 
     const opcoesMascara = {
         mask: [

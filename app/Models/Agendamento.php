@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Agendamento extends Model
 {
     protected $primaryKey = 'id_agendamento';
-    protected $fillable = ['id_cliente', 'id_barbeiro', 'id_servico', 'data_hora', 'status'];
+    protected $fillable = ['id_cliente', 'id_barbeiro', 'id_servico', 'data_hora', 'status', 'duracao_total'];
 
     public function cliente() {
         return $this->belongsTo(Usuario::class, 'id_cliente');

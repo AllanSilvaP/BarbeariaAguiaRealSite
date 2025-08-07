@@ -27,25 +27,25 @@ export async function agendarColaborador(tipoUsuario = null) {
             const me = await resMe.json()
             let tipoUsuario = me.tipo_usuario
 
-            if(tipoUsuario == 'administrador') {
+            if (tipoUsuario == 'administrador') {
                 tipoUsuario = 'admin'
             }
 
-            const resUsers = await fetch (`api/${tipoUsuario}/listar-usuarios`, {
+            const resUsers = await fetch(`api/${tipoUsuario}/listar-usuarios`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
 
-            if(!resUsers.ok) throw new Error('Erro ao listar Usuarios')
+            if (!resUsers.ok) throw new Error('Erro ao listar Usuarios')
             const usuariosNomes = await resUsers.json()
 
             const selectCliente = document.getElementById('select-cliente')
-            selectCliente.innerHTML = Object.entries(usuariosNomes).map(([id,nome]) =>
+            selectCliente.innerHTML = Object.entries(usuariosNomes).map(([id, nome]) =>
                 `<option value="${id}">${nome}</option>`
             ).join('')
 
             new TomSelect("#select-cliente", {
                 create: false,
-                sortField: {field: "text", direction: "asc"},
+                sortField: { field: "text", direction: "asc" },
                 placeholder: "Selecione um cliente...",
                 allowEmptyOption: true,
                 maxOptions: 10
@@ -101,6 +101,11 @@ export async function agendarColaborador(tipoUsuario = null) {
             document.querySelectorAll('input[name="servicos"]:checked')
         ).map(cb => cb.value)
 
+        if (servicosSelecionados.length === 0) {
+            alert('Por favor, selecione pelo menos um serviço.')
+            return
+        }
+
         try {
             const res = await fetch(`/api/${tipoUsuario}/agendamentos`, {
                 method: 'POST',
@@ -117,7 +122,12 @@ export async function agendarColaborador(tipoUsuario = null) {
 
             if (!res.ok) {
                 const erro = await res.json()
-                throw new Error(erro.message || 'Erro ao agendar')
+                if (res.status === 409 && erro.message === 'O barbeiro já possui um agendamento neste horário.') {
+                    alert('Erro: horário já reservado. Por favor, escolha outro horário.')
+                    return;
+                } else {
+                    throw new Error(erro.message || 'Erro ao agendar')
+                }
             }
 
             alert('Agendamento realizado com sucesso!')
