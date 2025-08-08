@@ -8,8 +8,8 @@ use App\Http\Controllers\PagamentoController;
 use App\Models\Pagamento;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:10,1');
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
 
 //ROTAS PROTEGIDAS
 
