@@ -1,0 +1,245 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Agendamento;
+use Carbon\Carbon;
+use App\Http\Controllers\Controller;
+use App\View\Components\Agendas;
+use Illuminate\Http\Request;
+
+class AgendamentoController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        return Agendamento::with(['cliente', 'barbeiro', 'servicos'])->get();
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $usuario = auth('api')->user();
+
+        $request->validate([
+            'id_barbeiro' => 'required|exists:usuarios,id_usuario',
+            'servicos' => 'required|array|min:1',
+            'servicos.*' => 'exists:servicos,id_servico',
+            'data_hora' => 'required|date'
+        ]);
+
+        $servicos = \App\Models\Servico::whereIn('id_servico', $request->servicos)->get();
+        $duracaoTotal = $servicos->sum('duracao_minutos');
+
+        $inicio = Carbon::parse($request->data_hora);
+        $fim = $inicio->copy()->addMinutes($duracaoTotal);
+
+        $conflito = Agendamento::where('id_barbeiro', $request->id_barbeiro)
+            ->where(function ($query) use ($inicio, $fim) {
+                $query->whereBetween('data_hora', [$inicio, $fim])
+                    ->orWhereRaw('? BETWEEN data_hora AND DATE_ADD(data_hora, INTERVAL duracao_total MINUTE)', [$inicio]);
+            })->exists();
+
+        if (!is_array($request->servicos) || count($request->servicos) === 0) {
+            return response()->json(['error' => 'Nenhum serviço selecionado'], 400);
+        }
+
+
+        if ($conflito) {
+            return response()->json([
+                'message' => 'O barbeiro já possui um agendamento neste horário.'
+            ], 409); // 409 = conflito
+        }
+        $agendamento = Agendamento::create([
+            'id_cliente' => $usuario->id_usuario,
+            'id_barbeiro' => $request->id_barbeiro,
+            'data_hora' => $request->data_hora,
+            'duracao_total' => $duracaoTotal,
+            'status' => 'pendente'
+        ]);
+
+        $agendamento->servicos()->attach($request->servicos);
+
+        return $agendamento->load(['cliente', 'barbeiro', 'servicos']);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        return Agendamento::with(['cliente', 'barbeiro', 'servicos'])->findOrFail($id);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Agendamento $agendamento)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        $agendamento = Agendamento::findOrFail($id);
+        $agendamento->update($request->all());
+        return $agendamento;
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        try {
+            Agendamento::destroy($id);
+            return response()->json(['mensagem' => 'Agendamento cancelado com sucesso.']);
+        } catch (\Illuminate\Database\QueryException $e) {
+            if ($e->getCode() === '23000') {
+                return response()->json([
+                    'mensagem' => 'Não é possível cancelar o agendamento, pois já possui um pagamento registrado.'
+                ], 400);
+            }
+
+            return response()->json([
+                'mensagem' => 'Erro ao cancelar agendamento.',
+                'erro' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+    public function meusAgendamentos(Request $request)
+    {
+        $usuario = auth('api')->user();
+
+        $query = Agendamento::with(['cliente', 'barbeiro', 'servicos']);
+
+        if ($request->boolean('ultimos_7_dias')) {
+            $hoje = Carbon::today();
+            $seteDiasAtras = $hoje->copy()->subDays(7);
+
+            $query->where('data_hora', '>=', $seteDiasAtras)
+                ->orderBy('data_hora', 'desc');
+        }
+
+        if ($usuario->tipo_usuario === 'cliente') {
+            $query->where('id_cliente', $usuario->id_usuario);
+        } elseif ($usuario->tipo_usuario === 'barbeiro') {
+            $query->where('id_barbeiro', $usuario->id_usuario);
+        } else {
+            return response()->json(['erro' => 'Perfil não autorizado'], 403);
+        }
+
+        // Filtro por data ou intervalo
+        if ($request->has('data')) {
+            $query->whereDate('data_hora', $request->query('data'));
+        } elseif ($request->has(['data_inicio', 'data_fim'])) {
+            $query->whereBetween('data_hora', [
+                $request->query('data_inicio'),
+                $request->query('data_fim')
+            ]);
+        }
+
+        return $query->orderBy('data_hora')->paginate(10);
+    }
+
+
+
+    //FUNCAO PARA LISTAR AGENDAMENTOS
+
+    public function agendamentosPorBarbeiro(Request $request)
+    {
+        $dataFiltro = $request->query('data'); // Recebe a data da query string
+
+        $agendamentosQuery = Agendamento::with(['barbeiro', 'cliente', 'servicos'])
+            ->whereHas('barbeiro', function ($query) {
+                $query->where('tipo_usuario', 'barbeiro');
+            });
+
+        if ($dataFiltro) {
+            $agendamentosQuery->whereDate('data_hora', $dataFiltro); // Filtra pela data (ignora hora)
+        }
+
+        $agendamentos = $agendamentosQuery->orderBy('data_hora', 'desc')->get();
+
+        $agrupados = [];
+
+        foreach ($agendamentos as $agendamento) {
+            $barbeiroId = $agendamento->barbeiro->id_usuario ?? null;
+
+            if (!$barbeiroId) continue;
+
+            if (!isset($agrupados[$barbeiroId])) {
+                $agrupados[$barbeiroId] = [
+                    'nome' => $agendamento->barbeiro->nome,
+                    'agendamentos' => []
+                ];
+            }
+
+            $agrupados[$barbeiroId]['agendamentos'][] = [
+                'id_agendamento' => $agendamento->id_agendamento,
+                'cliente' => ['nome' => $agendamento->cliente->nome ?? 'N/A'],
+                'servicos' => $agendamento->servicos->pluck('nome')->toArray(),
+                'data_hora' => $agendamento->data_hora,
+                'status' => $agendamento->status
+            ];
+        }
+
+        return array_values($agrupados);
+    }
+
+    public function concluidos()
+    {
+        $agendamento = Agendamento::with(['cliente', 'barbeiro', 'servicos'])
+            ->where('status', 'concluido')
+            ->whereDoesntHave('pagamento')
+            ->get();
+
+        return response()->json($agendamento);
+    }
+
+    public function concluidosIndividual()
+    {
+        $usuario = auth('api')->user();
+        $agendamento = Agendamento::with(['cliente', 'barbeiro', 'servicos'])
+            ->where('status', 'concluido')
+            ->where('id_barbeiro', $usuario->id_usuario)
+            ->whereDoesntHave('pagamento')
+            ->get();
+
+        return response()->json($agendamento);
+    }
+
+    public function agendaPorBarbeiro(Request $request, $id)
+    {
+        $data = $request->query('data');
+
+        if (!$data) {
+            return response()->json(['erro' => 'Data obrigatória.'], 400);
+        }
+
+        $agendamentos = Agendamento::with(['cliente', 'servicos'])
+            ->where('id_barbeiro', $id)
+            ->whereDate('data_hora', $data)
+            ->orderBy('data_hora')
+            ->get();
+
+        return response()->json($agendamentos);
+    }
+}

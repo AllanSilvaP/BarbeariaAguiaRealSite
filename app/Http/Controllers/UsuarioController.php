@@ -1,0 +1,100 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Usuario;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
+class UsuarioController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request)
+    {
+        $perPage = $request->query('per_page', 5);
+        $usuarios = Usuario::paginate($perPage);
+        return response()->json($usuarios);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        return Usuario::create([
+            'nome' => $request->nome,
+            'telefone' => $request->telefone,
+            'email' => $request->email,
+            'senha' => Hash::make($request->senha),
+            'tipo_usuario' => $request->tipo_usuario
+        ]);
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        return Usuario::findOrFail($id);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Usuario $usuario)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        $usuario = Usuario::findOrFail($id);
+        $usuario->update([
+            'nome' => $request->nome,
+            'telefone' => $request->telefone,
+            'email' => $request->email,
+            'tipo_usuario' => $request->tipo_usuario,
+        ]);
+
+        if($request->filled('senha')) {
+            $usuario->senha = Hash::make($request->senha);
+            $usuario->save();
+        }
+
+        return $usuario;
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        Usuario::destroy($id);
+        return response()->json(['mensagem' => 'Usuário deletado com sucesso']);
+    }
+
+    public function listarBarbeiros() {
+        $barbeiros = Usuario::where('tipo_usuario', 'Barbeiro')->get();
+        return response()->json($barbeiros);
+    }
+
+    public function listarUsuarios() {
+        $usuarios = Usuario::pluck('nome', 'id_usuario');
+        return response()->json($usuarios);
+    }
+}
+

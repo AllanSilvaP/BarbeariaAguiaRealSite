@@ -1,13 +1,71 @@
 {
+  "_agendarColaborador-B_220alx.css": {
+    "file": "assets/agendarColaborador-B_220alx.css",
+    "src": "_agendarColaborador-B_220alx.css"
+  },
+  "_agendarColaborador-D0sg5Ujo.js": {
+    "file": "assets/agendarColaborador-D0sg5Ujo.js",
+    "name": "agendarColaborador",
+    "css": [
+      "assets/agendarColaborador-B_220alx.css"
+    ]
+  },
+  "_inatividade-DwR18d54.js": {
+    "file": "assets/inatividade-DwR18d54.js",
+    "name": "inatividade"
+  },
+  "_index-BOAzHGzj.js": {
+    "file": "assets/index-BOAzHGzj.js",
+    "name": "index"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-C6G_3qQV.css",
+    "file": "assets/app-DMT98QGu.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-T1DpEqax.js",
+    "file": "assets/app-BgyFMjOk.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true
+  },
+  "resources/js/index.js": {
+    "file": "assets/index-CEF-2gy_.js",
+    "name": "index",
+    "src": "resources/js/index.js",
+    "isEntry": true,
+    "imports": [
+      "_index-BOAzHGzj.js"
+    ]
+  },
+  "resources/js/internal/indexBarbeiro.js": {
+    "file": "assets/indexBarbeiro-vF7rkD2w.js",
+    "name": "indexBarbeiro",
+    "src": "resources/js/internal/indexBarbeiro.js",
+    "isEntry": true,
+    "imports": [
+      "_inatividade-DwR18d54.js",
+      "_agendarColaborador-D0sg5Ujo.js"
+    ]
+  },
+  "resources/js/internal/indexCliente.js": {
+    "file": "assets/indexCliente-CxEJrIFJ.js",
+    "name": "indexCliente",
+    "src": "resources/js/internal/indexCliente.js",
+    "isEntry": true,
+    "imports": [
+      "_inatividade-DwR18d54.js",
+      "_index-BOAzHGzj.js"
+    ]
+  },
+  "resources/js/internal/indexHub.js": {
+    "file": "assets/indexHub-OxAfUes4.js",
+    "name": "indexHub",
+    "src": "resources/js/internal/indexHub.js",
+    "isEntry": true,
+    "imports": [
+      "_inatividade-DwR18d54.js",
+      "_agendarColaborador-D0sg5Ujo.js"
+    ]
   }
 }
