@@ -19,7 +19,7 @@
     "name": "index"
   },
   "resources/css/app.css": {
-    "file": "assets/app-DMT98QGu.css",
+    "file": "assets/app-LOmBROmK.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -59,7 +59,7 @@
     ]
   },
   "resources/js/internal/indexHub.js": {
-    "file": "assets/indexHub-OxAfUes4.js",
+    "file": "assets/indexHub-CnW4HlKb.js",
     "name": "indexHub",
     "src": "resources/js/internal/indexHub.js",
     "isEntry": true,
