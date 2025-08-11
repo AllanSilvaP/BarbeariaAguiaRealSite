@@ -1,6 +1,8 @@
 import TomSelect from 'tom-select'
 import 'tom-select/dist/css/tom-select.default.min.css'
 
+let tomSelectCliente = null
+
 export async function agendarColaborador(tipoUsuario = null) {
     const token = localStorage.getItem('token')
     const botao = document.getElementById('agendar-corte')
@@ -43,7 +45,12 @@ export async function agendarColaborador(tipoUsuario = null) {
                 `<option value="${id}">${nome}</option>`
             ).join('')
 
-            new TomSelect("#select-cliente", {
+            if (tomSelectCliente) {
+                tomSelectCliente.destroy()
+                tomSelectCliente = null
+            }
+
+            tomSelectCliente = new TomSelect("#select-cliente", {
                 create: false,
                 sortField: { field: "text", direction: "asc" },
                 placeholder: "Selecione um cliente...",
