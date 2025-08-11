@@ -62,6 +62,7 @@ class AgendamentoController extends Controller
                 'message' => 'O barbeiro já possui um agendamento neste horário.'
             ], 409); // 409 = conflito
         }
+
         $agendamento = Agendamento::create([
             'id_cliente' => $usuario->id_usuario,
             'id_barbeiro' => $request->id_barbeiro,
