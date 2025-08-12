@@ -36,7 +36,7 @@ class AuthController extends Controller
         $credenciais = ['email' => $request->email, 'password' => $request->senha];
 
         if (!$token = auth('api')->attempt($credenciais)) {
-            return response()->json(['erro' => 'Não autorizado'], 401);
+            return response()->json(['erro' => 'Email ou senha não validos!'], 401);
         }
 
         return response()->json(['token' => $token]);
@@ -44,7 +44,12 @@ class AuthController extends Controller
 
     public function me()
     {
-        return response()->json(auth('api')->user());
+        $usuario = auth('api')->user();
+        return response()->json([
+            'id_usuario' => $usuario->id_usuario,
+            'nome' => $usuario->nome,
+            'tipo_usuario' => $usuario->tipo_usuario
+        ]);
     }
 
     public function logout()

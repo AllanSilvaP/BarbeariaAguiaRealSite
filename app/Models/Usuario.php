@@ -13,6 +13,11 @@ class Usuario extends Authenticatable implements JWTSubject
     protected $primaryKey = 'id_usuario';
     protected $fillable = ['nome', 'telefone', 'email', 'tipo_usuario', 'senha'];
 
+    protected $hidden = [
+        'senha',
+        'remember_token'
+    ];
+
     public function getAuthPassword()
     {
         return $this->senha;
