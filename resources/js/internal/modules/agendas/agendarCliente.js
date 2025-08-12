@@ -8,6 +8,17 @@ export async function agendarCliente() {
     const inputDataHora = document.getElementById('data-hora')
     const form = document.getElementById('form-agendar')
 
+    // Função para obter data/hora local formatada para datetime-local (YYYY-MM-DDTHH:mm)
+    function getLocalDateTimeMin() {
+        const now = new Date()
+        const year = now.getFullYear()
+        const month = String(now.getMonth() + 1).padStart(2, '0')
+        const day = String(now.getDate()).padStart(2, '0')
+        const hours = String(now.getHours()).padStart(2, '0')
+        const minutes = String(now.getMinutes()).padStart(2, '0')
+        return `${year}-${month}-${day}T${hours}:${minutes}`
+    }
+
     if (!botao || !modal) return
 
     botao.addEventListener('click', async () => {
@@ -15,7 +26,6 @@ export async function agendarCliente() {
         carregando.classList.remove('hidden')
 
         try {
-
             // Buscar dados do usuário logado
             const resMe = await fetch('/api/me', {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -51,9 +61,9 @@ export async function agendarCliente() {
                 </label>`
             ).join('')
 
-            const agora = new Date()
+            // Define o mínimo do input para a hora local atual, corrigindo o problema do UTC
+            inputDataHora.min = getLocalDateTimeMin()
 
-            inputDataHora.min = agora.toISOString().slice(0, 16)
             modal.classList.remove('hidden')
 
         } catch (error) {
@@ -84,14 +94,13 @@ export async function agendarCliente() {
             return
         }
 
-
         try {
-
-            const horaSelecionada = new Date(data_hora).getHours();
+            const horaSelecionada = new Date(data_hora).getHours()
             if (horaSelecionada < 9 || horaSelecionada > 20) {
                 alert('Por favor, selecione um horário entre 09:00 e 20:00')
-                return;
+                return
             }
+
             const res = await fetch('/api/cliente/agendamentos', {
                 method: 'POST',
                 headers: {

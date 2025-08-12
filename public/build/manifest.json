@@ -3,8 +3,8 @@
     "file": "assets/agendarColaborador-B_220alx.css",
     "src": "_agendarColaborador-B_220alx.css"
   },
-  "_agendarColaborador-D0sg5Ujo.js": {
-    "file": "assets/agendarColaborador-D0sg5Ujo.js",
+  "_agendarColaborador-DMHV3eGx.js": {
+    "file": "assets/agendarColaborador-DMHV3eGx.js",
     "name": "agendarColaborador",
     "css": [
       "assets/agendarColaborador-B_220alx.css"
@@ -39,17 +39,17 @@
     ]
   },
   "resources/js/internal/indexBarbeiro.js": {
-    "file": "assets/indexBarbeiro-vF7rkD2w.js",
+    "file": "assets/indexBarbeiro-Ct0JBOzt.js",
     "name": "indexBarbeiro",
     "src": "resources/js/internal/indexBarbeiro.js",
     "isEntry": true,
     "imports": [
       "_inatividade-DwR18d54.js",
-      "_agendarColaborador-D0sg5Ujo.js"
+      "_agendarColaborador-DMHV3eGx.js"
     ]
   },
   "resources/js/internal/indexCliente.js": {
-    "file": "assets/indexCliente-CxEJrIFJ.js",
+    "file": "assets/indexCliente-B9VyV9F_.js",
     "name": "indexCliente",
     "src": "resources/js/internal/indexCliente.js",
     "isEntry": true,
@@ -59,13 +59,13 @@
     ]
   },
   "resources/js/internal/indexHub.js": {
-    "file": "assets/indexHub-CnW4HlKb.js",
+    "file": "assets/indexHub-B81fNuD5.js",
     "name": "indexHub",
     "src": "resources/js/internal/indexHub.js",
     "isEntry": true,
     "imports": [
       "_inatividade-DwR18d54.js",
-      "_agendarColaborador-D0sg5Ujo.js"
+      "_agendarColaborador-DMHV3eGx.js"
     ]
   }
 }

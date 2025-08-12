@@ -106,6 +106,9 @@ export async function renderSecaoPagamentosBarbeiro() {
 async function renderCadPagamento() {
     const container = document.getElementById('secao-conteudo')
 
+    const agora = new Date();
+    const dataFormatada = agora.toISOString().slice(0, 16);
+
     const html = `
     <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
         <h2 class="text-xl font-bold mb-4">Cadastrar Pagamento</h2>
@@ -123,6 +126,17 @@ async function renderCadPagamento() {
             <option value="cartão">Cartão</option>
             <option value="dinheiro">Dinheiro</option>
         </select>
+
+
+        <label class="block font-medium mt-4 mb-1">Data do Pagamento</label>
+            <input
+                type="datetime-local"
+                name="data_pagamento"
+                value="${dataFormatada}"
+                class="input w-full border p-2 rounded"
+                required
+            >
+
             <button type="submit" class="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-800">
                 Cadastrar
             </button>
@@ -167,6 +181,10 @@ async function renderCadPagamento() {
         const data = {};
         formData.forEach((value, key) => data[key] = value)
 
+        if (data.data_pagamento) {
+            data.data_pagamento = formatDateToMySQLLocal(data.data_pagamento);
+        }
+
         const agendamentoSelecionado = agendamentos.find(ag => ag.id_agendamento == data.id_agendamento)
 
         if (!agendamentoSelecionado) {
@@ -179,6 +197,7 @@ async function renderCadPagamento() {
             id_cliente: agendamentoSelecionado.id_cliente || 'N|A',
             valor: data.valor,
             forma_pagamento: data.forma_pagamento,
+            data_pagamento: data.data_pagamento
         }
         try {
             const response = await fetch('/api/barbeiro/pagamentos', {
@@ -315,6 +334,9 @@ async function renderEditarPagamento(id) {
 
         const pagamento = await response.json();
 
+        const agora = new Date();
+        const dataFormatada = agora.toISOString().slice(0, 16);
+
         const html = `
         <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
             <h2 class="text-xl font-bold mb-4">Editar Pagamento</h2>
@@ -347,6 +369,16 @@ async function renderEditarPagamento(id) {
                     <option value="dinheiro" ${pagamento.forma_pagamento === 'dinheiro' ? 'selected' : ''}>Dinheiro</option>
                 </select>
 
+
+        <label class="block font-medium mt-4 mb-1">Data do Pagamento</label>
+            <input
+                type="datetime-local"
+                name="data_pagamento"
+                value="${dataFormatada}"
+                class="input w-full border p-2 rounded"
+                required
+            >
+
                 <button
                     type="submit"
                     class="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-800"
@@ -370,6 +402,10 @@ async function renderEditarPagamento(id) {
             });
 
             try {
+                if (data.data_pagamento) {
+                    data.data_pagamento = formatDateToMySQL(data.data_pagamento)
+                }
+
                 const updateResponse = await fetch(`/api/barbeiro/pagamentos/${id}`, {
                     method: 'PUT',
                     headers: {
@@ -399,3 +435,30 @@ async function renderEditarPagamento(id) {
         container.innerHTML = `<p class="text-red-600">Erro ao carregar pagamento para edição.</p>`;
     }
 }
+
+
+function formatDateToMySQL(datetimeLocal) {
+    const dt = new Date(datetimeLocal);
+    const pad = (n) => n.toString().padStart(2, '0');
+
+    const year = dt.getFullYear();
+    const month = pad(dt.getMonth() + 1);
+    const day = pad(dt.getDate());
+    const hours = pad(dt.getHours());
+    const minutes = pad(dt.getMinutes());
+    const seconds = pad(dt.getSeconds());
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+function formatDateToMySQLLocal(datetimeLocal) {
+    // Se já tem segundos, só troca o T por espaço
+    if (datetimeLocal.length === 19) {
+        // Exemplo: "2025-08-11T18:43:00"
+        return datetimeLocal.replace('T', ' ');
+    }
+    // Se não tem segundos, adiciona ":00"
+    // Exemplo: "2025-08-11T18:43"
+    return datetimeLocal.replace('T', ' ') + ':00';
+}
+

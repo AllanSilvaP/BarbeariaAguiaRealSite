@@ -63,8 +63,14 @@ class AgendamentoController extends Controller
             ], 409); // 409 = conflito
         }
 
+        $idCliente = $request->id_cliente ?? $usuario -> id_usuario;
+
+        if($usuario->tipo_usuario === 'administrador' && $request->filled('id_cliente')) {
+            $idCliente = $request->id_cliente;
+        }
+
         $agendamento = Agendamento::create([
-            'id_cliente' => $usuario->id_usuario,
+            'id_cliente' => $idCliente,
             'id_barbeiro' => $request->id_barbeiro,
             'data_hora' => $request->data_hora,
             'duracao_total' => $duracaoTotal,

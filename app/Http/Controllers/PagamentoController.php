@@ -74,6 +74,7 @@ class PagamentoController extends Controller
             ],
             'valor' => 'required|numeric',
             'forma_pagamento' => 'required|in:pix,dinheiro,cartão',
+            'data_pagamento' => 'sometimes|date',
         ]);
 
         $pagamentoExistente = Pagamento::where('id_agendamento', $request->id_agendamento)->first();
@@ -87,6 +88,7 @@ class PagamentoController extends Controller
             'id_agendamento' => $request->id_agendamento,
             'valor' => $request->valor,
             'forma_pagamento' => $request->forma_pagamento,
+            'data_pagamento' => $request->data_pagamento
         ]);
     }
 
@@ -112,6 +114,13 @@ class PagamentoController extends Controller
     public function update(Request $request, $id)
     {
         $pagamento = Pagamento::findOrFail($id);
+
+        $request->validate([
+            'valor' => 'sometimes|numeric',
+            'forma_pagamento' => 'sometimes|in:pix,dinheiro,cartão',
+            'data_pagamento' => 'sometimes|date',
+        ]);
+
         $pagamento->update($request->all());
         return $pagamento;
     }

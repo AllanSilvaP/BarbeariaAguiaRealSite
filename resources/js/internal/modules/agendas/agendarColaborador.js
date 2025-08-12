@@ -102,11 +102,17 @@ export async function agendarColaborador(tipoUsuario = null) {
     form.addEventListener('submit', async (e) => {
         e.preventDefault()
 
+        const id_cliente = document.getElementById('select-cliente').value
         const id_barbeiro = selectBarbeiro.value
         const data_hora = inputDataHora.value
         const servicosSelecionados = Array.from(
             document.querySelectorAll('input[name="servicos"]:checked')
         ).map(cb => cb.value)
+
+        if (!id_cliente) {
+            alert('Por favor, selecione um cliente.')
+            return
+        }
 
         if (servicosSelecionados.length === 0) {
             alert('Por favor, selecione pelo menos um serviço.')
@@ -121,6 +127,7 @@ export async function agendarColaborador(tipoUsuario = null) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    id_cliente,
                     id_barbeiro,
                     data_hora,
                     servicos: servicosSelecionados

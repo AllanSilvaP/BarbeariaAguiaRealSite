@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pagamento extends Model
 {
     protected $primaryKey = 'id_pagamento';
-    protected $fillable = ['id_cliente', 'id_agendamento', 'valor', 'forma_pagamento'];
+    protected $fillable = ['id_cliente', 'id_agendamento', 'valor', 'forma_pagamento', 'data_pagamento'];
 
     public function cliente() {
         return $this->belongsTo(Usuario::class, 'id_cliente');

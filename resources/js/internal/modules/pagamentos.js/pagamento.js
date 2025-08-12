@@ -106,7 +106,11 @@ export async function renderSecaoPagamentos() {
 
 
 async function renderCadPagamento() {
-    const container = document.getElementById('secao-conteudo')
+    const container = document.getElementById('secao-conteudo');
+
+    // Igual ao da edição — pega o horário atual no formato aceito pelo input datetime-local
+    const agora = new Date();
+    const dataFormatada = agora.toISOString().slice(0, 16);
 
     const html = `
     <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
@@ -125,6 +129,15 @@ async function renderCadPagamento() {
             <option value="cartão">Cartão</option>
             <option value="dinheiro">Dinheiro</option>
         </select>
+
+        <label class="block font-medium mt-4 mb-1">Data do Pagamento</label>
+            <input
+                type="datetime-local"
+                name="data_pagamento"
+                value="${dataFormatada}"
+                class="input w-full border p-2 rounded"
+                required
+            >
             <button type="submit" class="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-800">
                 Cadastrar
             </button>
@@ -134,42 +147,45 @@ async function renderCadPagamento() {
 
     container.innerHTML = html;
 
-
-    const selectAgendamento = document.getElementById('select-agendamento')
-    const token = localStorage.getItem('token')
+    const selectAgendamento = document.getElementById('select-agendamento');
+    const token = localStorage.getItem('token');
 
     const resAg = await fetch('/api/admin/agendamentos-concluidos', {
         headers: { 'Authorization': `Bearer ${token}` }
-    })
+    });
 
-    const agendamentos = await resAg.json()
+    const agendamentos = await resAg.json();
 
     const resPag = await fetch('/api/admin/pagamentos', {
         headers: { 'Authorization': `Bearer ${token}` }
-    })
-    const pagamentos = await resPag.json()
+    });
+    const pagamentos = await resPag.json();
 
-    const idsPagos = new Set(pagamentos.map(p => p.id_agendamento))
-    const agendamentosDisponiveis = agendamentos.filter(ag => !idsPagos.has(ag.id_agendamento))
+    const idsPagos = new Set(pagamentos.map(p => p.id_agendamento));
+    const agendamentosDisponiveis = agendamentos.filter(ag => !idsPagos.has(ag.id_agendamento));
 
     selectAgendamento.innerHTML += agendamentosDisponiveis.map(ag => `
         <option value="${ag.id_agendamento}">
             ${ag.cliente.nome} - ${new Date(ag.data_hora).toLocaleString('pt-BR')}
         </option>
-        `).join('')
+    `).join('');
 
     const form = document.getElementById('form-cad-pagamento');
 
     form.addEventListener('submit', async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        const token = localStorage.getItem('token')
-        const formData = new FormData(form)
+        const token = localStorage.getItem('token');
+        const formData = new FormData(form);
 
         const data = {};
-        formData.forEach((value, key) => data[key] = value)
+        formData.forEach((value, key) => data[key] = value);
 
-        const agendamentoSelecionado = agendamentos.find(ag => ag.id_agendamento == data.id_agendamento)
+        if (data.data_pagamento) {
+            data.data_pagamento = formatDateToMySQLLocal(data.data_pagamento);
+        }
+
+        const agendamentoSelecionado = agendamentos.find(ag => ag.id_agendamento == data.id_agendamento);
 
         if (!agendamentoSelecionado) {
             alert("Agendamento inválido");
@@ -181,7 +197,9 @@ async function renderCadPagamento() {
             id_cliente: agendamentoSelecionado.id_cliente || 'N|A',
             valor: data.valor,
             forma_pagamento: data.forma_pagamento,
-        }
+            data_pagamento: data.data_pagamento,
+        };
+
         try {
             const response = await fetch('/api/admin/pagamentos', {
                 method: 'POST',
@@ -191,22 +209,21 @@ async function renderCadPagamento() {
                     'Accept': 'application/json',
                 },
                 body: JSON.stringify(payload),
-            })
+            });
 
             if (!response.ok) {
-                const erro = await response.json()
-                throw new Error(erro.message || 'Erro ao cadastrar Pagamento')
+                const erro = await response.json();
+                throw new Error(erro.message || 'Erro ao cadastrar Pagamento');
             }
 
-            console.log(response.json())
-            alert('Pagamento cadastrado com Sucesso!');
-            renderSecaoPagamentos()
+            alert('Pagamento cadastrado com sucesso!');
+            renderSecaoPagamentos();
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
-
-    })
+    });
 }
+
 
 async function carregarPagamentosFiltrados() {
     const data = document.getElementById('filtro-data').value;
@@ -329,6 +346,8 @@ async function renderEditarPagamento(id) {
 
         const pagamento = await response.json();
 
+        const dataFormatada = new Date(pagamento.data_pagamento).toISOString().slice(0,16);
+
         const html = `
         <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
             <h2 class="text-xl font-bold mb-4">Editar Pagamento</h2>
@@ -361,6 +380,15 @@ async function renderEditarPagamento(id) {
                     <option value="dinheiro" ${pagamento.forma_pagamento === 'dinheiro' ? 'selected' : ''}>Dinheiro</option>
                 </select>
 
+                <label class="block font-medium mt-4 mb-1">Data do Pagamento</label>
+                <input
+                    type="datetime-local"
+                    name="data_pagamento"
+                    value="${dataFormatada}"
+                    class="input w-full border p-2 rounded"
+                    required
+                >
+
                 <button
                     type="submit"
                     class="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-800"
@@ -384,6 +412,10 @@ async function renderEditarPagamento(id) {
             });
 
             try {
+
+                if (data.data_pagamento) {
+                    data.data_pagamento = formatDateToMySQL(data.data_pagamento)
+                }
                 const updateResponse = await fetch(`/api/admin/pagamentos/${id}`, {
                     method: 'PUT',
                     headers: {
@@ -414,3 +446,27 @@ async function renderEditarPagamento(id) {
     }
 }
 
+function formatDateToMySQL(datetimeLocal) {
+    const dt = new Date(datetimeLocal);
+    const pad = (n) => n.toString().padStart(2, '0');
+
+    const year = dt.getFullYear();
+    const month = pad(dt.getMonth() + 1);
+    const day = pad(dt.getDate());
+    const hours = pad(dt.getHours());
+    const minutes = pad(dt.getMinutes());
+    const seconds = pad(dt.getSeconds());
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+function formatDateToMySQLLocal(datetimeLocal) {
+    // Se já tem segundos, só troca o T por espaço
+    if (datetimeLocal.length === 19) {
+        // Exemplo: "2025-08-11T18:43:00"
+        return datetimeLocal.replace('T', ' ');
+    }
+    // Se não tem segundos, adiciona ":00"
+    // Exemplo: "2025-08-11T18:43"
+    return datetimeLocal.replace('T', ' ') + ':00';
+}
