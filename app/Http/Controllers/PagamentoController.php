@@ -37,10 +37,12 @@ class PagamentoController extends Controller
                 return [
                     'barbeiro' => $barbeiro,
                     'total' => $items->sum('valor'),
-                    'pagamentos' => $items->map(function ($p) {
+                    'pagamentos' => $items
+                    ->groupBy(fn($p) => \Carbon\Carbon::parse($p->data_pagamento)->format('d-m-Y'))
+                    ->map(function ($pagamentosDia, $data) {
                         return [
-                            'forma_pagamento' => $p->forma_pagamento,
-                            'valor' => $p->valor,
+                            'data' => $data,
+                            'total' => $pagamentosDia->sum('valor'),
                         ];
                     })->values()
                 ];

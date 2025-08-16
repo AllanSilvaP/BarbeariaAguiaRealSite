@@ -22,8 +22,12 @@ export async function renderSecaoPagamentos() {
 
             <div class="flex items-center gap-4 mb-4">
                 <label>
-                    Data:
+                    Data Inicio:
                     <input type="date" id="filtro-data" class="border p-2 rounded" value="${new Date().toISOString().split('T')[0]}">
+                </label>
+                <label>
+                    Data Final(Opcional):
+                    <input type="date" id="filtro-data-fim" class="border p-2 rounded" value="">
                 </label>
 
                 <label class="flex items-center gap-2">
@@ -52,7 +56,8 @@ export async function renderSecaoPagamentos() {
             const fim = new Date(hoje)
 
             const diaSemana = hoje.getDay()
-            inicio.setDate(hoje.getDate() - diaSemana);
+            const diff = (diaSemana + 1) % 7;
+            inicio.setDate(hoje.getDate() - diff);
             fim.setDate(inicio.getDate() + 6)
 
             const data_inicio = inicio.toISOString().split('T')[0];
@@ -73,15 +78,16 @@ export async function renderSecaoPagamentos() {
                 const tabela = document.getElementById('tabela-pagamentos');
                 tabela.innerHTML = `
                 <div>
-                <h3 class="font-bold text-lg mb-2">Semana: ${data_inicio} - ${data_fim}</h3>
+                <h3 class="font-bold text-lg mb-2">Semana: ${formatarDataBR(data_inicio)} - ${formatarDataBR(data_fim)}</h3>
                 </div>
                 `
+                console.log(result)
                 tabela.innerHTML += result.map(grupo => `
             <div class="border p-4 rounded mb-4 shadow">
                 <h3 class="font-bold text-lg mb-2">${grupo.barbeiro || 'Sem nome'}</h3>
                 <p>Total: R$ ${parseFloat(grupo.total).toFixed(2)}</p>
                 <ul class="mt-2 text-sm text-gray-600">
-                    ${grupo.pagamentos.map(p => `<li>${new Date(p.data_pagamento).toLocaleDateString('pt-BR')} - ${p.forma_pagamento} - R$ ${p.valor}</li>`).join('')}
+                    ${grupo.pagamentos.map(p => `<li>${p.data} - R$ ${p.total}</li>`).join('')}
                 </ul>
             </div>
         `).join('');
@@ -227,11 +233,22 @@ async function renderCadPagamento() {
 
 async function carregarPagamentosFiltrados() {
     const data = document.getElementById('filtro-data').value;
+    const dataFim = document.getElementById('filtro-data-fim').value;
     const agrupar = document.getElementById('group-barbeiro').checked;
     const token = localStorage.getItem('token');
 
+    if (!data) {
+        alert('Preencha pelo menos a data Inicial')
+        return
+
+    }
+
+    let query = `data_pagamento=${data}`;
+    if(dataFim) {
+        query = `data_inicio=${data}&data_fim=${dataFim}`
+    }
     try {
-        const res = await fetch(`/api/admin/pagamentos?data_pagamento=${data}&group=${agrupar}`, {
+        const res = await fetch(`/api/admin/pagamentos?${query}&group=${agrupar}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -250,7 +267,7 @@ async function carregarPagamentosFiltrados() {
                 <h3 class="font-bold text-lg mb-2">${grupo.barbeiro || 'Sem nome'}</h3>
                 <p>Total: R$ ${grupo.total.toFixed(2)}</p>
                 <ul class="mt-2 text-sm text-gray-600">
-                    ${grupo.pagamentos.map(p => `<li>${p.forma_pagamento} - R$ ${p.valor}</li>`).join('')}
+                    ${grupo.pagamentos.map(p => `<li>${p.data} - R$ ${p.total}</li>`).join('')}
                 </ul>
             </div>
                 `
@@ -346,7 +363,7 @@ async function renderEditarPagamento(id) {
 
         const pagamento = await response.json();
 
-        const dataFormatada = new Date(pagamento.data_pagamento).toISOString().slice(0,16);
+        const dataFormatada = new Date(pagamento.data_pagamento).toISOString().slice(0, 16);
 
         const html = `
         <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
@@ -469,4 +486,9 @@ function formatDateToMySQLLocal(datetimeLocal) {
     // Se não tem segundos, adiciona ":00"
     // Exemplo: "2025-08-11T18:43"
     return datetimeLocal.replace('T', ' ') + ':00';
+}
+
+function formatarDataBR(isoDate) {
+    const [ano, mes, dia] = isoDate.split('-');
+    return `${dia}/${mes}/${ano}`;
 }
