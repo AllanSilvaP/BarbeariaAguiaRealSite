@@ -221,8 +221,6 @@ async function renderCadPagamento() {
                 const erro = await response.json();
                 throw new Error(erro.message || 'Erro ao cadastrar Pagamento');
             }
-
-            alert('Pagamento cadastrado com sucesso!');
             renderSecaoPagamentos();
         } catch (error) {
             console.error(error);
@@ -333,8 +331,6 @@ async function carregarPagamentosFiltrados() {
                         const erro = await response.json();
                         throw new Error(erro.message || 'Erro ao excluir pagamento');
                     }
-
-                    alert('Pagamento excluído com sucesso!');
                     renderSecaoPagamentos(); // Atualiza a listagem
                 } catch (error) {
                     console.error(error);
@@ -447,8 +443,6 @@ async function renderEditarPagamento(id) {
                     const erro = await updateResponse.json();
                     throw new Error(erro.message || 'Erro ao atualizar pagamento');
                 }
-
-                alert('Pagamento atualizado com sucesso!');
                 renderSecaoPagamentos();
 
             } catch (err) {

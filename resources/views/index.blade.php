@@ -46,7 +46,7 @@
                 <span class="block">Barbearia</span>
                 <span class="block">Águia Real</span>
             </h2>
-            <a href="https://wa.me/61982436970" target="_blank" class="bg-[#5CB338] hover:bg-[#777777] text-white font-bold py-2 px-4 sm:px-6 rounded-full flex items-center gap-2">
+            <a href="{{ route('login')}}" class="bg-[#5CB338] hover:bg-[#777777] text-white font-bold py-2 px-4 sm:px-6 rounded-full flex items-center gap-2">
                 <img src="{{ asset('img/Whatsaap.png') }}" alt="WhatsApp" class="w-5 h-5">
                 <span>Agende seu Horário</span>
             </a>

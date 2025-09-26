@@ -1,8 +1,9 @@
-export async function renderSecaoUsuarios(pagina = 1) {
+export async function renderSecaoUsuarios(pagina = 1, termoBusca = '') {
     const token = localStorage.getItem('token');
+    const searchParam = termoBusca ? `&search=${encodeURIComponent(termoBusca)}` : '';
 
     try {
-        const response = await fetch(`/api/admin/usuarios?page=${pagina}&per_page=25`, {
+        const response = await fetch(`/api/admin/usuarios?page=${pagina}&per_page=25${searchParam}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Accept': 'application/json'
@@ -22,6 +23,7 @@ export async function renderSecaoUsuarios(pagina = 1) {
         <div class="bg-white text-black rounded p-4 shadow-md">
             <div class="flex justify-between items-center">
             <h2 class="text-xl font-bold mb-4">Usuarios</h2>
+            <input type="text" id="busca-usuario" value="${termoBusca}" placeholder="Buscar por nome..." class="border rounded px-2 py-1 mr-2 mb-4" />
             <button id="cad-usuario" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded">Cadastrar Usuario</button>
             </div>
             ${lista.length > 0 ? `
@@ -62,6 +64,20 @@ export async function renderSecaoUsuarios(pagina = 1) {
 
         document.getElementById('secao-conteudo').innerHTML = html;
 
+        // Busca por nome
+        let buscaTimeout;
+
+        document.getElementById('busca-usuario').addEventListener('input', (e) => {
+            const termo = e.target.value;
+            clearTimeout(buscaTimeout);
+
+            if(termo.length < 2 && termo.length > 0) return;
+
+            buscaTimeout = setTimeout(() => {
+                renderSecaoUsuarios(1, termo);
+            }, 400)
+        });
+
         const botao = document.getElementById('cad-usuario');
         if (botao) {
             botao.addEventListener('click', () => renderCadUsuario())
@@ -96,8 +112,6 @@ export async function renderSecaoUsuarios(pagina = 1) {
                         const erro = await response.json();
                         throw new Error(erro.message || 'Erro ao excluir barbeiro');
                     }
-
-                    alert('Usuario excluído com sucesso!');
                     renderSecaoUsuarios(); // Atualiza a listagem
                 } catch (error) {
                     console.error(error);
@@ -124,8 +138,10 @@ function renderCadUsuario() {
     const container = document.getElementById('secao-conteudo')
 
     const html = `
-    <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
+    <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto relative">
         <h2 class="text-xl font-bold mb-4">Cadastrar Usuario</h2>
+
+        <button id="fechar-usuario" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl font-bold">&times;</button>
 
         <form id="form-cad-usuario" class="space-y-4">
             <input type="text" name="nome" placeholder="Nome" class="input w-full border p-2 rounded" required>
@@ -134,10 +150,9 @@ function renderCadUsuario() {
             <input type="password" name="senha" placeholder="Senha" class="input w-full border p-2 rounded" required>
             <label for="tipo_usuario">Tipo de Usuário:</label>
             <select name="tipo_usuario" id="tipo_usuario" required>
-                <option value="">Selecione o tipo</option>
+                <option value="cliente">Cliente</option>
                 <option value="administrador">Administrador</option>
                 <option value="barbeiro">Barbeiro</option>
-                <option value="cliente">Cliente</option>
             </select>
 
             <button type="submit" class="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-800">
@@ -148,6 +163,8 @@ function renderCadUsuario() {
     `;
 
     container.innerHTML = html;
+
+    document.getElementById('fechar-usuario').onclick = renderSecaoUsuarios;
 
     const form = document.getElementById('form-cad-usuario');
 
@@ -175,8 +192,6 @@ function renderCadUsuario() {
                 const erro = await response.json()
                 throw new Error(erro.message || 'Erro ao cadastrar Usuario')
             }
-
-            alert('Usuario cadastrado com Sucesso!');
             renderSecaoUsuarios()
         } catch (error) {
             console.error(error)
@@ -202,8 +217,9 @@ async function renderEditarUsuario(id) {
         const b = await response.json();
 
         const html = `
-        <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
+        <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto relative">
             <h2 class="text-xl font-bold mb-4">Editar Usuario</h2>
+            <button id="fechar-servico" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl font-bold">&times;</button>
 
             <form id="form-editar-usuario" class="space-y-4">
                 <input type="text" name="nome" value="${b.nome}" class="input w-full border p-2 rounded" required>
@@ -212,10 +228,9 @@ async function renderEditarUsuario(id) {
                 <input type="password" name="senha" placeholder="Nova senha (opcional)" class="input w-full border p-2 rounded">
                  <label for="tipo_usuario">Tipo de Usuário:</label>
             <select name="tipo_usuario" id="tipo_usuario" required>
-                <option value="">Selecione o tipo</option>
-                <option value="administrador">Administrador</option>
-                <option value="barbeiro">Barbeiro</option>
-                <option value="cliente">Cliente</option>
+                <option value="administrador" ${b.tipo_usuario === 'administrador' ? 'selected' : ''}>Administrador</option>
+                <option value="barbeiro" ${b.tipo_usuario === 'barbeiro' ? 'selected' : ''}>Barbeiro</option>
+                <option value="cliente" ${b.tipo_usuario === 'cliente' ? 'selected' : ''}>Cliente</option>
             </select>
 
                 <button type="submit" class="bg-black text-white px-4 py-2 rounded w-full hover:bg-gray-800">
@@ -226,6 +241,8 @@ async function renderEditarUsuario(id) {
         `;
 
         container.innerHTML = html;
+
+        document.getElementById('fechar-servico').onclick = renderSecaoUsuarios;
 
         const form = document.getElementById('form-editar-usuario');
         form.addEventListener('submit', async (e) => {
@@ -253,7 +270,6 @@ async function renderEditarUsuario(id) {
                     throw new Error(erro.message || 'Erro ao atualizar barbeiro');
                 }
 
-                alert('Usuario atualizado com sucesso!');
                 renderSecaoUsuarios();
 
             } catch (err) {

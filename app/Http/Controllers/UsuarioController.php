@@ -14,8 +14,13 @@ class UsuarioController extends Controller
      */
     public function index(Request $request)
     {
+        $query = Usuario::query();
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('nome', 'like', "%{$search}%");
+        }
         $perPage = $request->query('per_page', 5);
-        $usuarios = Usuario::paginate($perPage);
+        $usuarios = $query->paginate($perPage);
         return response()->json($usuarios);
     }
 

@@ -84,8 +84,6 @@ export async function renderSecaoServicos() {
                         const erro = await response.json();
                         throw new Error(erro.message || 'Erro ao excluir servico');
                     }
-
-                    alert('Servico excluído com sucesso!');
                     renderSecaoServicos(); // Atualiza a listagem
                 } catch (error) {
                     console.error(error);
@@ -105,8 +103,9 @@ function renderCadServico() {
     const container = document.getElementById('secao-conteudo')
 
     const html = `
-    <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
+    <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto relative">
         <h2 class="text-xl font-bold mb-4">Cadastrar Servico</h2>
+        <button id="fechar-servico" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl font-bold">&times;</button>
 
         <form id="form-cad-usuario" class="space-y-4">
             <input type="text" name="nome" placeholder="Nome" class="input w-full border p-2 rounded" required>
@@ -121,6 +120,8 @@ function renderCadServico() {
     `;
 
     container.innerHTML = html;
+
+    document.getElementById('fechar-servico').onclick = renderSecaoServicos;
 
     const form = document.getElementById('form-cad-usuario');
 
@@ -148,8 +149,6 @@ function renderCadServico() {
                 const erro = await response.json()
                 throw new Error(erro.message || 'Erro ao cadastrar Servico')
             }
-
-            alert('Servico cadastrado com Sucesso!');
             renderSecaoServicos()
         } catch (error) {
             console.error(error)
@@ -175,8 +174,9 @@ async function renderEditarServico(id) {
         const s = await response.json();
 
         const html = `
-        <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto">
+        <div class="bg-white text-black rounded p-4 shadow-md max-w-md mx-auto relative">
             <h2 class="text-xl font-bold mb-4">Editar Servico</h2>
+            <button id="fechar-servico" class="absolute top-4 right-4 text-gray-600 hover:text-gray-800 text-2xl font-bold">&times;</button>
 
             <form id="form-editar-servico" class="space-y-4">
             <input type="text" name="nome" value="${s.nome}" class="input w-full border p-2 rounded" required>
@@ -193,6 +193,8 @@ async function renderEditarServico(id) {
         `;
 
         container.innerHTML = html;
+
+        document.getElementById('fechar-servico').onclick = renderSecaoServicos;
 
         const form = document.getElementById('form-editar-servico');
         form.addEventListener('submit', async (e) => {
@@ -219,8 +221,6 @@ async function renderEditarServico(id) {
                     const erro = await updateResponse.json();
                     throw new Error(erro.message || 'Erro ao atualizar servico');
                 }
-
-                alert('Servico atualizado com sucesso!');
                 renderSecaoServicos();
 
             } catch (err) {
