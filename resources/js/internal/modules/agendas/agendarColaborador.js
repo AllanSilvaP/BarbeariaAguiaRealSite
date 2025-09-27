@@ -1,6 +1,11 @@
 import TomSelect from 'tom-select'
 import 'tom-select/dist/css/tom-select.default.min.css'
 
+// Data Bonita
+import flatpickr from 'flatpickr'
+import 'flatpickr/dist/flatpickr.min.css'
+import { Portuguese } from 'flatpickr/dist/l10n/pt.js'
+
 let tomSelectCliente = null
 
 export async function agendarColaborador(tipoUsuario = null) {
@@ -8,7 +13,6 @@ export async function agendarColaborador(tipoUsuario = null) {
     const botao = document.getElementById('agendar-corte')
     const modal = document.getElementById('modal-agendamento')
     const fecharModal = document.getElementById('fechar-modal')
-    const nomeCliente = document.getElementById('nome-cliente')
     const selectBarbeiro = document.getElementById('select-barbeiro')
     const inputDataHora = document.getElementById('data-hora')
     const form = document.getElementById('form-agendar')
@@ -18,7 +22,7 @@ export async function agendarColaborador(tipoUsuario = null) {
     botao.addEventListener('click', async () => {
         const carregando = document.getElementById('carregando-formulario')
         carregando.classList.remove('hidden')
-        modal.classList.remove('hidden')
+        modal.classList.add('hidden')
 
         try {
             // Buscar dados do usuário logado
@@ -85,11 +89,21 @@ export async function agendarColaborador(tipoUsuario = null) {
                 </label>`
             ).join('')
 
+            flatpickr(inputDataHora, {
+                enableTime: true,
+                dateFormat: "d/m/Y H:i",
+                minDate: "today",
+                locale: Portuguese,
+                time_24hr: true,
+                defaultDate: new Date(),
+                scrollInput: true
+            })
+            carregando.classList.add('hidden')
+            modal.classList.remove('hidden')
         } catch (error) {
+            carregando.classList.add('hidden')
             console.error('Erro ao carregar formulário:', error)
             alert('Erro ao carregar formulário!')
-        } finally {
-            carregando.classList.add('hidden')
         }
     })
 

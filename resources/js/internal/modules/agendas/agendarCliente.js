@@ -1,3 +1,8 @@
+//Data bonita, modulo
+import flatpickr from "flatpickr";
+import "flatpickr/dist/flatpickr.min.css";
+import { Portuguese } from "flatpickr/dist/l10n/pt.js";
+
 export async function agendarCliente() {
     const token = localStorage.getItem('token')
     const botao = document.getElementById('agendar-corte')
@@ -26,6 +31,17 @@ export async function agendarCliente() {
         carregando.classList.remove('hidden')
 
         try {
+            // Inicializar o flatpickr - data bonita
+            flatpickr(inputDataHora, {
+                enableTime: true,
+                dateFormat: "d/m/Y H:i",
+                minDate: "today",
+                locale: Portuguese,
+                time_24hr: true,
+                defaultDate: new Date(),
+                scrollInput: true
+            })
+
             // Buscar dados do usuário logado
             const resMe = await fetch('/api/me', {
                 headers: { 'Authorization': `Bearer ${token}` }

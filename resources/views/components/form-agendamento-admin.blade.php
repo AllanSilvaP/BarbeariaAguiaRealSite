@@ -1,8 +1,13 @@
 <div id="carregando-formulario" class="hidden text-white text-center p-4">
-    Carregando dados do formulário...
+    <div class="flex flex-col items-center">
+        <svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+        </svg>
+    </div>
 </div>
 
-<div id="modal-agendamento" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur hidden">
+<div id="modal-agendamento" class="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50 backdrop-blur hidden">
     <div class="bg-white p-6 rounded-lg w-full max-w-md text-black relative">
         <button id="fechar-modal" class="absolute top-2 right-2 text-red-500 font-bold">&times;</button>
         <h2 class="text-xl font-bold mb-4">Novo Agendamento</h2>
@@ -24,7 +29,7 @@
 
             <div>
                 <label class="block text-sm font-medium">Data e Hora</label>
-                <input type="datetime-local" id="data-hora" class="w-full border p-2 rounded" required />
+                <input type="text" id="data-hora" class="w-full border p-2 rounded" required />
             </div>
 
             <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Confirmar Agendamento</button>
